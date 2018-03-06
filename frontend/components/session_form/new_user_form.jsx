@@ -5,8 +5,11 @@ class SessionForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: ''
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      email: '',
+      password: '',
+
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -42,23 +45,51 @@ class SessionForm extends React.Component {
           <br/>
           {this.renderErrors()}
           <div className="signup-form">
+            <label>
+            </label>
             <br/>
-            <label>Email or Phone
+
+            <label>
             <input type="text"
-              value={this.state.username}
-              onChange={this.update('username')}
+              aria-label='Mobile number or email'
+              value={this.state.email}
+              onChange={this.update('email')}
               className="signup-input"
             />
             </label>
             <br/>
             <label>Password:
             <input type="password"
+              aria-label={'New Password'}
               value={this.state.password}
               onChange={this.update('password')}
               className="signup-input"
             />
             </label>
             <br/>
+
+            <select aria-label='Month' name='birthday_month' id='month' className='signup-input'>
+              <option value='0'>Month</option>
+            </select>
+            <select aria-label='Day' name='birthday_day' id='day' className='signup-input'>
+              <option value='0'>Day</option>
+            </select>
+            <select aria-label='Year' name='birthday_year' id='year' className='signup-input'>
+              <option value='0'>Year</option>
+            </select>
+            <br/>
+            <div data-type='radio' data-name='gender_wrapper'>
+              <span>
+                <span className='gender_radio_button'>
+                  <input type='radio' name='sex' value='1' />
+                  <label>Female</label>
+                </span>
+                <span className='gender_radio_button'>
+                  <input type='radio' name='sex' value='2' />
+                  <label>Male</label>
+                </span>
+              </span>
+            </div>
             <input className="session-submit" type="submit" value={this.props.formType} />
           </div>
         </form>

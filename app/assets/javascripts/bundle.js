@@ -13053,7 +13053,7 @@ var SessionForm = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (SessionForm.__proto__ || Object.getPrototypeOf(SessionForm)).call(this, props));
 
     _this.state = {
-      username: '',
+      email: '',
       password: ''
     };
     _this.handleSubmit = _this.handleSubmit.bind(_this);
@@ -13111,8 +13111,8 @@ var SessionForm = function (_React$Component) {
               null,
               'Email or Phone',
               _react2.default.createElement('input', { type: 'text',
-                value: this.state.username,
-                onChange: this.update('username'),
+                value: this.state.email,
+                onChange: this.update('email'),
                 className: 'login-input'
               })
             ),
@@ -29917,6 +29917,7 @@ var mapStateToProps = function mapStateToProps(_ref) {
   var errors = _ref.errors;
 
   return {
+
     errors: errors.session,
     formType: 'signup'
   };
@@ -32476,8 +32477,11 @@ var SessionForm = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (SessionForm.__proto__ || Object.getPrototypeOf(SessionForm)).call(this, props));
 
     _this.state = {
-      username: '',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      email: '',
       password: ''
+
     };
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     return _this;
@@ -32528,14 +32532,15 @@ var SessionForm = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'signup-form' },
+            _react2.default.createElement('label', null),
             _react2.default.createElement('br', null),
             _react2.default.createElement(
               'label',
               null,
-              'Email or Phone',
               _react2.default.createElement('input', { type: 'text',
-                value: this.state.username,
-                onChange: this.update('username'),
+                'aria-label': 'Mobile number or email',
+                value: this.state.email,
+                onChange: this.update('email'),
                 className: 'signup-input'
               })
             ),
@@ -32545,12 +32550,69 @@ var SessionForm = function (_React$Component) {
               null,
               'Password:',
               _react2.default.createElement('input', { type: 'password',
+                'aria-label': 'New Password',
                 value: this.state.password,
                 onChange: this.update('password'),
                 className: 'signup-input'
               })
             ),
             _react2.default.createElement('br', null),
+            _react2.default.createElement(
+              'select',
+              { 'aria-label': 'Month', name: 'birthday_month', id: 'month', className: 'signup-input' },
+              _react2.default.createElement(
+                'option',
+                { value: '0' },
+                'Month'
+              )
+            ),
+            _react2.default.createElement(
+              'select',
+              { 'aria-label': 'Day', name: 'birthday_day', id: 'day', className: 'signup-input' },
+              _react2.default.createElement(
+                'option',
+                { value: '0' },
+                'Day'
+              )
+            ),
+            _react2.default.createElement(
+              'select',
+              { 'aria-label': 'Year', name: 'birthday_year', id: 'year', className: 'signup-input' },
+              _react2.default.createElement(
+                'option',
+                { value: '0' },
+                'Year'
+              )
+            ),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement(
+              'div',
+              { 'data-type': 'radio', 'data-name': 'gender_wrapper' },
+              _react2.default.createElement(
+                'span',
+                null,
+                _react2.default.createElement(
+                  'span',
+                  { className: 'gender_radio_button' },
+                  _react2.default.createElement('input', { type: 'radio', name: 'sex', value: '1' }),
+                  _react2.default.createElement(
+                    'label',
+                    null,
+                    'Female'
+                  )
+                ),
+                _react2.default.createElement(
+                  'span',
+                  { className: 'gender_radio_button' },
+                  _react2.default.createElement('input', { type: 'radio', name: 'sex', value: '2' }),
+                  _react2.default.createElement(
+                    'label',
+                    null,
+                    'Male'
+                  )
+                )
+              )
+            ),
             _react2.default.createElement('input', { className: 'session-submit', type: 'submit', value: this.props.formType })
           )
         )
