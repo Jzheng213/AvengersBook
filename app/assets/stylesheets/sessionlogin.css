@@ -1,0 +1,71 @@
+.signin-header {
+  display: flex;
+  justify-content: center;
+  height: 82px;
+  min-width: 980px;
+  background-color: #3b5998;
+  background-image: linear-gradient(#4e69a2, #3b5998 50%);
+  color: white;
+  border-bottom: 1px solid #133783;
+  font-family: SF Optimized, system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
+}
+.signin-container{
+  width: 980px;
+  display: inherit;
+  justify-content: space-between;
+}
+.signin-header-link{
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 13px;
+}
+
+.signin-header h1{
+  font-size: 38px;
+  font-weight: 550;
+}
+
+.login-form-box{
+  display: inherit;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.login-form-box span{
+  font-size: 12px;
+  padding-bottom: 4px;
+}
+
+.login-form-box{
+  margin-bottom: 20px;
+}
+
+.login-label{
+  padding-left: 14px;
+  display: inherit;
+  flex-direction: column;
+}
+
+.login-input {
+  font-size: 12px;
+  width: 142px;
+  padding: 3px;
+  background-color: white;
+  color: black;
+}
+
+.session-submit {
+  font-size: 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  line-height: 18px;
+  padding: 2px 6px;
+  margin-left: 14px;
+  text-align: center;
+  color: white;
+  background-color: #4267b2;
+  border-color: #29487d;
+}

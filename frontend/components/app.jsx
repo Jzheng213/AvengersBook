@@ -8,26 +8,22 @@ import {
   Link,
   HashRouter
 } from 'react-router-dom';
+
 //Components
 import { AuthRoute, ProtectedRoute } from '../util/route_util';
 import LoginSignin from './session_form/login_signin';
-
+import NewsFeedContainer from './NewsFeed/newsfeed_container';
 
 const App = () => {
   return(
     <div>
-      <header>
-        <Link to="/" className="header-link">
-          <h1>AvengersBook</h1>
-        </Link>
-      </header>
 
       <Switch>
         <AuthRoute exact path="/login" component={LoginSignin} />
+        <ProtectedRoute exact path='/newsfeed' component={NewsFeedContainer} />
       </Switch>
     </div>
   );
 };
-
 
 export default App;

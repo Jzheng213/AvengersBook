@@ -1,10 +1,13 @@
 class User < ApplicationRecord
-
   attr_reader :password
 
-  validates :username, :password_digest, :session_token, presence: true
-  validates :username, uniqueness: true
-  validates :password, length: {minimum: 6}, allow_nil: true
+  validates :first_name, :last_name, :password_digest, :email,
+            :session_token, :birthday, :gender, presence: true
+  validates :gender, inclusion: { in: ['male', 'female', 'enby', 'other']}
+  validates :email, uniqueness: true
+  validates_format_of :email, :with =>
+                      /\A([\w+\-]\.?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+  validates :password, length: { minimum: 6 }, allow_nil: true
 
   after_initialize :ensure_session_token
 
