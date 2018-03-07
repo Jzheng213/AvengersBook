@@ -12,7 +12,7 @@ import {
 //Components
 import { AuthRoute, ProtectedRoute } from '../util/route_util';
 import LoginSignin from './session_form/login_signin';
-import NewsFeedContainer from './NewsFeed/newsfeed_container';
+import NewsFeedContainer from './newsfeed/newsfeed_container';
 
 const App = () => {
   return(
