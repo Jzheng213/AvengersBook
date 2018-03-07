@@ -20,6 +20,7 @@ const App = () => {
 
       <Switch>
         <AuthRoute exact path="/login" component={LoginSignin} />
+        <ProtectedRoute exact path='/' component={NewsFeedContainer} />
         <ProtectedRoute exact path='/newsfeed' component={NewsFeedContainer} />
       </Switch>
     </div>
