@@ -29960,7 +29960,6 @@ var login = exports.login = function login(user) {
 };
 
 var signup = exports.signup = function signup(user) {
-  debugger;
   return $.ajax({
     method: 'POST',
     url: '/api/users',
@@ -30683,7 +30682,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(44);
 
-var _session_reducer = __webpack_require__(315);
+var _session_reducer = __webpack_require__(387);
 
 var _session_reducer2 = _interopRequireDefault(_session_reducer);
 
@@ -30705,47 +30704,7 @@ var rootReducer = (0, _redux.combineReducers)({
 exports.default = rootReducer;
 
 /***/ }),
-/* 315 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _merge = __webpack_require__(316);
-
-var _merge2 = _interopRequireDefault(_merge);
-
-var _session_actions = __webpack_require__(34);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _nullUser = Object.freeze({
-  currentUser: null
-});
-
-var sessionReducer = function sessionReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _nullUser;
-  var action = arguments[1];
-
-  Object.freeze(state);
-  var currentUser = void 0;
-
-  switch (action.type) {
-    case _session_actions.RECEIVE_CURRENT_USER:
-      currentUser = action.currentUser;
-      return (0, _merge2.default)({}, { currentUser: currentUser });
-    default:
-      return state;
-  }
-};
-
-exports.default = sessionReducer;
-
-/***/ }),
+/* 315 */,
 /* 316 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -32914,11 +32873,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(44);
 
-var _session_errors_reducer = __webpack_require__(384);
+var _session_errors_reducer = __webpack_require__(386);
 
 var _session_errors_reducer2 = _interopRequireDefault(_session_errors_reducer);
 
-var _signup_errors_reducer = __webpack_require__(385);
+var _signup_errors_reducer = __webpack_require__(388);
 
 var _signup_errors_reducer2 = _interopRequireDefault(_signup_errors_reducer);
 
@@ -32930,7 +32889,9 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 384 */
+/* 384 */,
+/* 385 */,
+/* 386 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32952,13 +32913,56 @@ exports.default = function () {
       return action.errors;
     case _session_actions.RECEIVE_CURRENT_USER:
       return [];
+    case _session_actions.RECEIVE_SIGNUP_ERRORS:
+      return [];
     default:
       return state;
   }
 };
 
 /***/ }),
-/* 385 */
+/* 387 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _merge = __webpack_require__(316);
+
+var _merge2 = _interopRequireDefault(_merge);
+
+var _session_actions = __webpack_require__(34);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _nullUser = Object.freeze({
+  currentUser: null
+});
+
+var sessionReducer = function sessionReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _nullUser;
+  var action = arguments[1];
+
+  Object.freeze(state);
+  var currentUser = void 0;
+
+  switch (action.type) {
+    case _session_actions.RECEIVE_CURRENT_USER:
+      currentUser = action.currentUser;
+      return (0, _merge2.default)({}, { currentUser: currentUser });
+    default:
+      return state;
+  }
+};
+
+exports.default = sessionReducer;
+
+/***/ }),
+/* 388 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32979,6 +32983,8 @@ exports.default = function () {
     case _session_actions.RECEIVE_SIGNUP_ERRORS:
       return action.errors;
     case _session_actions.RECEIVE_CURRENT_USER:
+      return [];
+    case _session_actions.RECEIVE_SESSION_ERRORS:
       return [];
     default:
       return state;
