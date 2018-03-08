@@ -29952,6 +29952,7 @@ var login = exports.login = function login(user) {
 };
 
 var signup = exports.signup = function signup(user) {
+  debugger;
   return $.ajax({
     method: 'POST',
     url: '/api/users',
@@ -30173,16 +30174,19 @@ var NewUserForm = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (NewUserForm.__proto__ || Object.getPrototypeOf(NewUserForm)).call(this, props));
 
     _this.state = {
-      firstName: '',
-      lastName: '',
+      first_name: '',
+      last_name: '',
       email: '',
-      password: ''
-
+      password: '',
+      gender: '',
+      birthday: ''
     };
     _this.month = 'Month Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
     _this.day = Array.apply(null, { length: 31 }).map(Number.call, Number);
     _this.year = Array.apply(null, { length: 2018 - 1905 + 1 }).map(Number.call, Number).reverse();
+    _this.runningBirthday = ['month', 'day', 'year'];
     _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handleBirthday = _this.handleBirthday.bind(_this);
     return _this;
   }
 
@@ -30193,6 +30197,27 @@ var NewUserForm = function (_React$Component) {
 
       return function (e) {
         return _this2.setState(_defineProperty({}, field, e.currentTarget.value));
+      };
+    }
+  }, {
+    key: 'handleBirthday',
+    value: function handleBirthday(field) {
+      var _this3 = this;
+
+      return function (e) {
+        switch (field) {
+          case 'month':
+            _this3.runningBirthday[0] = e.currentTarget.value;
+            break;
+          case 'day':
+            _this3.runningBirthday[1] = e.currentTarget.value;
+            break;
+          case 'year':
+            _this3.runningBirthday[2] = e.currentTarget.value;
+            break;
+          default:
+        }
+        _this3.setState({ birthday: _this3.runningBirthday.join('/') });
       };
     }
   }, {
@@ -30239,13 +30264,13 @@ var NewUserForm = function (_React$Component) {
           _react2.default.createElement('input', { className: 'signup-input-box',
             type: 'text',
             placeholder: 'First name',
-            onChange: this.update('firstName'),
+            onChange: this.update('first_name'),
             value: this.state.firstName
           }),
           _react2.default.createElement('input', { className: 'signup-input-box',
             type: 'text',
             placeholder: 'Last name',
-            onChange: this.update('lastName'),
+            onChange: this.update('last_name'),
             value: this.state.lastName
           })
         ),
@@ -30271,45 +30296,52 @@ var NewUserForm = function (_React$Component) {
           { className: 'birthday-input-container' },
           _react2.default.createElement(
             'select',
-            { 'aria-label': 'Month', name: 'birthday_month', id: 'month', className: 'signup-input-box month' },
+            { className: 'signup-input-box month',
+              id: 'month',
+              onChange: this.handleBirthday('month') },
             this.month.map(function (mon, idx) {
-              return _react2.default.createElement(
-                'option',
-                { value: idx, key: idx },
-                mon
-              );
+              return _react2.default.createElement('option', {
+                value: idx,
+                key: idx,
+
+                label: mon
+              });
             })
           ),
           _react2.default.createElement(
             'select',
-            { 'aria-label': 'Day', name: 'birthday_day', id: 'day', className: 'signup-input-box day' },
+            { className: 'signup-input-box day',
+              id: 'day',
+              onChange: this.handleBirthday('day') },
             _react2.default.createElement(
               'option',
               { value: 0, key: 0 },
               'Day'
             ),
-            this.day.map(function (day) {
-              return _react2.default.createElement(
-                'option',
-                { value: day + 1, key: day + 1 },
-                day + 1
-              );
+            this.day.map(function (date) {
+              return _react2.default.createElement('option', {
+                value: parseInt(date) + 1,
+                key: date + 1,
+                label: date + 1
+              });
             })
           ),
           _react2.default.createElement(
             'select',
-            { 'aria-label': 'Year', name: 'birthday_year', id: 'year', className: 'signup-input-box year' },
+            { className: 'signup-input-box year',
+              id: 'year',
+              onChange: this.handleBirthday('year') },
             _react2.default.createElement(
               'option',
               { value: 0, key: 0 },
               'Year'
             ),
             this.year.map(function (year) {
-              return _react2.default.createElement(
-                'option',
-                { value: year + 1, key: year + 1 },
-                year + 1905
-              );
+              return _react2.default.createElement('option', {
+                value: year + 1905,
+                key: year + 1,
+                label: year + 1905
+              });
             })
           )
         ),
@@ -30319,7 +30351,7 @@ var NewUserForm = function (_React$Component) {
           _react2.default.createElement(
             'span',
             { className: 'gender_radio_button' },
-            _react2.default.createElement('input', { type: 'radio', name: 'sex', value: '1' }),
+            _react2.default.createElement('input', { type: 'radio', name: 'sex', onChange: this.update('gender'), value: 'female' }),
             _react2.default.createElement(
               'label',
               null,
@@ -30329,7 +30361,7 @@ var NewUserForm = function (_React$Component) {
           _react2.default.createElement(
             'span',
             { className: 'gender_radio_button' },
-            _react2.default.createElement('input', { type: 'radio', name: 'sex', value: '2' }),
+            _react2.default.createElement('input', { type: 'radio', name: 'sex', onChange: this.update('gender'), value: 'male' }),
             _react2.default.createElement(
               'label',
               null,
@@ -30339,7 +30371,7 @@ var NewUserForm = function (_React$Component) {
           _react2.default.createElement(
             'span',
             { className: 'gender_radio_button' },
-            _react2.default.createElement('input', { type: 'radio', name: 'sex', value: '3' }),
+            _react2.default.createElement('input', { type: 'radio', name: 'sex', onChange: this.update('gender'), value: 'enby' }),
             _react2.default.createElement(
               'label',
               null,
@@ -30349,7 +30381,7 @@ var NewUserForm = function (_React$Component) {
           _react2.default.createElement(
             'span',
             { className: 'gender_radio_button' },
-            _react2.default.createElement('input', { type: 'radio', name: 'sex', value: '4' }),
+            _react2.default.createElement('input', { type: 'radio', name: 'sex', onChange: this.update('gender'), value: 'other' }),
             _react2.default.createElement(
               'label',
               null,

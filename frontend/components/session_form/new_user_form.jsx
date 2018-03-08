@@ -6,22 +6,43 @@ class NewUserForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
+      first_name: '',
+      last_name: '',
       email: '',
       password: '',
-
+      gender: '',
+      birthday: '',
     };
     this.month = 'Month Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
     this.day = Array.apply(null, {length: 31}).map(Number.call, Number);
     this.year = Array.apply(null, {length: (2018 - 1905 + 1)}).map(Number.call, Number).reverse();
+    this.runningBirthday = ['month','day','year'];
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleBirthday = this.handleBirthday.bind(this);
   }
 
   update(field) {
     return e => this.setState({
       [field]: e.currentTarget.value
     });
+  }
+
+  handleBirthday(field){
+    return e => {
+      switch (field) {
+      case 'month':
+        this.runningBirthday[0] = e.currentTarget.value;
+        break;
+      case 'day':
+        this.runningBirthday[1] = e.currentTarget.value;
+        break;
+      case 'year':
+        this.runningBirthday[2] = e.currentTarget.value;
+        break;
+      default:
+      }
+      this.setState({birthday: this.runningBirthday.join('/')});
+    };
   }
 
   handleSubmit(e) {
@@ -52,13 +73,13 @@ class NewUserForm extends React.Component {
           <input className='signup-input-box'
             type='text'
             placeholder='First name'
-            onChange={this.update('firstName')}
+            onChange={this.update('first_name')}
             value={this.state.firstName}
           />
           <input className='signup-input-box'
             type='text'
             placeholder='Last name'
-            onChange={this.update('lastName')}
+            onChange={this.update('last_name')}
             value={this.state.lastName}
           />
         </div>
@@ -80,26 +101,47 @@ class NewUserForm extends React.Component {
 
         <label className='birthday-label'>Birthday</label>
         <div className='birthday-input-container'>
-          <select aria-label='Month' name='birthday_month' id='month' className='signup-input-box month'>
+          <select className='signup-input-box month'
+            id='month'
+            onChange={this.handleBirthday('month')}>
             {
               this.month.map((mon, idx) => {
-                return <option value={idx} key={idx}>{mon}</option>;
+                return <option
+                  value={idx}
+                  key={idx}
+
+                  label={mon}
+                />;
               })
             }
           </select>
-          <select aria-label='Day' name='birthday_day' id='day' className='signup-input-box day'>
+          <select className='signup-input-box day'
+            id='day'
+            onChange={this.handleBirthday('day')}>
+
             <option value= {0} key={0}>Day</option>
             {
-              this.day.map((day) => {
-                return <option value={day+ 1} key={day + 1}>{day + 1}</option>;
+              this.day.map((date) => {
+                return <option
+                  value={parseInt(date) + 1}
+                  key={date + 1}
+                  label={date + 1}
+                />;
               })
             }
           </select>
-          <select aria-label='Year' name='birthday_year' id='year' className='signup-input-box year'>
+          <select className='signup-input-box year'
+            id='year'
+            onChange={this.handleBirthday('year')}>
+
             <option value= {0} key={0}>Year</option>
             {
               this.year.map((year) => {
-                return <option value={year+ 1} key={year + 1}>{year + 1905}</option>;
+                return <option
+                  value={year+ 1905}
+                  key={year + 1}
+                  label={year + 1905}
+                />;
               })
             }
           </select>
@@ -107,20 +149,20 @@ class NewUserForm extends React.Component {
 
         <div className='gender-container' data-type='radio' data-name='gender_wrapper'>
           <span className='gender_radio_button'>
-            <input type='radio' name='sex' value='1' />
+            <input type='radio' name='sex' onChange={this.update('gender')} value='female' />
             <label>Female</label>
           </span>
           <span className='gender_radio_button'>
-            <input type='radio' name='sex' value='2' />
+            <input type='radio' name='sex' onChange={this.update('gender')} value='male' />
             <label>Male</label>
           </span>
           <span className='gender_radio_button'>
-            <input type='radio' name='sex' value='3' />
+            <input type='radio' name='sex' onChange={this.update('gender')} value='enby' />
             <label>Enby</label>
           </span>
 
           <span className='gender_radio_button'>
-            <input type='radio' name='sex' value='4' />
+            <input type='radio' name='sex' onChange={this.update('gender')} value='other' />
             <label>Other</label>
           </span>
         </div>
