@@ -30174,18 +30174,19 @@ var NewUserForm = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (NewUserForm.__proto__ || Object.getPrototypeOf(NewUserForm)).call(this, props));
 
     _this.state = {
-      first_name: undefined,
-      last_name: undefined,
-      email: undefined,
-      password: undefined,
-      gender: undefined,
+      first_name: '',
+      last_name: '',
+      email: '',
+      password: '',
+      gender: '',
       birthday: '',
       firstNameInput: '',
       lastNameInput: '',
       emailInput: '',
-      passwordInput: ''
+      passwordInput: '',
+      birthdayInput: ''
     };
-    _this.month = 'Month Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
+    _this.month = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
     _this.day = Array.apply(null, { length: 31 }).map(Number.call, Number);
     _this.year = Array.apply(null, { length: 2018 - 1905 + 1 }).map(Number.call, Number).reverse();
     _this.runningBirthday = ['month', 'day', 'year'];
@@ -30306,7 +30307,7 @@ var NewUserForm = function (_React$Component) {
           value: this.state.password,
           onBlur: this.toggleClick('passwordInput'),
           onChange: this.update('password'),
-          required: true
+          required: true, minLength: '6'
         }),
         _react2.default.createElement(
           'label',
@@ -30315,29 +30316,35 @@ var NewUserForm = function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          { className: 'birthday-input-container' },
+          { className: 'birthday-input-container', onBlur: this.toggleClick('birthdayInput') },
           _react2.default.createElement(
             'select',
-            { className: 'signup-input-box month',
+            { className: this.state.birthdayInput + ' signup-input-box month',
               id: 'month',
-              onChange: this.handleBirthday('month') },
+              onChange: this.handleBirthday('month'),
+              required: true },
+            _react2.default.createElement(
+              'option',
+              { value: '', key: 0 },
+              'Month'
+            ),
             this.month.map(function (mon, idx) {
               return _react2.default.createElement('option', {
-                value: idx,
-                key: idx,
-
+                value: idx + 1,
+                key: idx + 1,
                 label: mon
               });
             })
           ),
           _react2.default.createElement(
             'select',
-            { className: 'signup-input-box day',
+            { className: this.state.birthdayInput + ' signup-input-box day',
               id: 'day',
-              onChange: this.handleBirthday('day') },
+              onChange: this.handleBirthday('day'),
+              required: true },
             _react2.default.createElement(
               'option',
-              { value: 0, key: 0 },
+              { value: '', key: 0 },
               'Day'
             ),
             this.day.map(function (date) {
@@ -30350,12 +30357,13 @@ var NewUserForm = function (_React$Component) {
           ),
           _react2.default.createElement(
             'select',
-            { className: 'signup-input-box year',
+            { className: this.state.birthdayInput + ' signup-input-box year',
               id: 'year',
-              onChange: this.handleBirthday('year') },
+              onChange: this.handleBirthday('year'),
+              required: true },
             _react2.default.createElement(
               'option',
-              { value: 0, key: 0 },
+              { value: '', key: 0 },
               'Year'
             ),
             this.year.map(function (year) {
@@ -30373,7 +30381,7 @@ var NewUserForm = function (_React$Component) {
           _react2.default.createElement(
             'span',
             { className: 'gender_radio_button' },
-            _react2.default.createElement('input', { type: 'radio', name: 'sex', onChange: this.update('gender'), value: 'female' }),
+            _react2.default.createElement('input', { type: 'radio', name: 'sex', onChange: this.update('gender'), value: 'female', required: true }),
             _react2.default.createElement(
               'label',
               null,
