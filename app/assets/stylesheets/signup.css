@@ -53,6 +53,11 @@
   border-color: #bdc7d8;
   border-radius: 5px;
 }
+
+.clicked:invalid {
+  border-color: red;
+}
+
 .signup-form-name {
   display: flex;
   justify-content: space-between;

@@ -6,12 +6,16 @@ class NewUserForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      gender: '',
+      first_name: undefined,
+      last_name: undefined,
+      email: undefined,
+      password: undefined,
+      gender: undefined,
       birthday: '',
+      firstNameInput: '',
+      lastNameInput: '',
+      emailInput: '',
+      passwordInput: '',
     };
     this.month = 'Month Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
     this.day = Array.apply(null, {length: 31}).map(Number.call, Number);
@@ -19,11 +23,18 @@ class NewUserForm extends React.Component {
     this.runningBirthday = ['month','day','year'];
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleBirthday = this.handleBirthday.bind(this);
+    this.toggleClick = this.toggleClick.bind(this);
   }
 
   update(field) {
     return e => this.setState({
       [field]: e.currentTarget.value
+    });
+  }
+
+  toggleClick(field){
+    return () => this.setState({
+      [field]: 'clicked'
     });
   }
 
@@ -69,34 +80,42 @@ class NewUserForm extends React.Component {
         <span className='signup-title'>Create a New Account</span>
         <span className='signup-sub-title'>{'It\'s free and always will be'}</span>
 
-        <div className='signup-form-name'>
-          <input className='signup-input-box'
+        <div className={'signup-form-name'}>
+          <input className={`${this.state.firstNameInput} signup-input-box`}
             type='text'
             placeholder='First name'
             onChange={this.update('first_name')}
+            onBlur={this.toggleClick('firstNameInput')}
             value={this.state.firstName}
+            required
           />
-          <input className='signup-input-box'
+          <input className={`${this.state.lastNameInput} signup-input-box`}
             type='text'
             placeholder='Last name'
             onChange={this.update('last_name')}
+            onBlur={this.toggleClick('lastNameInput')}
             value={this.state.lastName}
+            required
           />
         </div>
 
-        <input className='signup-input-box'
-          type='text'
-          placeholder='Mobile number or email'
+        <input className={`${this.state.emailInput} signup-input-box`}
+          type='email'
+          placeholder='Email'
           value={this.state.email}
           onChange={this.update('email')}
+          onBlur={this.toggleClick('emailInput')}
+          required
         />
 
 
-        <input className='signup-input-box'
+      <input className={`${this.state.passwordInput} signup-input-box`}
           type='password'
           placeholder={'New Password'}
           value={this.state.password}
+          onBlur={this.toggleClick('passwordInput')}
           onChange={this.update('password')}
+          required
         />
 
         <label className='birthday-label'>Birthday</label>

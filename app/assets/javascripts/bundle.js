@@ -30174,12 +30174,16 @@ var NewUserForm = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (NewUserForm.__proto__ || Object.getPrototypeOf(NewUserForm)).call(this, props));
 
     _this.state = {
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      gender: '',
-      birthday: ''
+      first_name: undefined,
+      last_name: undefined,
+      email: undefined,
+      password: undefined,
+      gender: undefined,
+      birthday: '',
+      firstNameInput: '',
+      lastNameInput: '',
+      emailInput: '',
+      passwordInput: ''
     };
     _this.month = 'Month Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
     _this.day = Array.apply(null, { length: 31 }).map(Number.call, Number);
@@ -30187,6 +30191,7 @@ var NewUserForm = function (_React$Component) {
     _this.runningBirthday = ['month', 'day', 'year'];
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.handleBirthday = _this.handleBirthday.bind(_this);
+    _this.toggleClick = _this.toggleClick.bind(_this);
     return _this;
   }
 
@@ -30200,24 +30205,33 @@ var NewUserForm = function (_React$Component) {
       };
     }
   }, {
+    key: 'toggleClick',
+    value: function toggleClick(field) {
+      var _this3 = this;
+
+      return function () {
+        return _this3.setState(_defineProperty({}, field, 'clicked'));
+      };
+    }
+  }, {
     key: 'handleBirthday',
     value: function handleBirthday(field) {
-      var _this3 = this;
+      var _this4 = this;
 
       return function (e) {
         switch (field) {
           case 'month':
-            _this3.runningBirthday[0] = e.currentTarget.value;
+            _this4.runningBirthday[0] = e.currentTarget.value;
             break;
           case 'day':
-            _this3.runningBirthday[1] = e.currentTarget.value;
+            _this4.runningBirthday[1] = e.currentTarget.value;
             break;
           case 'year':
-            _this3.runningBirthday[2] = e.currentTarget.value;
+            _this4.runningBirthday[2] = e.currentTarget.value;
             break;
           default:
         }
-        _this3.setState({ birthday: _this3.runningBirthday.join('/') });
+        _this4.setState({ birthday: _this4.runningBirthday.join('/') });
       };
     }
   }, {
@@ -30261,30 +30275,38 @@ var NewUserForm = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'signup-form-name' },
-          _react2.default.createElement('input', { className: 'signup-input-box',
+          _react2.default.createElement('input', { className: this.state.firstNameInput + ' signup-input-box',
             type: 'text',
             placeholder: 'First name',
             onChange: this.update('first_name'),
-            value: this.state.firstName
+            onBlur: this.toggleClick('firstNameInput'),
+            value: this.state.firstName,
+            required: true
           }),
-          _react2.default.createElement('input', { className: 'signup-input-box',
+          _react2.default.createElement('input', { className: this.state.lastNameInput + ' signup-input-box',
             type: 'text',
             placeholder: 'Last name',
             onChange: this.update('last_name'),
-            value: this.state.lastName
+            onBlur: this.toggleClick('lastNameInput'),
+            value: this.state.lastName,
+            required: true
           })
         ),
-        _react2.default.createElement('input', { className: 'signup-input-box',
-          type: 'text',
-          placeholder: 'Mobile number or email',
+        _react2.default.createElement('input', { className: this.state.emailInput + ' signup-input-box',
+          type: 'email',
+          placeholder: 'Email',
           value: this.state.email,
-          onChange: this.update('email')
+          onChange: this.update('email'),
+          onBlur: this.toggleClick('emailInput'),
+          required: true
         }),
-        _react2.default.createElement('input', { className: 'signup-input-box',
+        _react2.default.createElement('input', { className: this.state.passwordInput + ' signup-input-box',
           type: 'password',
           placeholder: 'New Password',
           value: this.state.password,
-          onChange: this.update('password')
+          onBlur: this.toggleClick('passwordInput'),
+          onChange: this.update('password'),
+          required: true
         }),
         _react2.default.createElement(
           'label',
