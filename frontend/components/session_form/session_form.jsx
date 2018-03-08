@@ -38,6 +38,7 @@ class SessionForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit} className="login-form-box">
+        <span className='login-errors'>{this.renderErrors()}</span>
         <label className='login-label'>
           <span>Email or Phone</span>
           <input type="text"
@@ -46,6 +47,7 @@ class SessionForm extends React.Component {
             className="login-input"
           />
         </label>
+
         <label className='login-label'>
           <span>Password</span>
           <input type="password"
@@ -55,6 +57,7 @@ class SessionForm extends React.Component {
           />
         </label>
         <input className="session-submit" type="submit" value='Log In' />
+
       </form>
     );
   }

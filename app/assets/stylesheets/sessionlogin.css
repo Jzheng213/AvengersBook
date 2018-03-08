@@ -69,3 +69,7 @@
   background-color: #4267b2;
   border-color: #29487d;
 }
+
+.login-errors {
+  font-size: 13px;
+}

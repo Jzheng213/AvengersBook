@@ -8,8 +8,8 @@ import NewUserForm from './new_user_form';
 
 const mapStateToProps = ({ errors }) => {
   return {
-    
-    errors: errors.session,
+
+    errors: errors.signup,
     formType: 'signup'
   };
 };

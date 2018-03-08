@@ -3892,7 +3892,7 @@ var createPath = function createPath(location) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logout = exports.login = exports.signup = exports.receiveErrors = exports.receiveCurrentUser = exports.RECEIVE_SESSION_ERRORS = exports.RECEIVE_CURRENT_USER = undefined;
+exports.logout = exports.login = exports.signup = exports.receiveSignupErrors = exports.receiveSessionErrors = exports.receiveCurrentUser = exports.RECEIVE_SIGNUP_ERRORS = exports.RECEIVE_SESSION_ERRORS = exports.RECEIVE_CURRENT_USER = undefined;
 
 var _session_api_util = __webpack_require__(303);
 
@@ -3902,6 +3902,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 var RECEIVE_CURRENT_USER = exports.RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
 var RECEIVE_SESSION_ERRORS = exports.RECEIVE_SESSION_ERRORS = 'RECEIVE_SESSION_ERRORS';
+var RECEIVE_SIGNUP_ERRORS = exports.RECEIVE_SIGNUP_ERRORS = 'RECEIVE_SIGNUP_ERRORS';
 
 var receiveCurrentUser = exports.receiveCurrentUser = function receiveCurrentUser(currentUser) {
   return {
@@ -3910,9 +3911,16 @@ var receiveCurrentUser = exports.receiveCurrentUser = function receiveCurrentUse
   };
 };
 
-var receiveErrors = exports.receiveErrors = function receiveErrors(errors) {
+var receiveSessionErrors = exports.receiveSessionErrors = function receiveSessionErrors(errors) {
   return {
     type: RECEIVE_SESSION_ERRORS,
+    errors: errors
+  };
+};
+
+var receiveSignupErrors = exports.receiveSignupErrors = function receiveSignupErrors(errors) {
+  return {
+    type: RECEIVE_SIGNUP_ERRORS,
     errors: errors
   };
 };
@@ -3922,7 +3930,7 @@ var signup = exports.signup = function signup(user) {
     return APIUtil.signup(user).then(function (user) {
       return dispatch(receiveCurrentUser(user));
     }, function (err) {
-      return dispatch(receiveErrors(err.responseJSON));
+      return dispatch(receiveSignupErrors(err.responseJSON));
     });
   };
 };
@@ -3932,7 +3940,7 @@ var login = exports.login = function login(user) {
     return APIUtil.login(user).then(function (user) {
       return dispatch(receiveCurrentUser(user));
     }, function (err) {
-      return dispatch(receiveErrors(err.responseJSON));
+      return dispatch(receiveSessionErrors(err.responseJSON));
     });
   };
 };
@@ -30050,6 +30058,11 @@ var SessionForm = function (_React$Component) {
         'form',
         { onSubmit: this.handleSubmit, className: 'login-form-box' },
         _react2.default.createElement(
+          'span',
+          { className: 'login-errors' },
+          this.renderErrors()
+        ),
+        _react2.default.createElement(
           'label',
           { className: 'login-label' },
           _react2.default.createElement(
@@ -30120,7 +30133,7 @@ var mapStateToProps = function mapStateToProps(_ref) {
 
   return {
 
-    errors: errors.session,
+    errors: errors.signup,
     formType: 'signup'
   };
 }; //React
@@ -32905,9 +32918,14 @@ var _session_errors_reducer = __webpack_require__(384);
 
 var _session_errors_reducer2 = _interopRequireDefault(_session_errors_reducer);
 
+var _signup_errors_reducer = __webpack_require__(385);
+
+var _signup_errors_reducer2 = _interopRequireDefault(_signup_errors_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({
+  signup: _signup_errors_reducer2.default,
   session: _session_errors_reducer2.default
 });
 
@@ -32931,6 +32949,34 @@ exports.default = function () {
   Object.freeze(state);
   switch (action.type) {
     case _session_actions.RECEIVE_SESSION_ERRORS:
+      return action.errors;
+    case _session_actions.RECEIVE_CURRENT_USER:
+      return [];
+    default:
+      return state;
+  }
+};
+
+/***/ }),
+/* 385 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _session_actions = __webpack_require__(34);
+
+exports.default = function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+  Object.freeze(state);
+  switch (action.type) {
+    case _session_actions.RECEIVE_SIGNUP_ERRORS:
       return action.errors;
     case _session_actions.RECEIVE_CURRENT_USER:
       return [];
