@@ -1,4 +1,4 @@
-class Api::UsersController < ApplicationController
+pclass Api::UsersController < ApplicationController
   def index
     @user = User.all
   end
@@ -14,7 +14,7 @@ class Api::UsersController < ApplicationController
   end
 
   def show
-
+    @user = User.find(params[:id])
   end
 
   def destroy
@@ -22,6 +22,7 @@ class Api::UsersController < ApplicationController
   end
 
   def update
+
   end
 
   private

@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   attr_reader :password
 
+
   validates :first_name, :last_name, :password_digest, :email,
             :session_token, :birthday, :gender, presence: true
   validates :gender, inclusion: { in: ['male', 'female', 'enby', 'other']}
@@ -8,6 +9,11 @@ class User < ApplicationRecord
   validates_format_of :email, :with =>
                       /\A([\w+\-]\.?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   validates :password, length: { minimum: 6 }, allow_nil: true
+
+  has_attached_file :profile_pic,
+                    styles: { medium: '300x300>', thumb: '100x100>'},
+                    default_url: 'image.jpg'
+  validates_attachment_content_type :profile_pic, content_type: /\Aimage\/.*\Z/
 
   after_initialize :ensure_session_token
 

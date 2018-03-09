@@ -1,0 +1,158 @@
+.logged-in-nav-bar{
+  background-color: #4267b2;
+  border-bottom: 1px solid #29487d;
+  color: #fff;
+  height: 42px;
+  font-family: SF Optimized, system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
+}
+
+
+.logged-in-nav-bar-container{
+  font-size: 12px;
+  height: inherit;
+  max-width: 1020px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+}
+
+.left-section{
+  display: inherit;
+  align-items: center;
+}
+
+.right-section{
+  display: inherit;
+  align-items: center;
+}
+
+.home-link-container{
+  align-items: center;
+  margin: 7px 5px 7px 10px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+
+.home-link{
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  color: #365899;
+  cursor: pointer;
+}
+.home-link span{
+  position:relative;
+  font-style: italic;
+  font-size: 25px;
+  font-weight: 700;
+  bottom: -5px;
+}
+
+.nav-profile-pic {
+  height: 22px;
+  width: auto;
+  border-radius: 50%;
+}
+
+.logged-in-nav-bar-container section {
+  display: inherit;
+  flex-direction: row;
+}
+
+.search-bar {
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #3b5998;
+  border-radius: 3px;
+  box-sizing: border-box;
+  height:23px;
+  min-width: 188px;
+  width: 441px;
+}
+
+.nav-img {
+  height: 22px;
+  width: auto;
+}
+
+.nav-button:focus img {
+  filter: invert(100%);
+}
+
+.search-bar-input {
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  padding-left: 5px;
+  background-color: #fff;
+  height: 21px;
+  width: 93%;
+  color: #1d2129;
+}
+
+.search-bar-button {
+  overflow: hidden;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  right: 0;
+  padding: 0px 16px;
+  height: 21px;
+  width: 24px;
+  background-color: #f6f7f9;
+  border-radius: 0 2px 2px 0;
+}
+
+.search-bar-button:focus {
+  background-color: #4080ff;
+}
+
+.search-bar-button:focus img {
+  filter: invert(100%);
+}
+.nav-profile-link{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 27px;
+  padding: 0px 10px;
+}
+
+.nav-profile-link span {
+  padding-left: 5px;
+}
+
+.util-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 99px;
+  padding: 0px 9px;
+}
+
+
+.nav-newsfeed-link{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1px 10px;
+  width: 50px;
+  height: 27px;
+}
+
+.nav-link:hover {
+  background-color: #365899;
+  border-radius: 2px;
+}
+
+.search-img {
+  height: 16px;
+  width: auto;
+}

@@ -3,8 +3,7 @@ import React from 'react';
 const NewsFeed = (props) => {
   return(
     <div>
-      <h1>News Feed</h1>
-      <button onClick={props.logout}>Log Out</button>
+      <h1>User Page</h1>
     </div>
   );
 };
