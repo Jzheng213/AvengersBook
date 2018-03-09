@@ -32,25 +32,32 @@ export default class NavBar extends React.Component {
               <span>Home</span></Link>
 
             <nav className='util-container'>
-              <a className='nav-button' href='#'>
+              <button className='nav-button' href='#'>
                 <img className='nav-img friend-request-img' src={window.navPeople} />
-              </a>
+              </button>
 
-              <a className='nav-button' href='#'>
+              <button className='nav-button' href='#'>
                 <img className='nav-img messenger-img' src={window.navMessenger} />
-              </a>
-              <a className='nav-button' href='#'>
+              </button>
+              <button className='nav-button' href='#'>
                 <img className='nav-img notification-img' src={window.navGlobe} />
-              </a>
+              </button>
             </nav>
-            <a className='nav-button' href='#'>
+            <button className='nav-button' href='#'>
               <img className='nav-img quick-help-img' src={window.navHelp} />
-            </a>
-
-            <a className='nav-button' href='#'>
+            </button>
+            <button className='nav-button dropdown-container' href='#'>
               <img className='nav-img settings-img' src={window.navDownArrow} />
-            </a>
-
+              <div className='dropdown-content-container'>
+                <div className='dropdown-content'>
+                  <img className='upArrow' src={window.upArrow} />
+                  <a href='#'>Create Page</a>
+                  <a href='#'>Manage Page</a>
+                  <button href='#' onClick={this.handleLogout}>Logout</button>
+                </div>
+              </div>
+            </button>
+            <button onClick={this.props.logout}>logout</button>
 
           </section>
         </nav>

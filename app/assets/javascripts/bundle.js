@@ -33070,30 +33070,59 @@ var NavBar = function (_React$Component) {
               'nav',
               { className: 'util-container' },
               _react2.default.createElement(
-                'a',
+                'button',
                 { className: 'nav-button', href: '#' },
                 _react2.default.createElement('img', { className: 'nav-img friend-request-img', src: window.navPeople })
               ),
               _react2.default.createElement(
-                'a',
+                'button',
                 { className: 'nav-button', href: '#' },
                 _react2.default.createElement('img', { className: 'nav-img messenger-img', src: window.navMessenger })
               ),
               _react2.default.createElement(
-                'a',
+                'button',
                 { className: 'nav-button', href: '#' },
                 _react2.default.createElement('img', { className: 'nav-img notification-img', src: window.navGlobe })
               )
             ),
             _react2.default.createElement(
-              'a',
+              'button',
               { className: 'nav-button', href: '#' },
               _react2.default.createElement('img', { className: 'nav-img quick-help-img', src: window.navHelp })
             ),
             _react2.default.createElement(
-              'a',
-              { className: 'nav-button', href: '#' },
-              _react2.default.createElement('img', { className: 'nav-img settings-img', src: window.navDownArrow })
+              'button',
+              { className: 'nav-button dropdown-container', href: '#' },
+              _react2.default.createElement('img', { className: 'nav-img settings-img', src: window.navDownArrow }),
+              _react2.default.createElement(
+                'div',
+                { className: 'dropdown-content-container' },
+                _react2.default.createElement(
+                  'div',
+                  { className: 'dropdown-content' },
+                  _react2.default.createElement('img', { className: 'upArrow', src: window.upArrow }),
+                  _react2.default.createElement(
+                    'a',
+                    { href: '#' },
+                    'Create Page'
+                  ),
+                  _react2.default.createElement(
+                    'a',
+                    { href: '#' },
+                    'Manage Page'
+                  ),
+                  _react2.default.createElement(
+                    'button',
+                    { href: '#', onClick: this.handleLogout },
+                    'Logout'
+                  )
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'button',
+              { onClick: this.props.logout },
+              'logout'
             )
           )
         )
@@ -33257,13 +33286,17 @@ var SearchBar = function (_React$Component) {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        'form',
-        { className: 'search-bar' },
-        _react2.default.createElement('input', { className: 'search-bar-input', type: 'text', placeholder: 'Search' }),
+        'div',
+        { className: 'search-bar-container' },
         _react2.default.createElement(
-          'button',
-          { className: 'search-bar-button' },
-          _react2.default.createElement('img', { className: 'search-img', src: window.navSearch })
+          'form',
+          { className: 'search-bar' },
+          _react2.default.createElement('input', { className: 'search-bar-input', type: 'text', placeholder: 'Search' }),
+          _react2.default.createElement(
+            'button',
+            { className: 'search-bar-button' },
+            _react2.default.createElement('img', { className: 'search-img', src: window.navSearch })
+          )
         )
       );
     }

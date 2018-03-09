@@ -1,4 +1,5 @@
 .logged-in-nav-bar{
+  overflow: hidden;
   background-color: #4267b2;
   border-bottom: 1px solid #29487d;
   color: #fff;
@@ -64,24 +65,19 @@
   flex-direction: row;
 }
 
+.search-bar-container {
+  width: 500px;
+}
+
 .search-bar {
   position: relative;
+  width: 100%;
+  min-width: 180px;
   background-color: #fff;
   border: 1px solid #3b5998;
   border-radius: 3px;
   box-sizing: border-box;
   height:23px;
-  min-width: 188px;
-  width: 441px;
-}
-
-.nav-img {
-  height: 22px;
-  width: auto;
-}
-
-.nav-button:focus img {
-  filter: invert(100%);
 }
 
 .search-bar-input {
@@ -112,6 +108,15 @@
 
 .search-bar-button:focus {
   background-color: #4080ff;
+}
+
+.nav-img {
+  height: 22px;
+  width: auto;
+}
+
+.nav-button:focus>img {
+  filter: invert(100%);
 }
 
 .search-bar-button:focus img {
@@ -154,5 +159,43 @@
 
 .search-img {
   height: 16px;
+  width: auto;
+}
+
+.dropdown-container {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown-content {
+  position: absolute;
+  display: none;
+
+  right: 0;
+  background-color: #fff;
+  color: black;
+  margin-top: 10px;
+  z-index: 1;
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
+.dropdown-container:focus .dropdown-content{
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-content>a:hover{
+  background: #4267b2;
+  color: white;
+  padding: 3px 0px;
+}
+
+
+.upArrow{
+  display: none;
+  position: absolute;
+
+  height: 8px;
   width: auto;
 }
