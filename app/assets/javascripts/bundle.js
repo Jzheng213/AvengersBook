@@ -33112,7 +33112,7 @@ var NavBar = function (_React$Component) {
                     'Manage Page'
                   ),
                   _react2.default.createElement(
-                    'button',
+                    'a',
                     { href: '#', onClick: this.handleLogout },
                     'Logout'
                   )

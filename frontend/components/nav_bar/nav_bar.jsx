@@ -53,7 +53,7 @@ export default class NavBar extends React.Component {
                   <img className='upArrow' src={window.upArrow} />
                   <a href='#'>Create Page</a>
                   <a href='#'>Manage Page</a>
-                  <button href='#' onClick={this.handleLogout}>Logout</button>
+                  <a href='#' onClick={this.handleLogout}>Logout</a>
                 </div>
               </div>
             </button>
