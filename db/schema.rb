@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180309173242) do
+ActiveRecord::Schema.define(version: 20180310222507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "posts", force: :cascade do |t|
+    t.string "body", null: false
+    t.integer "author_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_posts_on_author_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name", null: false
@@ -32,6 +40,10 @@ ActiveRecord::Schema.define(version: 20180309173242) do
     t.string "cover_pic_content_type"
     t.integer "cover_pic_file_size"
     t.datetime "cover_pic_updated_at"
+    t.string "content_url_file_name"
+    t.string "content_url_content_type"
+    t.integer "content_url_file_size"
+    t.datetime "content_url_updated_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
