@@ -6,10 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+User.destroy_all
 User.create!(first_name: 'Peter', last_name: 'Parker', email: 'spiderman@avengers.com',
-            password: 'starwars', birthday: '4/1/2000', gender: 'male',
-            cover_pic: File.open('app/assets/images/spiderman/spiderman_cover.png'),
-            profile_pic: File.open('app/assets/images/spiderman/spiderman_profile.jpg')
+            password: 'starwars', birthday: '4/1/2000', gender: 'male'
           )
 
 User.create!(first_name: 'Steven', last_name: 'Rogers', email: 'captian_america@avengers.com',
