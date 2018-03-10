@@ -10,6 +10,7 @@ class User < ApplicationRecord
                       /\A([\w+\-]\.?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   validates :password, length: { minimum: 6 }, allow_nil: true
 
+  has_attached_file :cover_pic, default_url: 'avengers_default_cover.jpeg'
   has_attached_file :profile_pic,
                     styles: { medium: '300x300>', thumb: '100x100>'},
                     default_url: 'image.jpg'

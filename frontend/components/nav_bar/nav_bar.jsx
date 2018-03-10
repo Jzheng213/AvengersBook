@@ -2,11 +2,23 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 //Components
-import SearchBar from '../search/search_form'
+import SearchBar from '../search/search_form';
+import DropDown from '../util/drop_down';
 
 export default class NavBar extends React.Component {
   constructor(props){
     super(props);
+    this.settingsContents = {'Create Page': null,'Manage Page': null, 'Log Out': this.props.logout};
+    this.helpContents = {'Adding a Cover': null, 'Activity Log': null, 'starring and hiding stories': null}
+    this.defaultContents = {'feature working in progess': null}
+  }
+
+  componentDidMount(){
+    document.addEventListener('mousedown', this.handleClickInside);
+  }
+
+  componentWillUnmount(){
+    document.removeEventListener('mousedown', this.handleClickInside);
   }
 
   render(){
@@ -19,46 +31,28 @@ export default class NavBar extends React.Component {
                 <span>A</span>
               </NavLink>
             </div>
+
             <SearchBar />
           </section>
-          <section className='right-section'>
 
+          <section className='right-section'>
             <Link to={`/user/${this.props.currentUser.id}`} className='nav-link nav-profile-link'>
               <img className='nav-profile-pic' src={this.props.currentUser.profile_pic_url}/>
               <span>{`${this.props.currentUser.first_name}`}</span>
             </Link>
 
             <Link to={'/newsfeed'} className='nav-link nav-newsfeed-link'>
-              <span>Home</span></Link>
+              <span>Home</span>
+            </Link>
 
             <nav className='util-container'>
-              <button className='nav-button' href='#'>
-                <img className='nav-img friend-request-img' src={window.navPeople} />
-              </button>
-
-              <button className='nav-button' href='#'>
-                <img className='nav-img messenger-img' src={window.navMessenger} />
-              </button>
-              <button className='nav-button' href='#'>
-                <img className='nav-img notification-img' src={window.navGlobe} />
-              </button>
+              <DropDown customClass='nav-settings' list={this.defaultContents} img={window.navPeople} />
+              <DropDown customClass='nav-settings' list={this.defaultContents} img={window.navMessenger} />
+              <DropDown customClass='nav-settings' list={this.defaultContents} img={window.navGlobe} />
             </nav>
-            <button className='nav-button' href='#'>
-              <img className='nav-img quick-help-img' src={window.navHelp} />
-            </button>
-            <button className='nav-button dropdown-container' href='#'>
-              <img className='nav-img settings-img' src={window.navDownArrow} />
-              <div className='dropdown-content-container'>
-                <div className='dropdown-content'>
-                  <img className='upArrow' src={window.upArrow} />
-                  <a href='#'>Create Page</a>
-                  <a href='#'>Manage Page</a>
-                  <a href='#' onClick={this.handleLogout}>Logout</a>
-                </div>
-              </div>
-            </button>
-            <button onClick={this.props.logout}>logout</button>
 
+            <DropDown customClass='nav-settings' list={this.helpContents} img={window.navHelp} />
+            <DropDown customClass='nav-settings' list={this.settingsContents} img={window.navDownArrow} />
           </section>
         </nav>
       </nav>

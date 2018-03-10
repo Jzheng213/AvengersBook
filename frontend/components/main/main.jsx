@@ -11,14 +11,12 @@ import UserContainer from '../user/user_container';
 
 const Main = () => {
   return(
-    <div>
-      <nav className='N'>
-        <NavBarContainer />
-      </nav>
+    <div className='main'>
+      <NavBarContainer />
       <div>
         <Switch>
           <Route exact path ='/newsfeed' component={NewsFeedContainer} />
-          <Route path ='/user' component={UserContainer} />
+          <Route path ='/user/:userId' component={UserContainer} />
         </Switch>
       </div>
     </div>

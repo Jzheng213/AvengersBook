@@ -2,9 +2,13 @@
   overflow: hidden;
   background-color: #4267b2;
   border-bottom: 1px solid #29487d;
+  position: fixed;
+  top: 0;
+  width: 100%;
   color: #fff;
   height: 42px;
-  font-family: SF Optimized, system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
+  z-index: 1000;
+  
 }
 
 
@@ -66,7 +70,7 @@
 }
 
 .search-bar-container {
-  width: 500px;
+  width: 350px;
 }
 
 .search-bar {
@@ -162,40 +166,41 @@
   width: auto;
 }
 
-.dropdown-container {
-  float: left;
-  overflow: hidden;
+.dropbtn{
+  cursor: pointer;
 }
 
-.dropdown-content {
-  position: absolute;
-  display: none;
-
-  right: 0;
-  background-color: #fff;
-  color: black;
-  margin-top: 10px;
-  z-index: 1;
-  border: 1px solid black;
-  border-radius: 3px;
+.dropdown {
+  position: relative;
+  display: inline-block;
 }
-
-.dropdown-container:focus .dropdown-content{
-  display: flex;
-  flex-direction: column;
-}
-
-.dropdown-content>a:hover{
-  background: #4267b2;
-  color: white;
-  padding: 3px 0px;
-}
-
 
 .upArrow{
-  display: none;
   position: absolute;
-
-  height: 8px;
+  top: -10px;
+  background-color: white;
+  height: 10px;
   width: auto;
+}
+.dropdown-content {
+  display: none;
+  position: fixed;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  background-color: white;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  display: block;
+}
+
+.dropdown-content a:hover{
+  background-color: #ddd;
+}
+
+.show{
+  display:block;
 }
