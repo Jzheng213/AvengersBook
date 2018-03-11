@@ -44,15 +44,15 @@ export default class NavBar extends React.Component {
             <Link to={'/newsfeed'} className='nav-link nav-newsfeed-link'>
               <span>Home</span>
             </Link>
-
-            <nav className='util-container'>
-              <DropDown customClass='nav-settings' list={this.defaultContents} img={window.navPeople} />
-              <DropDown customClass='nav-settings' list={this.defaultContents} img={window.navMessenger} />
-              <DropDown customClass='nav-settings' list={this.defaultContents} img={window.navGlobe} />
+            <nav className='nav-button-container'>
+              <nav className='util-container'>
+                <DropDown customClass='nav-button' list={this.defaultContents} img={window.navPeople} />
+                <DropDown customClass='nav-button' list={this.defaultContents} img={window.navMessenger} />
+                <DropDown customClass='nav-button' list={this.defaultContents} img={window.navGlobe} />
+              </nav>
+              <DropDown customClass='nav-button' list={this.helpContents} img={window.navHelp} />
+              <DropDown customClass='nav-button' list={this.settingsContents} img={window.navDownArrow} />
             </nav>
-
-            <DropDown customClass='nav-settings' list={this.helpContents} img={window.navHelp} />
-            <DropDown customClass='nav-settings' list={this.settingsContents} img={window.navDownArrow} />
           </section>
         </nav>
       </nav>

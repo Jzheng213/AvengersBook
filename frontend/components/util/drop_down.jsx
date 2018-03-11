@@ -17,7 +17,8 @@ export default class DropDown extends React.Component{
   }
 
   toggleShow(){
-    this.setState({show: 'show'});
+    const show = this.state.show === '' ? 'show' : '';
+    this.setState({show});
   }
 
   hide(e){
@@ -29,10 +30,9 @@ export default class DropDown extends React.Component{
 
   render(){
     return(
-      <button className='nav-button' onClick={this.toggleShow} onBlur={this.hide}>
-        <img className='nav-img' src={ this.props.img} />
+      <button className={`${this.props.customClass} dropdown-button`} onClick={this.toggleShow} onBlur={this.hide}>
+        <img className='dropdown-img' src={ this.props.img} />
         <div className={`${this.state.show} dropdown-content ${this.props.customClass}`}>
-          <img className='upArrow' src={window.upArrow} />
           {
             Object.keys(this.props.list).map((el, idx) => {
               return <a href='#' key={idx} onClick={this.executeAction.bind(this, this.props.list[el])}>{el}</a>

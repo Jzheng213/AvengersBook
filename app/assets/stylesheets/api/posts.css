@@ -1,0 +1,83 @@
+.post-container{
+  border: 1px solid rgb(221, 223, 226);
+  margin-bottom: 12px;
+  border-radius: 2px;
+}
+.post-item {
+  width: 492px;
+  padding: 12px 12px 0px 12px;
+}
+
+.post-image {
+  width: 100%;
+}
+
+.post-body{
+  border-bottom: 1px solid rgb(221, 223, 226);
+  margin-bottom: 12px;
+}
+
+.post-body {
+  font-size: 24px;
+}
+
+.post-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding-bottom: 12px;
+}
+
+.security-button .dropdown-img{
+  height: 14px;
+  width: auto;
+  filter: invert(50%);
+}
+
+.mid-dot{
+  padding: 0px 3px;
+}
+.nav-button:focus img {
+  filter: invert(100%);
+}
+
+.timeStamp{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.post-profile-pic {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.author-home-page{
+  color: rgb(54, 88, 153);
+  font-size: 14px;
+  font-weight: 550;
+}
+
+.post-header{
+  display: flex;
+  flex-direction: row;
+}
+.post-profile-pic{
+  margin-right: 8px;
+  padding-bottom: 3px;
+}
+.post-header-detail{
+  display: flex;
+  flex-direction: column;
+}
+
+.timeStamp{
+  color: rgb(144, 148, 156);
+  font-size: 12px;
+}
+
+.friend-dropdown-btn{
+  height: 12px;
+}

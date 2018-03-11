@@ -1,11 +1,10 @@
+//React
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+//Component
+import PostsContainer from '../posts/post_container'
 
 class User extends React.Component{
-  constructor(props){
-    super(props);
-  }
-
   componentDidMount(){
     this.props.requestUser(this.props.match.params.userId);
   }
@@ -21,7 +20,7 @@ class User extends React.Component{
             <div className='profile-picture-container'>
               <img className='profile-picture' src={this.props.user.profile_pic_url} />
             </div>
-              <span className='profile-user-name'>{this.props.user.full_name}</span>
+            <span className='profile-user-name'>{this.props.user.full_name}</span>
             <div className='header-links-container'>
               <ul>
                 <li><a href='#'>Timeline</a></li>
@@ -32,11 +31,11 @@ class User extends React.Component{
               </ul>
             </div>
             <div className='user-profile-content'>
-              <div className='left-column'>
+              <div className='profile-left-column'>
 
               </div>
-              <div className='right-column'>
-
+              <div className='profile-right-column'>
+                <PostsContainer />
               </div>
             </div>
           </div>

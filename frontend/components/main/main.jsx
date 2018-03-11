@@ -2,7 +2,8 @@
 import React from 'react';
 import {
   Switch,
-  Route
+  Route,
+  withRouter
 } from 'react-router-dom';
 
 import NavBarContainer from '../nav_bar/nav_bar_container';
@@ -23,4 +24,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default withRouter(Main);
