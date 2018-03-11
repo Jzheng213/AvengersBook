@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import DropDown from '../util/drop_down';
+import Moment from 'react-moment';
 
 class PostItem extends React.Component{
   render(){
-    const list = {'Public':null, 'Friends':null, 'Friends except...': null}
+    const list = {'Public':null, 'Friends':null, 'Friends except...': null};
+    const dateToFormat = this.props.post.updated_at;
     return(
       <div className='post-container'>
         <div className='post-item'>
@@ -13,7 +15,7 @@ class PostItem extends React.Component{
             <div className='post-header-detail'>
               <Link className='author-home-page' to={`/user/${this.props.post.author_id}`} >{this.props.post.author_name}</Link>
               <div className='timeStamp'>
-                <span>15 hrs</span>
+                <Moment interval={120000} fromNow ago>{dateToFormat}</Moment>
                 <span className='mid-dot'>  &middot;  </span>
                 <DropDown customClass='security-button' list={list} img={window.navPeople} />
               </div>

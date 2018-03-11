@@ -1,3 +1,4 @@
 export const asArray = (posts) => {
-  return Object.keys(posts).map(key => posts[key]);
+  const postsArr = Object.keys(posts).map(key => posts[key]);
+  return postsArr.reverse();
 };

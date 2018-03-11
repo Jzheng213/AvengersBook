@@ -10,8 +10,7 @@ class Api::PostsController < ApplicationController
   end
 
   def create
-    debugger;
-    @post.new(post_params)
+    @post = Post.new(post_params)
     @post.author = current_user
 
     if @post.save

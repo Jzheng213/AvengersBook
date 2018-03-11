@@ -28,3 +28,9 @@ export const fetchPost = (id) => dispatch => {
     return dispatch(receivePost(postFromServer));
   });
 };
+
+export const createPost = (post) => dispatch => {
+  return APIUtil.createPost(post).then((postFromServer) => {
+    return dispatch(receivePost(postFromServer));
+  });
+};

@@ -2,7 +2,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 //Component
-import PostsContainer from '../posts/post_container'
+import PostsContainer from '../posts/post_container';
+import CreatePostFormContainer from '../posts/create_post_form_container';
 
 class User extends React.Component{
   componentDidMount(){
@@ -35,6 +36,7 @@ class User extends React.Component{
 
               </div>
               <div className='profile-right-column'>
+                <CreatePostFormContainer wallOwnerId={this.props.user.id}/>
                 <PostsContainer />
               </div>
             </div>
