@@ -1,19 +1,24 @@
 //React
 import { connect } from 'react-redux';
 //Components
-import { fetchUser, fetchUsers } from '../../actions/user_actions';
+import { fetchUser, fetchUsers, saveUserPhoto } from '../../actions/user_actions';
 import User from './user';
+import { toggleProfPicModal } from '../../actions/modal_actions';
 
 const mapStateToProps = (state, ownProps) => {
   const defaultUser = {email: '', first_name: '', full_name: '', profile_pic_url: '', cover_pic_url: ''}
   return {
-    user: state.entities.users[ownProps.match.params.userId] || defaultUser
+    user: state.entities.users[ownProps.match.params.userId] || defaultUser,
+    currentUser: state.session.currentUser,
+    modal: state.ui.modal.profPicModal
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    requestUser: (id) => dispatch(fetchUser(id))
+    saveUserPhoto: (formData) => dispatch(saveUserPhoto(formData)),
+    requestUser: (id) => dispatch(fetchUser(id)),
+    toggleProfPicModal: ()=> dispatch(toggleProfPicModal())
   };
 };
 

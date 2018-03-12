@@ -11,3 +11,14 @@ export const fetchUser = (id) => {
     url: `/api/users/${id}`
   });
 };
+
+export const updateUser = formData => { 
+  return $.ajax({
+    method: 'PATCH',
+    url: `/api/users/${formData.get("user[id]")}`,
+    processData: false,
+    contentType: false,
+    dataType: 'json',
+    data: formData
+  });
+};

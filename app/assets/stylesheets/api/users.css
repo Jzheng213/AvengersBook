@@ -27,6 +27,14 @@
   border-top-color: rgba(0, 0, 0, 0.1);
 }
 
+.edit-cover-picture-button{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
 .profile-user-name{
   position: absolute;
   font-size: 24px;
@@ -41,10 +49,9 @@
 .profile-picture-container{
   background-color: white;
   border: 1px solid rgb(178, 178, 178);
-
   bottom: 15px;
-  left: 15px;
   position: absolute;
+  left: 15px;
   height: 168px;
   width: 168px;
   overflow: hidden;
@@ -53,7 +60,7 @@
   border-radius: 2px;
 }
 
-.header-links-container{
+.header-links-container {
   display: flex;
   position: relative;
   align-items: center;
@@ -62,7 +69,6 @@
   width: 647px;
   font-size: 14px;
   font-weight: bold;
-  padding-left: 201px;
   color: #365899;
   background-color: white;
   border-width: 1px;
@@ -70,10 +76,11 @@
   border-color: rgb(233, 234, 237);
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+  padding-left: 201px;
 }
 
-.header-links-container ul {
-  display: inherit;
+.header-link-list>ul {
+  display: flex;
   flex-direction: row;
   height: inherit;
 }
@@ -108,4 +115,69 @@
 .user-profile-content{
   display: flex;
   justify-content: space-between;
+}
+
+
+.cover-upload-button{
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 8px 2px;
+  padding: 2px 6px;
+}
+
+.cover-image-upload{
+  margin-left: 10px;
+  margin-top: 8px;
+  color: white;
+  font-size: 18px;
+}
+
+.cover-image-upload span {
+  font-size: 12px;
+  padding-left: 2px;
+}
+
+.cover-picture-container span{
+  opacity: 0;
+  transition: opacity .3s ease-in;
+  -moz-transition: opacity .3s ease-in;
+  -webkit-transition: opacity .3s ease-in;
+  -o-transition: opacity .3s ease-in;
+}
+
+.cover-picture-container:hover span{
+  opacity: 1;
+  transition: opacity .3s ease-out;
+  -moz-transition: opacity .3s ease-out;
+  -webkit-transition: opacity .3s ease-out;
+  -o-transition: opacity .3s ease-out;
+}
+
+
+
+
+.cover-image-upload > input {
+  display: none;
+}
+
+.upload-buttons{
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.cancel{
+  border: 1px solid #ced0d4;
+  background-color: #f6f7f9;
+  color: #4b4f56;
+}
+
+.submit{
+  border: 1px solid #4267b2;
+  background-color: #4267b2;
+  color: white;
+}
+
+.hidden{
+  display: none;
 }

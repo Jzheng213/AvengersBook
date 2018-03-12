@@ -3,6 +3,7 @@
   margin-bottom: 12px;
   border-radius: 2px;
 }
+
 .post-item {
   width: 492px;
   padding: 12px 12px 0px 12px;
@@ -18,7 +19,8 @@
 }
 
 .post-body {
-  font-size: 24px;
+  font-size: 14px;
+  padding: 4px 0px;
 }
 
 .post-buttons {
@@ -78,6 +80,7 @@
   font-size: 12px;
 }
 
-.friend-dropdown-btn{
-  height: 12px;
+
+.hidden{
+  display: none;
 }

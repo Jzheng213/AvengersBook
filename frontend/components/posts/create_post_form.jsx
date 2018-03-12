@@ -22,7 +22,9 @@ class CreatePostForm extends React.Component {
       content: this.state.content
     };
 
-    this.props.submitPost(post);
+    this.props.submitPost(post).then(()=>{
+      this.props.fetchPosts();
+    });
   }
 
   update(field){

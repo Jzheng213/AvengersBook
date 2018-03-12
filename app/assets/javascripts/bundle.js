@@ -30670,6 +30670,10 @@ var _entities_reducer = __webpack_require__(394);
 
 var _entities_reducer2 = _interopRequireDefault(_entities_reducer);
 
+var _ui_reducer = __webpack_require__(535);
+
+var _ui_reducer2 = _interopRequireDefault(_ui_reducer);
+
 var _session_reducer = __webpack_require__(316);
 
 var _session_reducer2 = _interopRequireDefault(_session_reducer);
@@ -30680,11 +30684,10 @@ var _errors_reducer2 = _interopRequireDefault(_errors_reducer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import ui from './ui_reducer';
 var rootReducer = (0, _redux.combineReducers)({
   entities: _entities_reducer2.default,
   session: _session_reducer2.default,
-  // ui,
+  ui: _ui_reducer2.default,
   errors: _errors_reducer2.default
 });
 
@@ -33180,21 +33183,32 @@ var _user = __webpack_require__(390);
 
 var _user2 = _interopRequireDefault(_user);
 
+var _modal_actions = __webpack_require__(533);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//Components
+//React
 var mapStateToProps = function mapStateToProps(state, ownProps) {
   var defaultUser = { email: '', first_name: '', full_name: '', profile_pic_url: '', cover_pic_url: '' };
   return {
-    user: state.entities.users[ownProps.match.params.userId] || defaultUser
+    user: state.entities.users[ownProps.match.params.userId] || defaultUser,
+    currentUser: state.session.currentUser,
+    modal: state.ui.modal.profPicModal
   };
-}; //React
+};
+//Components
 
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
+    saveUserPhoto: function saveUserPhoto(formData) {
+      return dispatch((0, _user_actions.saveUserPhoto)(formData));
+    },
     requestUser: function requestUser(id) {
       return dispatch((0, _user_actions.fetchUser)(id));
+    },
+    toggleProfPicModal: function toggleProfPicModal() {
+      return dispatch((0, _modal_actions.toggleProfPicModal)());
     }
   };
 };
@@ -33228,6 +33242,10 @@ var _create_post_form_container = __webpack_require__(531);
 
 var _create_post_form_container2 = _interopRequireDefault(_create_post_form_container);
 
+var _profile_picture = __webpack_require__(534);
+
+var _profile_picture2 = _interopRequireDefault(_profile_picture);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -33239,26 +33257,110 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 //Component
 
 
+// import CoverPhoto from './cover_photo';
+
 var User = function (_React$Component) {
   _inherits(User, _React$Component);
 
-  function User() {
+  function User(props) {
     _classCallCheck(this, User);
 
-    return _possibleConstructorReturn(this, (User.__proto__ || Object.getPrototypeOf(User)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (User.__proto__ || Object.getPrototypeOf(User)).call(this, props));
+
+    _this.state = {
+      modal: _this.props.modal,
+      coverFile: null,
+      coverImageUrl: null,
+      uploadingCover: false
+    };
+
+    _this.updateFile = _this.updateFile.bind(_this);
+    _this.cancelUpdate = _this.cancelUpdate.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
   }
 
   _createClass(User, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      window.scrollTo(0, 0);
       this.props.requestUser(this.props.match.params.userId);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      if (this.props.match.params.userId !== newProps.match.params.userId) {
+        this.props.requestUser(newProps.match.params.userId);
+        window.scrollTo(0, 0);
+      }
+      this.setState({ modal: newProps.modal });
+    }
+  }, {
+    key: 'updateFile',
+    value: function updateFile(e) {
+      var _this2 = this;
+
+      if (parseInt(this.props.match.params.userId) === this.props.currentUser.id) {
+        var file = e.currentTarget.files[0];
+        var fileReader = new FileReader();
+        fileReader.onloadend = function () {
+          _this2.setState({ coverFile: file,
+            coverImageUrl: fileReader.result,
+            uploadingCover: !_this2.state.uploadingCover });
+        };
+
+        if (file) fileReader.readAsDataURL(file);
+      }
+    }
+  }, {
+    key: 'cancelUpdate',
+    value: function cancelUpdate() {
+      this.fileInput.value = '';
+      this.setState({ coverFile: null,
+        coverImageUrl: null,
+        uploadingCover: !this.state.uploadingCover });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit() {
+      var _this3 = this;
+
+      var formData = new FormData();
+      formData.append('user[cover_pic]', this.state.coverFile);
+      formData.append('user[id]', this.props.user.id);
+      this.props.saveUserPhoto(formData).then(function () {
+        _this3.setState({
+          coverFile: null,
+          coverImageUrl: null
+        });
+      });
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this4 = this;
+
+      var currentUserPage = this.props.currentUser.id === parseInt(this.props.match.params.userId) ? '' : 'hidden';
+
+      var modalProfPicScreen = '';
+      if (this.state.modal) modalProfPicScreen = 'prof-picture-modal-screen';
+
+      var coverUrl = this.state.coverImageUrl || this.props.user.cover_pic_url;
+
+      var hideDuringCoverUpload = '';
+      var unhideDuringCoverUpload = 'hidden';
+      if (this.state.uploadingCover) {
+        hideDuringCoverUpload = 'hidden';
+        unhideDuringCoverUpload = '';
+      }
+
       return _react2.default.createElement(
         'div',
         { className: 'body-container' },
+        _react2.default.createElement('div', { className: modalProfPicScreen,
+          onClick: function onClick() {
+            return _this4.props.toggleProfPicModal();
+          } }),
         _react2.default.createElement(
           'div',
           { className: 'user-container' },
@@ -33268,12 +33370,42 @@ var User = function (_React$Component) {
             _react2.default.createElement(
               'div',
               { className: 'cover-picture-container' },
-              _react2.default.createElement('img', { className: 'cover-picture', src: this.props.user.cover_pic_url })
+              _react2.default.createElement('img', { className: 'cover-picture', src: coverUrl }),
+              _react2.default.createElement(
+                'div',
+                { className: hideDuringCoverUpload + ' edit-cover-picture-button' },
+                _react2.default.createElement(
+                  'div',
+                  { className: currentUserPage + ' cover-image-upload' },
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'cover-image-input' },
+                    _react2.default.createElement('i', { className: 'fas fa-camera' }),
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'cover-update-text' },
+                      'Update Cover Photo'
+                    )
+                  ),
+                  _react2.default.createElement('input', { id: 'cover-image-input',
+                    type: 'file',
+                    onChange: this.updateFile,
+                    ref: function ref(element) {
+                      _this4.fileInput = element;
+                    }
+                  })
+                )
+              )
             ),
             _react2.default.createElement(
               'div',
               { className: 'profile-picture-container' },
-              _react2.default.createElement('img', { className: 'profile-picture', src: this.props.user.profile_pic_url })
+              _react2.default.createElement(_profile_picture2.default, {
+                currentUser: this.props.currentUser,
+                user: this.props.user,
+                toggleProfPicModal: this.props.toggleProfPicModal,
+                modal: this.props.modal
+              })
             ),
             _react2.default.createElement(
               'span',
@@ -33284,57 +33416,75 @@ var User = function (_React$Component) {
               'div',
               { className: 'header-links-container' },
               _react2.default.createElement(
-                'ul',
-                null,
+                'span',
+                { className: hideDuringCoverUpload + ' header-link-list' },
                 _react2.default.createElement(
-                  'li',
+                  'ul',
                   null,
                   _react2.default.createElement(
-                    'a',
-                    { href: '#' },
-                    'Timeline'
-                  )
-                ),
-                _react2.default.createElement(
-                  'li',
-                  null,
-                  _react2.default.createElement(
-                    'a',
-                    { href: '#' },
-                    'About'
-                  )
-                ),
-                _react2.default.createElement(
-                  'li',
-                  null,
-                  _react2.default.createElement(
-                    'a',
-                    { href: '#' },
-                    'Friends',
+                    'li',
+                    null,
                     _react2.default.createElement(
-                      'span',
-                      { className: 'friends-count' },
-                      '400'
+                      'a',
+                      { href: '#' },
+                      'Timeline'
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                      'a',
+                      { href: '#' },
+                      'About'
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                      'a',
+                      { href: '#' },
+                      'Friends',
+                      _react2.default.createElement(
+                        'span',
+                        { className: 'friends-count' },
+                        '400'
+                      )
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                      'a',
+                      { href: '#' },
+                      'Photos'
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                      'a',
+                      { href: '#' },
+                      'More'
                     )
                   )
+                )
+              ),
+              _react2.default.createElement(
+                'span',
+                { className: unhideDuringCoverUpload + ' upload-buttons' },
+                _react2.default.createElement(
+                  'button',
+                  { className: 'cover-upload-button cancel', onClick: this.cancelUpdate },
+                  'Cancel'
                 ),
                 _react2.default.createElement(
-                  'li',
-                  null,
-                  _react2.default.createElement(
-                    'a',
-                    { href: '#' },
-                    'Photos'
-                  )
-                ),
-                _react2.default.createElement(
-                  'li',
-                  null,
-                  _react2.default.createElement(
-                    'a',
-                    { href: '#' },
-                    'More'
-                  )
+                  'button',
+                  { className: 'cover-upload-button submit', onClick: this.handleSubmit },
+                  'Save Changes'
                 )
               )
             ),
@@ -33429,7 +33579,7 @@ exports.default = SearchBar;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchUser = exports.fetchUsers = exports.RECEIVE_USER = exports.RECEIVE_USERS = undefined;
+exports.saveUserPhoto = exports.fetchUser = exports.fetchUsers = exports.RECEIVE_USER = exports.RECEIVE_USERS = undefined;
 
 var _user_api_util = __webpack_require__(393);
 
@@ -33470,6 +33620,14 @@ var fetchUser = exports.fetchUser = function fetchUser(id) {
   };
 };
 
+var saveUserPhoto = exports.saveUserPhoto = function saveUserPhoto(photo) {
+  return function (dispatch) {
+    return APIUtil.updateUser(photo).then(function (user) {
+      dispatch(receiveUser(user));
+    });
+  };
+};
+
 /***/ }),
 /* 393 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -33491,6 +33649,17 @@ var fetchUser = exports.fetchUser = function fetchUser(id) {
   return $.ajax({
     method: 'GET',
     url: '/api/users/' + id
+  });
+};
+
+var updateUser = exports.updateUser = function updateUser(formData) {
+  return $.ajax({
+    method: 'PATCH',
+    url: '/api/users/' + formData.get("user[id]"),
+    processData: false,
+    contentType: false,
+    dataType: 'json',
+    data: formData
   });
 };
 
@@ -50543,6 +50712,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     submitPost: function submitPost(post) {
       return dispatch((0, _post_actions.createPost)(post));
+    },
+    fetchPosts: function fetchPosts() {
+      return dispatch((0, _post_actions.fetchPosts)());
     }
   };
 };
@@ -50598,6 +50770,8 @@ var CreatePostForm = function (_React$Component) {
   _createClass(CreatePostForm, [{
     key: 'handleSubmit',
     value: function handleSubmit(e) {
+      var _this2 = this;
+
       e.preventDefault();
       var post = {
         body: this.state.body,
@@ -50605,15 +50779,17 @@ var CreatePostForm = function (_React$Component) {
         content: this.state.content
       };
 
-      this.props.submitPost(post);
+      this.props.submitPost(post).then(function () {
+        _this2.props.fetchPosts();
+      });
     }
   }, {
     key: 'update',
     value: function update(field) {
-      var _this2 = this;
+      var _this3 = this;
 
       return function (e) {
-        _this2.setState(_defineProperty({}, field, e.target.value));
+        _this3.setState(_defineProperty({}, field, e.target.value));
       };
     }
   }, {
@@ -50704,6 +50880,162 @@ var CreatePostForm = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = CreatePostForm;
+
+/***/ }),
+/* 533 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var TOGGLE_PROF_PIC_MODAL = exports.TOGGLE_PROF_PIC_MODAL = 'TOGGLE_PROF_PIC_MODAL';
+
+var toggleProfPicModal = exports.toggleProfPicModal = function toggleProfPicModal() {
+  return {
+    type: TOGGLE_PROF_PIC_MODAL
+  };
+};
+
+/***/ }),
+/* 534 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ProfilePicture = function (_React$Component) {
+  _inherits(ProfilePicture, _React$Component);
+
+  function ProfilePicture(props) {
+    _classCallCheck(this, ProfilePicture);
+
+    var _this = _possibleConstructorReturn(this, (ProfilePicture.__proto__ || Object.getPrototypeOf(ProfilePicture)).call(this, props));
+
+    _this.state = {
+      imageFile: null,
+      imageUrl: null
+    };
+    return _this;
+  }
+
+  _createClass(ProfilePicture, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'profile-picture-root' },
+        _react2.default.createElement('img', { className: 'profile-picture', src: this.props.user.profile_pic_url }),
+        _react2.default.createElement(
+          'div',
+          { className: 'profile-pic-button', onClick: function onClick() {
+              return _this2.props.toggleProfPicModal();
+            } },
+          _react2.default.createElement(
+            'label',
+            { className: 'profile-picture-button-label' },
+            _react2.default.createElement('i', { className: 'fas fa-camera' }),
+            _react2.default.createElement(
+              'p',
+              null,
+              'Update Profile Picture'
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return ProfilePicture;
+}(_react2.default.Component);
+
+exports.default = ProfilePicture;
+
+/***/ }),
+/* 535 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _redux = __webpack_require__(44);
+
+var _modal_reducer = __webpack_require__(536);
+
+var _modal_reducer2 = _interopRequireDefault(_modal_reducer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = (0, _redux.combineReducers)({
+  // filters,
+  modal: _modal_reducer2.default
+});
+
+// import filters from './filters_reducer';
+
+/***/ }),
+/* 536 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _modal_actions = __webpack_require__(533);
+
+var _merge = __webpack_require__(317);
+
+var _merge2 = _interopRequireDefault(_merge);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultState = {
+  profPicModal: false
+};
+
+var modalReducer = function modalReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
+  var action = arguments[1];
+
+  Object.freeze(state);
+  switch (action.type) {
+    case _modal_actions.TOGGLE_PROF_PIC_MODAL:
+      return (0, _merge2.default)({}, state, { profPicModal: !state.profPicModal });
+    default:
+      return state;
+  }
+};
+
+exports.default = modalReducer;
 
 /***/ })
 /******/ ]);

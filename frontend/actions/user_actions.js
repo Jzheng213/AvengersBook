@@ -28,3 +28,9 @@ export const fetchUser = (id) => dispatch => {
     return dispatch(receiveUser(user));
   });
 };
+
+export const saveUserPhoto = (photo) => dispatch => {
+  return APIUtil.updateUser(photo).then((user) => {
+    dispatch(receiveUser(user));
+  });
+};

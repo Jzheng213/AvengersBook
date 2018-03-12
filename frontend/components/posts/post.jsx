@@ -2,7 +2,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 //Components
-import PostItem from './post_item'
+import PostItem from './post_item';
 
 class Post extends React.Component{
   constructor(props){
@@ -12,6 +12,7 @@ class Post extends React.Component{
   componentDidMount(){
     this.props.requestPosts();
   }
+
   render(){
     return(
       <div>
