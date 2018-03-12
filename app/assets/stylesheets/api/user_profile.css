@@ -36,18 +36,18 @@
   cursor: pointer;
   padding: 0px 5px;
   opacity: 0;
-  transition: opacity .3s ease-out;
-  -moz-transition: opacity .3s ease-out;
-  -webkit-transition: opacity .3s ease-out;
-  -o-transition: opacity .3s ease-out;
+  transition: opacity .13s ease-out;
+  -moz-transition: opacity .13s ease-out;
+  -webkit-transition: opacity .13s ease-out;
+  -o-transition: opacity .13s ease-out;
 }
 
 .profile-pic-button:hover {
-  opacity: 1;
-  transition: opacity .3s ease-in;
-  -moz-transition: opacity .3s ease-in;
-  -webkit-transition: opacity .3s ease-in;
-  -o-transition: opacity .3s ease-in;
+  opacity: 0.75;
+  transition: opacity .13s ease-in;
+  -moz-transition: opacity .13s ease-in;
+  -webkit-transition: opacity .13s ease-in;
+  -o-transition: opacity .13s ease-in;
 }
 
 .profile-picture-button-label{
