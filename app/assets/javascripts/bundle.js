@@ -33331,7 +33331,8 @@ var User = function (_React$Component) {
       this.props.saveUserPhoto(formData).then(function () {
         _this3.setState({
           coverFile: null,
-          coverImageUrl: null
+          coverImageUrl: null,
+          uploadingCover: !_this3.state.uploadingCover
         });
       });
     }

@@ -65,6 +65,7 @@ class User extends React.Component{
       this.setState({
         coverFile: null,
         coverImageUrl: null,
+        uploadingCover: !this.state.uploadingCover
       })
     });
   }
