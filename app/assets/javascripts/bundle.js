@@ -33956,51 +33956,7 @@ var userReducer = function userReducer() {
 exports.default = userReducer;
 
 /***/ }),
-/* 401 */,
-/* 402 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _reactRedux = __webpack_require__(32);
-
-var _post_actions = __webpack_require__(398);
-
-var _Post = __webpack_require__(403);
-
-var _Post2 = _interopRequireDefault(_Post);
-
-var _selector = __webpack_require__(404);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var mapStateToProps = function mapStateToProps(state) {
-  var posts = (0, _selector.asArray)(state.entities.posts);
-  return {
-    posts: posts
-  };
-};
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    requestPost: function requestPost(id) {
-      return dispatch((0, _post_actions.fetchPost)(id));
-    },
-    requestPosts: function requestPosts() {
-      return dispatch((0, _post_actions.fetchPosts)());
-    }
-  };
-};
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Post2.default);
-
-/***/ }),
-/* 403 */
+/* 401 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34070,6 +34026,50 @@ var Post = function (_React$Component) {
 exports.default = (0, _reactRouterDom.withRouter)(Post);
 
 /***/ }),
+/* 402 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactRedux = __webpack_require__(32);
+
+var _post_actions = __webpack_require__(398);
+
+var _post = __webpack_require__(401);
+
+var _post2 = _interopRequireDefault(_post);
+
+var _selector = __webpack_require__(404);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state) {
+  var posts = (0, _selector.asArray)(state.entities.posts);
+  return {
+    posts: posts
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    requestPost: function requestPost(id) {
+      return dispatch((0, _post_actions.fetchPost)(id));
+    },
+    requestPosts: function requestPosts() {
+      return dispatch((0, _post_actions.fetchPosts)());
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_post2.default);
+
+/***/ }),
+/* 403 */,
 /* 404 */
 /***/ (function(module, exports, __webpack_require__) {
 
