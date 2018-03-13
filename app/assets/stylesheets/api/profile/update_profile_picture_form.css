@@ -1,0 +1,39 @@
+.edit-profile-form{
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+  font-size: 18px;
+  border-radius: 3px;
+}
+
+.edit-profile-form .profile-header{
+  padding: 12px 10px;
+  font-size: 15px;
+  background-color: rgb(246, 247, 249);
+  border-bottom-color: rgb(229,229,229);
+}
+
+.edit-profile-form .profile-body{
+  margin-top: 4px;
+  display: flex;
+  justify-content: center;
+  flex: 1 1 auto;
+  align-items: center;
+}
+
+.edit-profile-form .profile-body:hover {
+  background-color: rgb(246, 247, 249);
+}
+
+.edit-profile-form .profile-body span{
+  padding-left: 6px;
+}
+
+.edit-profile-form > input {
+  display: none;
+}
+
+.profile-body{
+  padding: 50px 0;
+}

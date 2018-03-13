@@ -1,8 +1,3 @@
-.cover-picture {
-  width: 849px;
-  height: auto;
-}
-
 .profile-picture {
   width: 168px;
   height: auto;
@@ -13,14 +8,19 @@
   height: 168px;
   position:relative;
 }
-.prof-picture-modal-screen {
-  position: fixed;
-  background: rgba(0, 0, 0, 0.7);
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 500;
+
+.profile-picture-container{
+  background-color: white;
+  border: 1px solid rgb(178, 178, 178);
+  position: absolute;
+  top: 160px;
+  left: 15px;
+  height: 168px;
+  width: 168px;
+  overflow: hidden;
+  z-index: 2;
+  padding: 3px;
+  border-radius: 2px;
 }
 
 .profile-pic-button {

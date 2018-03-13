@@ -1,5 +1,6 @@
 .create-post{
   display: flex;
+  background-color: #fff;
   flex-direction: column;
   height: 194px;
   width: 516px;

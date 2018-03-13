@@ -1,0 +1,81 @@
+.cover-picture-container {
+  top: 42px;
+  width: 848px;
+  height: 313px;
+  overflow:hidden;
+  position: relative;
+  border: 1px solid #000;
+  border-color: rgba(0, 0, 0, 0.25);
+  border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+.cover-picture {
+  width: 849px;
+  height: auto;
+}
+
+.edit-cover-picture-button{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+
+.cover-upload-button{
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 8px 2px;
+  padding: 2px 6px;
+}
+
+.cover-image-upload{
+  margin-left: 10px;
+  margin-top: 8px;
+  color: white;
+  font-size: 18px;
+}
+
+.cover-image-upload span {
+  font-size: 12px;
+  padding-left: 2px;
+}
+
+.cover-picture-container span{
+  opacity: 0;
+  transition: opacity .3s ease-in;
+  -moz-transition: opacity .3s ease-in;
+  -webkit-transition: opacity .3s ease-in;
+  -o-transition: opacity .3s ease-in;
+}
+
+.cover-picture-container:hover span{
+  opacity: 1;
+  transition: opacity .3s ease-out;
+  -moz-transition: opacity .3s ease-out;
+  -webkit-transition: opacity .3s ease-out;
+  -o-transition: opacity .3s ease-out;
+}
+
+.cover-image-upload > input {
+  display: none;
+}
+
+.upload-buttons{
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.cancel{
+  border: 1px solid #ced0d4;
+  background-color: #f6f7f9;
+  color: #4b4f56;
+}
+
+.submit{
+  border: 1px solid #4267b2;
+  background-color: #4267b2;
+  color: white;
+}

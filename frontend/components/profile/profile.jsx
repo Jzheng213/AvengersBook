@@ -5,9 +5,12 @@ import { withRouter } from 'react-router-dom';
 import PostsContainer from '../posts/post_container';
 import CreatePostFormContainer from '../posts/create_post_form_container';
 import ProfilePicture from './profile_picture';
+import ProfilePictureForm from './update_profile_pic_form';
+import Modal from '../modal';
+import ProfileHeaderLinks from './profile_header_links';
 // import CoverPhoto from './cover_photo';
 
-class User extends React.Component{
+class Profile extends React.Component{
   constructor(props){
     super(props);
     this.state = {
@@ -15,10 +18,12 @@ class User extends React.Component{
       coverFile: null,
       coverImageUrl: null,
       uploadingCover: false,
+      profileFile: null,
+      profileImageUrl: null
     };
 
-    this.updateFile = this.updateFile.bind(this);
-    this.cancelUpdate = this.cancelUpdate.bind(this);
+    this.updateFile = this.updateFile;
+    this.cancelUpdate = this.cancelUpdate;
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -35,38 +40,40 @@ class User extends React.Component{
     this.setState({ modal: newProps.modal });
   }
 
-  updateFile(e){
-
+  updateFile(field, e){
     if(parseInt(this.props.match.params.userId) === this.props.currentUser.id){
       const file = e.currentTarget.files[0];
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        this.setState({coverFile: file,
-          coverImageUrl: fileReader.result,
-          uploadingCover: !this.state.uploadingCover});
-      };
+        if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
 
+        this.setState({[`${field}File`]: file,
+          [`${field}ImageUrl`]: fileReader.result
+        });
+      };
       if (file) fileReader.readAsDataURL(file);
     }
   }
 
-  cancelUpdate(){
+  cancelUpdate(field){
     this.fileInput.value = '';
-    this.setState({coverFile: null,
-      coverImageUrl: null,
-      uploadingCover: !this.state.uploadingCover});
+    this.setState({
+      [`${field}File`]: null,
+      [`${field}ImageUrl`]: null
+    });
+    if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
   }
 
-  handleSubmit(){
+  handleSubmit(field){
     let formData = new FormData();
-    formData.append('user[cover_pic]', this.state.coverFile);
+    formData.append(`user[${field}_pic]`, this.state[`${field}File`]);
     formData.append('user[id]', this.props.user.id);
     this.props.saveUserPhoto(formData).then(()=>{
       this.setState({
-        coverFile: null,
-        coverImageUrl: null,
-        uploadingCover: !this.state.uploadingCover
-      })
+        [`${field}File`]: null,
+        [`${field}ImageUrl`]: null
+      });
+      if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
     });
   }
 
@@ -76,7 +83,7 @@ class User extends React.Component{
     let modalProfPicScreen = '';
     if (this.state.modal) modalProfPicScreen = 'prof-picture-modal-screen';
 
-    let coverUrl = this.state.coverImageUrl || this.props.user.cover_pic_url
+    let coverUrl = this.state.coverImageUrl || this.props.user.cover_pic_url;
 
     let hideDuringCoverUpload = '';
     let unhideDuringCoverUpload = 'hidden';
@@ -84,12 +91,20 @@ class User extends React.Component{
       hideDuringCoverUpload = 'hidden';
       unhideDuringCoverUpload = '';
     }
-
+    
     return(
-      <div className='body-container'>
-        <div className={modalProfPicScreen}
-          onClick={() => this.props.toggleProfPicModal()}/>
-        <div className='user-container'>
+      <div className='profile-container'>
+        <div className= 'profile-wrapper'>
+          <Modal component={
+            <ProfilePictureForm
+              fileInput={this.fileInput}
+              profilePicUrl={this.state.profileImageUrl}
+              handleSubmit={this.handleSubmit.bind(this, 'profile')}
+              cancelUpdate={this.cancelUpdate.bind(this,'profile')}
+              updateFile={this.updateFile.bind(this, 'profile')} />}
+          modalScreen={modalProfPicScreen}
+          />
+
           <div className='header-container'>
             <div className='cover-picture-container'>
               <img className='cover-picture' src={coverUrl} />
@@ -101,13 +116,12 @@ class User extends React.Component{
                   </label>
                   <input id='cover-image-input'
                     type='file'
-                    onChange={this.updateFile}
+                    onChange={this.updateFile.bind(this, 'cover')}
                     ref={(element) => { this.fileInput = element; }}
                   />
                 </div>
               </div>
             </div>
-
 
             <div className={'profile-picture-container'}>
               <ProfilePicture
@@ -119,30 +133,21 @@ class User extends React.Component{
             </div>
 
             <span className='profile-user-name'>{this.props.user.full_name}</span>
-            <div className='header-links-container'>
-              <span className={`${hideDuringCoverUpload} header-link-list` }>
-                <ul>
-                  <li><a href='#'>Timeline</a></li>
-                  <li><a href='#'>About</a></li>
-                  <li><a href='#'>Friends<span className='friends-count'>400</span></a></li>
-                  <li><a href='#'>Photos</a></li>
-                  <li><a href='#'>More</a></li>
-                </ul>
-              </span>
+            <ProfileHeaderLinks
+              hideDuringCoverUpload={hideDuringCoverUpload}
+              unhideDuringCoverUpload={unhideDuringCoverUpload}
+              cancelUpdate={this.cancelUpdate.bind(this, 'cover')}
+              handleSubmit={this.handleSubmit.bind(this, 'cover')}
+            />
+          </div>
 
-              <span className={`${unhideDuringCoverUpload} upload-buttons`}>
-                <button className='cover-upload-button cancel' onClick={this.cancelUpdate}>Cancel</button>
-                <button className='cover-upload-button submit' onClick={this.handleSubmit}>Save Changes</button>
-              </span>
+          <div className='user-profile-content'>
+            <div className='profile-left-column'>
+
             </div>
-            <div className='user-profile-content'>
-              <div className='profile-left-column'>
-
-              </div>
-              <div className='profile-right-column'>
-                <CreatePostFormContainer wallOwnerId={this.props.user.id}/>
-                <PostsContainer />
-              </div>
+            <div className='profile-right-column'>
+              <CreatePostFormContainer wallOwnerId={this.props.user.id}/>
+              <PostsContainer />
             </div>
           </div>
         </div>
@@ -151,4 +156,4 @@ class User extends React.Component{
   }
 }
 
-export default withRouter(User);
+export default withRouter(Profile);

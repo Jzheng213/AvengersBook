@@ -1,0 +1,39 @@
+.body-container {
+}
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.profile-wrapper{
+  width: 850px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-container{
+  position: relative
+}
+
+.user-profile-content{
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-user-name{
+  position: absolute;
+  font-size: 24px;
+  font-weight: 250;
+  z-index: 2;
+  top: 265px;
+  left: 205px;
+  color: white;
+  text-shadow: rgba(0,0,0,.8);
+}
+
+.hidden{
+  display: none;
+}
