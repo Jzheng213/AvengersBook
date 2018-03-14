@@ -4,7 +4,8 @@ const ProfileHeaderLinks = ({
   hideDuringCoverUpload,
   unhideDuringCoverUpload,
   cancelUpdate,
-  handleSubmit
+  handleSubmit,
+  friend_ids,
 }) => {
   return(
     <div className='header-links-container'>
@@ -12,7 +13,7 @@ const ProfileHeaderLinks = ({
         <ul>
           <li><a href='#'>Timeline</a></li>
           <li><a href='#'>About</a></li>
-          <li><a href='#'>Friends<span className='friends-count'>400</span></a></li>
+          <li><a href='#'>Friends<span className='friends-count'>{friend_ids.length}</span></a></li>
           <li><a href='#'>Photos</a></li>
           <li><a href='#'>More</a></li>
         </ul>
@@ -23,6 +24,7 @@ const ProfileHeaderLinks = ({
         <button className='cover-upload-button submit' onClick={handleSubmit}>Save Changes</button>
       </span>
     </div>
+
   );
 };
 

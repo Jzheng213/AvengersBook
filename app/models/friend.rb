@@ -1,5 +1,5 @@
-class Post < ApplicationRecord
-  validates :requestor_id, :receiver_id, :pending, presence: true
+class Friend < ApplicationRecord
+  validates :requestor_id, :receiver_id, presence: true
   validates :requestor_id, uniqueness: { scope: :receiver_id}
 
   belongs_to :requestor,

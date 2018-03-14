@@ -1,0 +1,15 @@
+.friend-image{
+  position: relative;
+  height: 101px;
+  width: 101px;
+  margin: 2px;
+  overflow: hidden;
+}
+
+.friend-image span{
+  color: #fff;
+  font-size: 12px;
+  position: absolute;
+  bottom: 5px;
+  padding: 5px;
+}

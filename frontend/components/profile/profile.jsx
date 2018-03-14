@@ -8,6 +8,7 @@ import ProfilePicture from './profile_picture';
 import ProfilePictureForm from './update_profile_pic_form';
 import Modal from '../modal';
 import ProfileHeaderLinks from './profile_header_links';
+import FriendsList from '../friends/friends_list';
 // import CoverPhoto from './cover_photo';
 
 class Profile extends React.Component{
@@ -29,12 +30,16 @@ class Profile extends React.Component{
 
   componentDidMount(){
     window.scrollTo(0, 0);
-    this.props.requestUser(this.props.match.params.userId);
+    this.props.requestUser(this.props.match.params.userId).then(
+      () => this.props.requestFriends(this.props.user)
+    );
   }
 
   componentWillReceiveProps(newProps){
     if(this.props.match.params.userId !== newProps.match.params.userId){
-      this.props.requestUser(newProps.match.params.userId);
+      this.props.requestUser(newProps.match.params.userId).then(
+        () => this.props.requestFriends(this.props.user)
+      );
       window.scrollTo(0, 0);
     }
     this.setState({ modal: newProps.modal });
@@ -74,6 +79,7 @@ class Profile extends React.Component{
         [`${field}ImageUrl`]: null
       });
       if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
+      this.props.requestUser(this.props.user.id);
     });
   }
 
@@ -91,7 +97,6 @@ class Profile extends React.Component{
       hideDuringCoverUpload = 'hidden';
       unhideDuringCoverUpload = '';
     }
-    
     return(
       <div className='profile-container'>
         <div className= 'profile-wrapper'>
@@ -138,12 +143,13 @@ class Profile extends React.Component{
               unhideDuringCoverUpload={unhideDuringCoverUpload}
               cancelUpdate={this.cancelUpdate.bind(this, 'cover')}
               handleSubmit={this.handleSubmit.bind(this, 'cover')}
+              friend_ids={this.props.user.friend_ids}
             />
           </div>
 
           <div className='user-profile-content'>
             <div className='profile-left-column'>
-
+              <FriendsList friends={this.props.friends}/>
             </div>
             <div className='profile-right-column'>
               <CreatePostFormContainer wallOwnerId={this.props.user.id}/>

@@ -22,14 +22,36 @@ class User < ApplicationRecord
     foreign_key: :author_id,
     class_name: :Post
 
-  has_many :requestor,
+  has_many :requestors,
     foreign_key: :requestor_id,
     class_name: :Friend
 
-  has_many :receiver,
+  has_many :receivers,
     foreign_key: :receiver_id,
     class_name: :Friend
-  
+
+  has_many :confirmed_friends_received,
+    -> { where pending: false },
+    foreign_key: :receiver_id,
+    class_name: :Friend
+
+  has_many :confirmed_friends_requested,
+    -> { where pending: false },
+    foreign_key: :requestor_id,
+    class_name: :Friend
+
+  has_many :friends_through_receive,
+    through: :confirmed_friends_received,
+    source: :requestor
+
+  has_many :friends_through_request,
+    through: :confirmed_friends_requested,
+    source: :receiver
+
+  def get_friends
+    @friends = friends_through_receive + friends_through_request
+  end
+
   def self.find_by_credentials(email, password)
     user = User.find_by(email: email)
     return nil unless user

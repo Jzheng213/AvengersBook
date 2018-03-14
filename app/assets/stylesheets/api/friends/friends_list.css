@@ -1,0 +1,36 @@
+.friends-list-container{
+  font-size: 16px;
+  color: #1d2129;
+  background: #fff;
+  width: 323px;
+  border-radius: 3px;
+  border: 1px solid #dddfe2;
+}
+
+.friends-list-container header {
+  padding: 12px 0;
+  margin: 0 12px;
+}
+
+.friends-icon{
+  padding: 4px;
+  border-radius: 50%;
+  background: #ed4a6a;
+  font-size: 11px;
+  color: white;
+  margin-right: 5px;
+}
+
+.friends-list-count{
+  color: #90949c;
+  font-size: 14px;
+}
+
+.friends-list-section{
+  min-height: 311px;
+  padding: 1px;
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+  align-content: flex-start;
+}

@@ -1,4 +1,5 @@
 import * as APIUtil from '../util/user_api_util';
+import * as APIUtilFriends from '../util/friend_api_util';
 
 export const RECEIVE_USERS = 'RECEIVE_USERS';
 export const RECEIVE_USER = 'RECEIVE_USER';
@@ -32,5 +33,11 @@ export const fetchUser = (id) => dispatch => {
 export const saveUserPhoto = (photo) => dispatch => {
   return APIUtil.updateUser(photo).then((user) => {
     dispatch(receiveUser(user));
+  });
+};
+
+export const fetchFriends = (user) => dispatch => {
+  return APIUtilFriends.fetchFriends(user).then((usersFromServer) => {
+    dispatch(receiveUsers(usersFromServer));
   });
 };

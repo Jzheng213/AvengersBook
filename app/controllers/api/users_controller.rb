@@ -16,6 +16,7 @@ class Api::UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @friend = @user.get_friends
     render :show
   end
 
