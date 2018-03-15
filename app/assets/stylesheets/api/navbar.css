@@ -127,13 +127,10 @@
   position: relative;
 }
 
-.nav-button .dropdown-content {
-  margin-top: 1px;
-  right: 0;
-}
 .search-bar-button:focus img {
   filter: invert(100%);
 }
+
 .nav-profile-link{
   display: flex;
   justify-content: space-between;
@@ -159,8 +156,6 @@
   width: 99px;
   padding: 0px 9px;
 }
-
-
 
 .nav-newsfeed-link{
   display: flex;

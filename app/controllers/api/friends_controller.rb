@@ -12,14 +12,79 @@ class Api::FriendsController < ApplicationController
     end
   end
 
+  def show
+
+  end
+
   def create
-    debugger
+    @friend_request = Friend.new(
+      requestor_id: params[:requestor_id],
+      receiver_id: params[:receiver_id],
+      pending: true
+    )
+    if @friend_request.save
+      @user = User.find(params[:receiver_id])
+      render 'api/users/show'
+    else
+      render json: @friends_request.errors.full_messages, status: 422
+    end
   end
 
   def update
+    @friend_request = Friend.find_by(
+      requestor_id: params[:requestor_id],
+      receiver_id: params[:receiver_id],
+      pending: true
+    )
+    if @friend_request.update(
+      requestor_id: params[:requestor_id],
+      receiver_id: params[:receiver_id],
+      pending: false)
+      @user = User.find(params[:requestor_id])
+      @current_user = User.find(params[:receiver_id])
+      render 'api/friends/friend_pair'
+    else
+      render :json ['invalid approval']
+    end
+  end
 
+  def cancel
+    @friend = Friend.find_by(
+      requestor_id: params[:requestor_id],
+      receiver_id: params[:receiver_id]
+    )
+
+    unless @friend
+      @friend = Friend.find_by(
+        receiver_id: params[:requestor_id],
+        requestor_id: params[:receiver_id]
+      )
+    end
+
+    if @friend.destroy
+      if params[:request] == "true"
+        @current_user = User.find(params[:requestor_id])
+        @user = User.find(params[:receiver_id])
+      else
+        @user = User.find(params[:requestor_id])
+        @current_user = User.find(params[:receiver_id])
+      end
+      render 'api/friends/friend_pair'
+    else
+      render :json ['currently not pending']
+    end
   end
 
   def destroy
+    @friend = Friend.find_by(
+      requestor_id: params[:requestor_id],
+      receiver_id: params[:receiver_id]
+    )
+    if @friend
+      @user.find(params[:receiver_id])
+      render 'api/users/show'
+    else
+      render :json ['currently not friends']
+    end
   end
 end

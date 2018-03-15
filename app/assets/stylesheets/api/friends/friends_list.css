@@ -28,7 +28,7 @@
 
 .friends-list-section{
   min-height: 311px;
-  padding: 1px;
+  padding: 4px;
   display: flex;
   justify-content: flex-start;
   flex-flow: row wrap;

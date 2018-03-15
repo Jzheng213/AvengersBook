@@ -1,7 +1,15 @@
 //React
 import { connect } from 'react-redux';
 //Components
-import { fetchUser, saveUserPhoto, fetchFriends } from '../../actions/user_actions';
+import {
+  fetchUser,
+  saveUserPhoto,
+  fetchFriends,
+  newFriendRequest,
+  cancelFriendRequest,
+  approveFriendRequest
+} from '../../actions/user_actions';
+
 import Profile from './profile';
 import { toggleProfPicModal } from '../../actions/modal_actions';
 import { filterFriends } from '../../reducers/users/selector';
@@ -23,7 +31,6 @@ const mapStateToProps = (state, ownProps) => {
     );
   }
 
-
   return {
     user: state.entities.users[ownProps.match.params.userId] || defaultUser,
     currentUser: state.session.currentUser,
@@ -37,7 +44,10 @@ const mapDispatchToProps = dispatch => {
     saveUserPhoto: (formData) => dispatch(saveUserPhoto(formData)),
     requestUser: (id) => dispatch(fetchUser(id)),
     toggleProfPicModal: ()=> dispatch(toggleProfPicModal()),
-    requestFriends: (user)=> dispatch(fetchFriends(user))
+    requestFriends: (user)=> dispatch(fetchFriends(user)),
+    newFriendRequest: (data) => dispatch(newFriendRequest(data)),
+    cancelFriendRequest: (data) => dispatch(cancelFriendRequest(data)),
+    approveFriendRequest: (data) => dispatch(approveFriendRequest(data))
   };
 };
 

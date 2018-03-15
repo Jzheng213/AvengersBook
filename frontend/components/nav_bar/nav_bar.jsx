@@ -8,13 +8,18 @@ import DropDown from '../util/drop_down';
 export default class NavBar extends React.Component {
   constructor(props){
     super(props);
-    this.settingsContents = {'Create Page': null,'Manage Page': null, 'Log Out': this.props.logout};
+    this.settingsContents = {'Create Page': null,'Manage Page': ()=>{console.log('whatever');}, 'Log Out': this.props.logout};
     this.helpContents = {'Adding a Cover': null, 'Activity Log': null, 'starring and hiding stories': null}
     this.defaultContents = {'feature working in progess': null}
   }
 
   componentDidMount(){
     document.addEventListener('mousedown', this.handleClickInside);
+    this.props.requestPendingFriendRequests(this.props.currentUser.id);
+  }
+
+  componentWillReceiveProps(){
+
   }
 
   componentWillUnmount(){

@@ -9,6 +9,8 @@ import ProfilePictureForm from './update_profile_pic_form';
 import Modal from '../modal';
 import ProfileHeaderLinks from './profile_header_links';
 import FriendsList from '../friends/friends_list';
+import FriendRequestButton from '../friends/friend_request_button';
+
 // import CoverPhoto from './cover_photo';
 
 class Profile extends React.Component{
@@ -29,18 +31,20 @@ class Profile extends React.Component{
   }
 
   componentDidMount(){
-    window.scrollTo(0, 0);
     this.props.requestUser(this.props.match.params.userId).then(
-      () => this.props.requestFriends(this.props.user)
+      () => {
+        return this.props.requestFriends(this.props.user);
+        window.scrollTo(0, 0);
+      }
     );
   }
 
   componentWillReceiveProps(newProps){
     if(this.props.match.params.userId !== newProps.match.params.userId){
+      window.scrollTo(0, 0);
       this.props.requestUser(newProps.match.params.userId).then(
         () => this.props.requestFriends(this.props.user)
       );
-      window.scrollTo(0, 0);
     }
     this.setState({ modal: newProps.modal });
   }
@@ -82,7 +86,6 @@ class Profile extends React.Component{
       this.props.requestUser(this.props.user.id);
     });
   }
-
   render(){
     let currentUserPage = this.props.currentUser.id === parseInt(this.props.match.params.userId) ? '' : 'hidden';
 
@@ -138,6 +141,19 @@ class Profile extends React.Component{
             </div>
 
             <span className='profile-user-name'>{this.props.user.full_name}</span>
+
+            {this.props.currentUser && this.props.user.id &&
+              <div className='float-button'>
+                <FriendRequestButton
+                  currentUser={this.props.currentUser}
+                  user={this.props.user}
+                  cancelFriendRequest={this.props.cancelFriendRequest}
+                  newFriendRequest={this.props.newFriendRequest}
+                  approveFriendRequest={this.props.approveFriendRequest}
+                />
+              </div>
+            }
+
             <ProfileHeaderLinks
               hideDuringCoverUpload={hideDuringCoverUpload}
               unhideDuringCoverUpload={unhideDuringCoverUpload}

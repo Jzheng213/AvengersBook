@@ -17,25 +17,27 @@ export default class DropDown extends React.Component{
   }
 
   toggleShow(){
-    const show = this.state.show === '' ? 'show' : '';
-    this.setState({show});
+    // const show = this.state.show === 'show' ? '' : 'show';
+    this.setState(prevState => ({show: prevState.show === '' ? 'show': ''}));
   }
 
+
   hide(e){
-    if(e && e.relatedTarget){
+    if(e && e.relatedTarget && e.relatedTarget.tagName === 'A'){
       e.relatedTarget.click();
     }
-    this.setState({show: ''});
+    this.setState(() => ({show: ''}));
   }
 
   render(){
     return(
-      <button className={`${this.props.customClass} dropdown-button`} onClick={this.toggleShow} onBlur={this.hide}>
+      <button className={`${this.props.customClass} dropdown-button`} onBlur={this.hide} onClick={this.toggleShow} >
         <img className='dropdown-img' src={ this.props.img} />
-        <div className={`${this.state.show} dropdown-content ${this.props.customClass}`}>
-          {
+        {this.props.content}
+        <div className={`${this.state.show || ''} dropdown-content`}>
+          { this.props.list &&
             Object.keys(this.props.list).map((el, idx) => {
-              return <a href='#' key={idx} onClick={this.executeAction.bind(this, this.props.list[el])}>{el}</a>
+              return <a href='#' key={idx} onClick={this.executeAction.bind(this, this.props.list[el])}>{el}</a>;
             })
           }
         </div>

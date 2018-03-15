@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180313173635) do
+ActiveRecord::Schema.define(version: 20180315053003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20180313173635) do
   create_table "friends", force: :cascade do |t|
     t.integer "requestor_id", null: false
     t.integer "receiver_id", null: false
-    t.boolean "pending", null: false
+    t.boolean "pending"
     t.index ["receiver_id"], name: "index_friends_on_receiver_id"
     t.index ["requestor_id", "receiver_id"], name: "index_friends_on_requestor_id_and_receiver_id", unique: true
     t.index ["requestor_id"], name: "index_friends_on_requestor_id"
