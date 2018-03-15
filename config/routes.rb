@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :friend_requests, only: [:index]
     resource :session, only: [:create, :destroy]
     resources :posts, only: [:index, :show, :create, :update, :destroy]
+    get '/friends_posts/', to: 'posts#friends_posts'
     resources :users, only: [:index, :show, :create, :update, :destroy]
   end
 end

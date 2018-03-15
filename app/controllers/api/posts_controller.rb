@@ -1,10 +1,20 @@
 class Api::PostsController < ApplicationController
   def index
-    @posts = Post.all
+    @posts = Post.where(wall_owner_id: params[:wall_owner_id])
+    render :index
+  end
+
+  def friends_posts
+    user = User.find(params[:current_user_id])
+    newsfeed_post_author_ids = user.get_friends.pluck(:id)
+    newsfeed_post_author_ids << params[:current_user_id]
+
+    @posts = Post.where(author_id: newsfeed_post_author_ids)
     render :index
   end
 
   def show
+    debugger
     @post = Post.find(params[:id])
     render :show
   end
@@ -34,6 +44,6 @@ class Api::PostsController < ApplicationController
 
   private
   def post_params
-    params.require(:post).permit(:body, :content, :wall_owner_id)
+    params.require(:post).permit(:body, :content, :wall_owner_id, :current_user_id)
   end
 end

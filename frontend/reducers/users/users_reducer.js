@@ -12,12 +12,12 @@ const userReducer = (state = {}, action) => {
     delete newState[action.user.id];
     return merge({}, newState, {[action.user.id]: action.user});
   case RECEIVE_PAIR:
-    debugger;
+    
     const newStates = merge({}, state);
     Object.keys(action.users).forEach((id) => {
       delete newStates[id];
     });
-    debugger;
+    
     return merge({}, newStates, action.users);
   default:
     return state;

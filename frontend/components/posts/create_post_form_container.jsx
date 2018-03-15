@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     submitPost: (post) => dispatch(createPost(post)),
-    fetchPosts: () => dispatch(fetchPosts())
+    fetchPosts: (wallOwnerId) => dispatch(fetchPosts(wallOwnerId))
   };
 };
 

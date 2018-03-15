@@ -23,7 +23,8 @@ class CreatePostForm extends React.Component {
     };
 
     this.props.submitPost(post).then(()=>{
-      this.props.fetchPosts();
+      this.props.fetchPosts(this.props.wallOwnerId);
+      this.setState({body: '', content: ''});
     });
   }
 
@@ -46,7 +47,7 @@ class CreatePostForm extends React.Component {
         </div>
         <div className='create-post-input-container'>
           <img className='post-profile-pic' src={this.props.currentUser.profile_pic_url} />
-          <input className='create-post-input'
+          <textarea className='create-post-input'
             type='text'
             value={this.state.body}
             onChange={this.update('body')}

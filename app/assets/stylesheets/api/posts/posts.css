@@ -1,12 +1,13 @@
 .post-container{
   border: 1px solid rgb(221, 223, 226);
+  max-width: 516px;
   margin-bottom: 12px;
   border-radius: 2px;
   background-color: #fff;
 }
 
 .post-item {
-  width: 492px;
+  object-fit: contain;
   padding: 12px 12px 0px 12px;
 }
 
@@ -17,6 +18,7 @@
 .post-body{
   border-bottom: 1px solid rgb(221, 223, 226);
   margin-bottom: 12px;
+  word-wrap: break-word;
 }
 
 .post-body {
@@ -74,6 +76,10 @@
 .post-header-detail{
   display: flex;
   flex-direction: column;
+}
+
+.post-image{
+  object-fit: contain;
 }
 
 .timeStamp{

@@ -17,8 +17,14 @@ const receivePost = (post) => {
   };
 };
 
-export const fetchPosts = () => dispatch => {
-  return APIUtil.fetchPosts().then((postsFromServer) => {
+export const fetchPosts = (wallOwnerId) => dispatch => {
+  return APIUtil.fetchPosts(wallOwnerId).then((postsFromServer) => {
+    return dispatch(receivePosts(postsFromServer));
+  });
+};
+
+export const fetchFriendsPosts = (currentUserId) => dispatch => {
+  return APIUtil.fetchFriendsPosts(currentUserId).then((postsFromServer) => {
     return dispatch(receivePosts(postsFromServer));
   });
 };

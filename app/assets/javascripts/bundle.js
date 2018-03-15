@@ -12712,7 +12712,7 @@ exports.default = DropDown;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createPost = exports.fetchPost = exports.fetchPosts = exports.RECEIVE_POST = exports.RECEIVE_POSTS = undefined;
+exports.createPost = exports.fetchPost = exports.fetchFriendsPosts = exports.fetchPosts = exports.RECEIVE_POST = exports.RECEIVE_POSTS = undefined;
 
 var _post_api_util = __webpack_require__(448);
 
@@ -12737,9 +12737,17 @@ var receivePost = function receivePost(post) {
   };
 };
 
-var fetchPosts = exports.fetchPosts = function fetchPosts() {
+var fetchPosts = exports.fetchPosts = function fetchPosts(wallOwnerId) {
   return function (dispatch) {
-    return APIUtil.fetchPosts().then(function (postsFromServer) {
+    return APIUtil.fetchPosts(wallOwnerId).then(function (postsFromServer) {
+      return dispatch(receivePosts(postsFromServer));
+    });
+  };
+};
+
+var fetchFriendsPosts = exports.fetchFriendsPosts = function fetchFriendsPosts(currentUserId) {
+  return function (dispatch) {
+    return APIUtil.fetchFriendsPosts(currentUserId).then(function (postsFromServer) {
       return dispatch(receivePosts(postsFromServer));
     });
   };
@@ -47455,13 +47463,11 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    logout: function logout() {
-      return dispatch((0, _session_actions.logout)());
-    }
+    logout: _session_actions.logout
   };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_newsfeed2.default);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(_newsfeed2.default);
 
 /***/ }),
 /* 444 */
@@ -47478,21 +47484,26 @@ var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _post_container = __webpack_require__(447);
+
+var _post_container2 = _interopRequireDefault(_post_container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var NewsFeed = function NewsFeed(props) {
   return _react2.default.createElement(
     'div',
-    null,
+    { className: 'newsfeed-container' },
     _react2.default.createElement(
-      'h1',
-      null,
-      'News Feed'
-    ),
-    _react2.default.createElement(
-      'button',
-      { onClick: props.logout },
-      'Log Out'
+      'div',
+      { className: 'newsfeed-wrapper' },
+      _react2.default.createElement('section', { className: 'newsfeed-left-section' }),
+      _react2.default.createElement(
+        'section',
+        { className: 'newsfeed-mid-section' },
+        _react2.default.createElement(_post_container2.default, null)
+      ),
+      _react2.default.createElement('section', { className: 'newsfeed-right-section' })
     )
   );
 };
@@ -47881,7 +47892,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var mapStateToProps = function mapStateToProps(state) {
   var posts = (0, _selector.asArray)(state.entities.posts);
   return {
-    posts: posts
+    posts: posts,
+    currentUser: state.session.currentUser
   };
 };
 
@@ -47890,8 +47902,11 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     requestPost: function requestPost(id) {
       return dispatch((0, _post_actions.fetchPost)(id));
     },
-    requestPosts: function requestPosts() {
-      return dispatch((0, _post_actions.fetchPosts)());
+    requestPosts: function requestPosts(wallOwnerId) {
+      return dispatch((0, _post_actions.fetchPosts)(wallOwnerId));
+    },
+    requestFriendsPosts: function requestFriendsPosts(currentUserId) {
+      return dispatch((0, _post_actions.fetchFriendsPosts)(currentUserId));
     }
   };
 };
@@ -47908,10 +47923,19 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var fetchPosts = exports.fetchPosts = function fetchPosts() {
+var fetchPosts = exports.fetchPosts = function fetchPosts(wall_owner_id) {
   return $.ajax({
     method: 'GET',
-    url: '/api/posts'
+    url: '/api/posts',
+    data: { wall_owner_id: wall_owner_id }
+  });
+};
+
+var fetchFriendsPosts = exports.fetchFriendsPosts = function fetchFriendsPosts(current_user_id) {
+  return $.ajax({
+    method: 'GET',
+    url: '/api/friends_posts',
+    data: { current_user_id: current_user_id }
   });
 };
 
@@ -47976,7 +48000,20 @@ var Post = function (_React$Component) {
   _createClass(Post, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.props.requestPosts();
+      if (this.props.match.params.userId) {
+        this.props.requestPosts(this.props.match.params.userId);
+      } else {
+        this.props.requestFriendsPosts(this.props.currentUser.id);
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      if (this.props.match.params.userId) {
+        if (this.props.match.params.userId !== newProps.match.params.userId) {
+          this.props.requestPosts(newProps.match.params.userId);
+        }
+      }
     }
   }, {
     key: 'render',
@@ -48458,8 +48495,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     submitPost: function submitPost(post) {
       return dispatch((0, _post_actions.createPost)(post));
     },
-    fetchPosts: function fetchPosts() {
-      return dispatch((0, _post_actions.fetchPosts)());
+    fetchPosts: function fetchPosts(wallOwnerId) {
+      return dispatch((0, _post_actions.fetchPosts)(wallOwnerId));
     }
   };
 };
@@ -48525,7 +48562,8 @@ var CreatePostForm = function (_React$Component) {
       };
 
       this.props.submitPost(post).then(function () {
-        _this2.props.fetchPosts();
+        _this2.props.fetchPosts(_this2.props.wallOwnerId);
+        _this2.setState({ body: '', content: '' });
       });
     }
   }, {
@@ -48571,7 +48609,7 @@ var CreatePostForm = function (_React$Component) {
           'div',
           { className: 'create-post-input-container' },
           _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.currentUser.profile_pic_url }),
-          _react2.default.createElement('input', { className: 'create-post-input',
+          _react2.default.createElement('textarea', { className: 'create-post-input',
             type: 'text',
             value: this.state.body,
             onChange: this.update('body')
@@ -49214,7 +49252,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var filterFriends = exports.filterFriends = function filterFriends(users, user) {
-  debugger;
+
   var friends = user.friend_ids.map(function (friend_id) {
     return users[friend_id];
   });
@@ -49400,12 +49438,12 @@ var userReducer = function userReducer() {
       delete newState[action.user.id];
       return (0, _merge3.default)({}, newState, _defineProperty({}, action.user.id, action.user));
     case _user_actions.RECEIVE_PAIR:
-      debugger;
+
       var newStates = (0, _merge3.default)({}, state);
       Object.keys(action.users).forEach(function (id) {
         delete newStates[id];
       });
-      debugger;
+
       return (0, _merge3.default)({}, newStates, action.users);
     default:
       return state;

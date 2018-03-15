@@ -1,0 +1,27 @@
+.newsfeed-container {
+  margin-top: 43px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.newsfeed-wrapper{
+  margin-top: 12px;
+  width: 850px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+}
+
+.newsfeed-left-section{
+  width: 180px;
+}
+
+.newsfeed-mid-section{
+
+  width: 500px;
+}
+
+.newsfeed-right-section{
+  width: 308px;
+}
