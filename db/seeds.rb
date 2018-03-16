@@ -33,7 +33,7 @@ User.create!(first_name: 'Stephen', last_name: 'Strange', email: 'doctor_strange
             password: 'starwars', birthday: '1/1/1900', gender: 'male')
 
 User.create!(first_name: 'Janet', last_name: 'Dyne', email: 'wasp@avengers.com',
-            password: 'starwars', birthday: '1/1/1900', gender: 'woman')
+            password: 'starwars', birthday: '1/1/1900', gender: 'female')
 
 Friend.create!(requestor: User.first, receiver: User.second, pending: true)
 Friend.create!(requestor: User.first, receiver: User.third, pending: false)
