@@ -48742,7 +48742,7 @@ var ProfilePicture = function (_React$Component) {
         'div',
         { className: 'profile-picture-root' },
         _react2.default.createElement('img', { className: 'profile-picture', src: this.props.user.profile_pic_url }),
-        _react2.default.createElement(
+        this.props.currentUser.id === this.props.user.id && _react2.default.createElement(
           'div',
           { className: 'profile-pic-button', onClick: function onClick() {
               return _this2.props.toggleProfPicModal();

@@ -13,14 +13,16 @@ class ProfilePicture extends React.Component{
     return(
       <div className='profile-picture-root'>
         <img className='profile-picture' src={this.props.user.profile_pic_url} />
-        <div className='profile-pic-button' onClick={()=> this.props.toggleProfPicModal()}>
-          <label className='profile-picture-button-label'>
-            <i className="fas fa-camera"></i>
-            <p>Update Profile Picture</p>
-          </label>
-        </div>
+        { this.props.currentUser.id === this.props.user.id &&
+          <div className='profile-pic-button' onClick={()=> this.props.toggleProfPicModal()}>
+            <label className='profile-picture-button-label'>
+              <i className="fas fa-camera"></i>
+              <p>Update Profile Picture</p>
+            </label>
+          </div>
+        }
       </div>
-    )
+    );
   }
 }
 
