@@ -6,25 +6,37 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
   # Character.create(name: 'Luke', movie: movies.first)
 
-# User.destroy_all
-# User.create!(first_name: 'Peter', last_name: 'Parker', email: 'spiderman@avengers.com',
-#             password: 'starwars', birthday: '4/1/2000', gender: 'male'
-#           )
-#
-# User.create!(first_name: 'Steven', last_name: 'Rogers', email: 'captian_america@avengers.com',
-#             password: 'starwars', birthday: '7/4/1920', gender: 'male')
-#
-# User.create!(first_name: 'Natalia', last_name: 'Romanova', email: 'black_widow@avengers.com',
-#             password: 'starwars', birthday: '11/22/1984', gender: 'female')
-#
-# User.create!(first_name: 'Tony', last_name: 'Stark', email: 'iron_man@avengers.com',
-#             password: 'starwars', birthday: '5/29/1970', gender: 'male')
+User.destroy_all
+User.create!(first_name: 'Peter', last_name: 'Parker', email: 'spiderman@avengers.com',
+            password: 'starwars', birthday: '4/1/2000', gender: 'male'
+          )
 
-# User.create!(first_name: 'Bruce', last_name: 'Banner', email: 'hulk@avengers.com',
-#             password: 'starwars', birthday: '12/18/1969', gender: 'male')
-# thanos_bday = Date.parse('2000-01-01 BCE')
-# User.create!(first_name: 'Thanos', last_name: 'The Dark Lord', email: 'thanos@avengers.com',
-#             password: 'starwars', birthday: thanos_bday, gender: 'male')
+User.create!(first_name: 'Steven', last_name: 'Rogers', email: 'captain_america@avengers.com',
+            password: 'starwars', birthday: '7/4/1920', gender: 'male')
+
+User.create!(first_name: 'Natalia', last_name: 'Romanova', email: 'black_widow@avengers.com',
+            password: 'starwars', birthday: '11/22/1984', gender: 'female')
+
+User.create!(first_name: 'Tony', last_name: 'Stark', email: 'iron_man@avengers.com',
+            password: 'starwars', birthday: '5/29/1970', gender: 'male')
+
+User.create!(first_name: 'Bruce', last_name: 'Banner', email: 'hulk@avengers.com',
+            password: 'starwars', birthday: '12/18/1969', gender: 'male')
+
+User.create!(first_name: 'Thor', last_name: 'Odinson', email: 'thor@avengers.com',
+            password: 'starwars', birthday: '1/1/0000', gender: 'male')
+
+User.create!(first_name: 'Henry', last_name: 'Pym', email: 'ant_man@avengers.com',
+            password: 'starwars', birthday: '1/1/1900', gender: 'male')
+
+User.create!(first_name: 'Stephen', last_name: 'Strange', email: 'doctor_strange@avengers.com',
+            password: 'starwars', birthday: '1/1/1900', gender: 'male')
+
+User.create!(first_name: 'Wanda', last_name: 'Maximoff', email: 'scarlet_witch@avengers.com',
+            password: 'starwars', birthday: '1/1/1900', gender: 'woman')
+
+User.create!(first_name: 'Janet', last_name: 'Dyne', email: 'wasp@avengers.com',
+            password: 'starwars', birthday: '1/1/1900', gender: 'woman')
 
 Friend.create!(requestor: User.first, receiver: User.second, pending: true)
 Friend.create!(requestor: User.first, receiver: User.third, pending: false)
