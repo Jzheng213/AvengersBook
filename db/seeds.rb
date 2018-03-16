@@ -32,9 +32,6 @@ User.create!(first_name: 'Henry', last_name: 'Pym', email: 'ant_man@avengers.com
 User.create!(first_name: 'Stephen', last_name: 'Strange', email: 'doctor_strange@avengers.com',
             password: 'starwars', birthday: '1/1/1900', gender: 'male')
 
-User.create!(first_name: 'Wanda', last_name: 'Maximoff', email: 'scarlet_witch@avengers.com',
-            password: 'starwars', birthday: '1/1/1900', gender: 'woman')
-
 User.create!(first_name: 'Janet', last_name: 'Dyne', email: 'wasp@avengers.com',
             password: 'starwars', birthday: '1/1/1900', gender: 'woman')
 
