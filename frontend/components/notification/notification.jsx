@@ -1,5 +1,9 @@
+//React
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
+//Component
+import NotificationCounter from '../notification/notification_counter';
+
 class FriendRequestDropDown extends React.Component{
   constructor(props){
     super(props);
@@ -31,16 +35,18 @@ class FriendRequestDropDown extends React.Component{
   render(){
     let accept = this.props.accept;
     let reject = this.props.reject;
+
     return(
       <button className={'friend-request-button'} onBlur={this.hide} onClick={this.toggleShow} >
         <img className='dropdown-img' src={window.navPeople}/>
-        {this.props.content}
+        { this.props.currentUser.friend_request_ids.length !== 0 &&
+          <NotificationCounter currentUser={this.props.currentUser}/>
+        }
         <div className={`${this.state.show || ''} friend-request-content`}>
           <header>Friend Requests</header>
           {
             Object.values(this.props.friendRequestors).map((requestor) =>{
               return (
-
                 <div key={requestor.id} className={'requestor-item'}>
                   <div className='inner-container'>
                     <Link to={`/user/${requestor.id}`}><img className='friend-request-profile-pic' src={requestor.profile_pic_url}></img></Link>
@@ -72,7 +78,7 @@ class FriendRequestDropDown extends React.Component{
           }
         </div>
       </button>
-    )
+    );
   }
 }
 

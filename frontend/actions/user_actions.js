@@ -19,11 +19,13 @@ const receiveUser = (user) => {
   };
 };
 
-const receiveUserPair = ({users, currentUser}) => {
+const receiveUserPair = (payload) => {
+  
   return {
     type: RECEIVE_PAIR,
-    users,
-    currentUser
+    currentUser: payload.currentUser,
+    users: payload.users,
+    friendRequests: payload.friendRequests || {}
   };
 };
 
@@ -60,11 +62,13 @@ export const newFriendRequest = (data) => dispatch => {
 export const cancelFriendRequest = (data) => dispatch => {
   APIUtilFriends.cancelFriendRequest(data).then((payload) => {
     return dispatch(receiveUserPair(payload));
+
   });
 };
 
 export const approveFriendRequest = (data) => dispatch => {
   APIUtilFriends.approveFriendRequest(data).then((payload) => {
     return dispatch(receiveUserPair(payload));
+
   });
 };

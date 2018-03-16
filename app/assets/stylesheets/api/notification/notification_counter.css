@@ -1,0 +1,11 @@
+.notification-counter{
+  background-color: red;
+  position: absolute;
+  color: white;
+  border-radius: 3px;
+  padding: 0 3px;
+  text-align: center;
+  z-index: 4;
+  right: -5px;
+  top: -5px;
+}

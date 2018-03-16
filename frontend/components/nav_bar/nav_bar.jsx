@@ -6,22 +6,26 @@ import SearchBar from '../search/search_form';
 import DropDown from '../util/drop_down';
 import FriendRequestDropDown from '../notification/notification';
 
+
 export default class NavBar extends React.Component {
   constructor(props){
     super(props);
-
     this.settingsContents = {'Create Page': null,'Manage Page': ()=>{console.log('whatever');}, 'Log Out': this.props.logout};
     this.helpContents = {'Adding a Cover': null, 'Activity Log': null, 'starring and hiding stories': null}
     this.defaultContents = {'feature working in progess': null}
   }
 
+  componentWillMount(){
+    this.props.requestPendingFriendRequests(this.props.currentUser.id);
+    
+  }
   componentDidMount(){
     document.addEventListener('mousedown', this.handleClickInside);
     this.props.requestPendingFriendRequests(this.props.currentUser.id);
   }
 
-  componentWillReceiveProps(){
-
+  componentWillReceiveProps(newProps){
+    
   }
 
   componentWillUnmount(){
@@ -42,7 +46,6 @@ export default class NavBar extends React.Component {
 
             <SearchBar />
           </section>
-
           <section className='right-section'>
             <Link to={`/user/${this.props.currentUser.id}`} className='nav-link nav-profile-link'>
               <img className='nav-profile-pic' src={this.props.currentUser.profile_pic_url}/>
@@ -54,6 +57,7 @@ export default class NavBar extends React.Component {
             </Link>
             <nav className='nav-button-container'>
               <nav className='util-container'>
+
                 <FriendRequestDropDown
                   accept={this.props.accept}
                   reject={this.props.reject}

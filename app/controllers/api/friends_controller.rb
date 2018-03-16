@@ -42,6 +42,10 @@ class Api::FriendsController < ApplicationController
       pending: false)
       @user = User.find(params[:requestor_id])
       @current_user = User.find(params[:receiver_id])
+
+      receiver_ids = Friend.where(receiver_id: params[:id], pending: true).pluck(:requestor_id)
+      @friend_requests = User.where(id: receiver_ids)
+
       render 'api/friends/friend_pair'
     else
       render :json ['invalid approval']
@@ -65,10 +69,16 @@ class Api::FriendsController < ApplicationController
       if params[:request] == "true"
         @current_user = User.find(params[:requestor_id])
         @user = User.find(params[:receiver_id])
+        @receiver_ids = Friend.where(receiver_id: params[:requestor_id], pending: true).pluck(:requestor_id)
       else
         @user = User.find(params[:requestor_id])
         @current_user = User.find(params[:receiver_id])
+        @receiver_ids = Friend.where(receiver_id: params[:receiver_id], pending: true).pluck(:requestor_id)
+
       end
+
+      @friend_requests = User.where(id: @receiver_ids)
+
       render 'api/friends/friend_pair'
     else
       render :json ['currently not pending']
