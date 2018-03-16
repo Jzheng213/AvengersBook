@@ -1,20 +1,24 @@
 import { connect } from 'react-redux';
 import { logout } from '../../actions/session_actions';
-import { fetchUser } from '../../actions/user_actions';
+import { fetchUser, cancelFriendRequest, approveFriendRequest } from '../../actions/user_actions';
 import { fetchFriendRequests } from '../../actions/friend_request_actions';
 import NavBar from './nav_bar';
 import { withRouter } from 'react-router-dom';
 
-const mapStateToProps = (props, ownProps) => {
+const mapStateToProps = (props) => {
   return {
-    currentUser: props.session.currentUser };
+    currentUser: props.session.currentUser,
+    pendingFriendRequests: props.entities.friend_requests
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     requestUser: (id) => dispatch(fetchUser(id)),
     requestPendingFriendRequests: (id) => dispatch(fetchFriendRequests(id)),
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logout()),
+    accept: (data) => dispatch(approveFriendRequest(data)),
+    reject: (data) => dispatch(cancelFriendRequest(data))
   };
 };
 

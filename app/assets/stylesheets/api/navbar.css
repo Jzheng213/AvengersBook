@@ -1,5 +1,6 @@
 .logged-in-nav-bar{
-  background-color: #4267b2;
+  background-color: #3b5998;
+  background-image: linear-gradient(#4e69a2, #3b5998 50%);
   border-bottom: 1px solid #29487d;
   position: fixed;
   top: 0;
@@ -36,7 +37,6 @@
   background-color: #fff;
   border-radius: 2px;
 }
-
 
 .home-link{
   display: flex;
@@ -112,6 +112,11 @@
   background-color: #4080ff;
 }
 
+.notification-dropdown-button .dropdown-img{
+  height: 22px;
+  width: auto;
+  padding-bottom: 9px;
+}
 
 .nav-button .dropdown-img{
   height: 22px;
@@ -119,7 +124,7 @@
   padding-bottom: 9px;
 }
 
-.nav-button:focus img {
+.nav-button:focus .dropdown-img {
   filter: invert(100%);
 }
 

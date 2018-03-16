@@ -4,10 +4,12 @@ import { NavLink, Link } from 'react-router-dom';
 //Components
 import SearchBar from '../search/search_form';
 import DropDown from '../util/drop_down';
+import FriendRequestDropDown from '../notification/notification';
 
 export default class NavBar extends React.Component {
   constructor(props){
     super(props);
+
     this.settingsContents = {'Create Page': null,'Manage Page': ()=>{console.log('whatever');}, 'Log Out': this.props.logout};
     this.helpContents = {'Adding a Cover': null, 'Activity Log': null, 'starring and hiding stories': null}
     this.defaultContents = {'feature working in progess': null}
@@ -27,6 +29,7 @@ export default class NavBar extends React.Component {
   }
 
   render(){
+    this.friendRequest = this.props
     return(
       <nav className='logged-in-nav-bar'>
         <nav className='logged-in-nav-bar-container'>
@@ -51,7 +54,13 @@ export default class NavBar extends React.Component {
             </Link>
             <nav className='nav-button-container'>
               <nav className='util-container'>
-                <DropDown customClass='nav-button' list={this.defaultContents} img={window.navPeople} />
+                <FriendRequestDropDown
+                  accept={this.props.accept}
+                  reject={this.props.reject}
+                  currentUser ={this.props.currentUser}
+                  friendRequestors={this.props.pendingFriendRequests}
+                  img={window.navPeople}
+                />
                 <DropDown customClass='nav-button' list={this.defaultContents} img={window.navMessenger} />
                 <DropDown customClass='nav-button' list={this.defaultContents} img={window.navGlobe} />
               </nav>
