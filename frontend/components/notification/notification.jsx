@@ -43,7 +43,7 @@ class FriendRequestDropDown extends React.Component{
 
                 <div key={requestor.id} className={'requestor-item'}>
                   <div className='inner-container'>
-                    <img className='friend-request-profile-pic' src={requestor.profile_pic_url}></img>
+                    <Link to={`/user/${requestor.id}`}><img className='friend-request-profile-pic' src={requestor.profile_pic_url}></img></Link>
                     <Link to={`/user/${requestor.id}`}>{requestor.full_name}</Link>
                   </div>
                   <div className='inner-container'>

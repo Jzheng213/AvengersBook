@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class CreatePostForm extends React.Component {
   constructor(props){
@@ -46,7 +47,9 @@ class CreatePostForm extends React.Component {
           <span>Live Event</span>
         </div>
         <div className='create-post-input-container'>
-          <img className='post-profile-pic' src={this.props.currentUser.profile_pic_url} />
+          <Link to={`/user/${this.props.currentUser.id}`}>
+            <img className='post-profile-pic' src={this.props.currentUser.profile_pic_url} />
+          </Link>
           <textarea className='create-post-input'
             type='text'
             value={this.state.body}

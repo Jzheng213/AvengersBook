@@ -11,7 +11,9 @@ class PostItem extends React.Component{
       <div className='post-container'>
         <div className='post-item'>
           <div className='post-header'>
-            <img className='post-profile-pic' src={this.props.post.author_profile_pic_url} />
+            <Link to={`/user/${this.props.post.author_id}`}>
+              <img className='post-profile-pic' src={this.props.post.author_profile_pic_url} />
+            </Link>
             <div className='post-header-detail'>
               <Link className='author-home-page' to={`/user/${this.props.post.author_id}`} >{this.props.post.author_name}</Link>
               <div className='timeStamp'>

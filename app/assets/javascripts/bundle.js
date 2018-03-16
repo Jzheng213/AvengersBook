@@ -47758,7 +47758,11 @@ var PostItem = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'post-header' },
-            _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.post.author_profile_pic_url }),
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/user/' + this.props.post.author_id },
+              _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.post.author_profile_pic_url })
+            ),
             _react2.default.createElement(
               'div',
               { className: 'post-header-detail' },
@@ -48539,6 +48543,8 @@ var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(10);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -48627,7 +48633,11 @@ var CreatePostForm = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'create-post-input-container' },
-          _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.currentUser.profile_pic_url }),
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/user/' + this.props.currentUser.id },
+            _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.currentUser.profile_pic_url })
+          ),
           _react2.default.createElement('textarea', { className: 'create-post-input',
             type: 'text',
             value: this.state.body,
@@ -51960,7 +51970,11 @@ var FriendRequestDropDown = function (_React$Component) {
               _react2.default.createElement(
                 'div',
                 { className: 'inner-container' },
-                _react2.default.createElement('img', { className: 'friend-request-profile-pic', src: requestor.profile_pic_url }),
+                _react2.default.createElement(
+                  _reactRouterDom.Link,
+                  { to: '/user/' + requestor.id },
+                  _react2.default.createElement('img', { className: 'friend-request-profile-pic', src: requestor.profile_pic_url })
+                ),
                 _react2.default.createElement(
                   _reactRouterDom.Link,
                   { to: '/user/' + requestor.id },
