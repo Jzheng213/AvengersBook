@@ -23,7 +23,8 @@
 
 .post-body {
   font-size: 14px;
-  padding: 4px 0px;
+  padding: 4px 12px;
+
 }
 
 .post-buttons {
@@ -32,6 +33,16 @@
   justify-content: space-around;
   align-items: center;
   padding-bottom: 12px;
+}
+
+.post-item-buttons{
+  font-size: 12px;
+  color: #606770;
+
+}
+
+.post-item-buttons span{
+  margin-left: 3px;
 }
 
 .security-button .dropdown-img{

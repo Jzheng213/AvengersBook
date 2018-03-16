@@ -47709,6 +47709,10 @@ var _post_container = __webpack_require__(140);
 
 var _post_container2 = _interopRequireDefault(_post_container);
 
+var _my_info = __webpack_require__(547);
+
+var _my_info2 = _interopRequireDefault(_my_info);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var NewsFeed = function NewsFeed(props) {
@@ -47718,7 +47722,11 @@ var NewsFeed = function NewsFeed(props) {
     _react2.default.createElement(
       'div',
       { className: 'newsfeed-wrapper' },
-      _react2.default.createElement('section', { className: 'newsfeed-left-section' }),
+      _react2.default.createElement(
+        'section',
+        { className: 'newsfeed-left-section' },
+        _react2.default.createElement(_my_info2.default, null)
+      ),
       _react2.default.createElement(
         'section',
         { className: 'newsfeed-mid-section' },
@@ -47969,7 +47977,8 @@ var PostItem = function (_React$Component) {
           { className: 'post-buttons' },
           _react2.default.createElement(
             'button',
-            null,
+            { className: 'post-item-buttons' },
+            _react2.default.createElement('i', { className: 'far fa-thumbs-up' }),
             _react2.default.createElement(
               'span',
               null,
@@ -47978,7 +47987,8 @@ var PostItem = function (_React$Component) {
           ),
           _react2.default.createElement(
             'button',
-            null,
+            { className: 'post-item-buttons' },
+            _react2.default.createElement('i', { className: 'far fa-comment' }),
             _react2.default.createElement(
               'span',
               null,
@@ -47987,7 +47997,8 @@ var PostItem = function (_React$Component) {
           ),
           _react2.default.createElement(
             'button',
-            null,
+            { className: 'post-item-buttons' },
+            _react2.default.createElement('i', { className: 'fas fa-share' }),
             _react2.default.createElement(
               'span',
               null,
@@ -52090,6 +52101,79 @@ var NotificationCounter = function NotificationCounter(_ref) {
 };
 
 exports.default = NotificationCounter;
+
+/***/ }),
+/* 547 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(3);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MyInfo = function MyInfo() {
+  return _react2.default.createElement(
+    'div',
+    { className: 'my-info' },
+    _react2.default.createElement(
+      'header',
+      null,
+      'Contact Jack Zheng'
+    ),
+    _react2.default.createElement(
+      'a',
+      { href: 'https://www.linkedin.com/in/jackzheng1/' },
+      _react2.default.createElement(
+        'span',
+        { id: 'linked-in' },
+        _react2.default.createElement('i', { className: 'fab fa-linkedin' })
+      ),
+      _react2.default.createElement(
+        'span',
+        null,
+        'LinkedIn'
+      )
+    ),
+    _react2.default.createElement(
+      'a',
+      { href: 'jzheng213@gmail.com' },
+      _react2.default.createElement(
+        'span',
+        { id: 'gmail' },
+        _react2.default.createElement('i', { className: 'far fa-envelope' })
+      ),
+      _react2.default.createElement(
+        'span',
+        null,
+        'Gmail'
+      )
+    ),
+    _react2.default.createElement(
+      'a',
+      { href: 'https://github.com/jzheng213' },
+      _react2.default.createElement(
+        'span',
+        { id: 'github' },
+        _react2.default.createElement('i', { className: 'fab fa-github-alt' })
+      ),
+      _react2.default.createElement(
+        'span',
+        null,
+        'GitHub'
+      )
+    )
+  );
+};
+
+exports.default = MyInfo;
 
 /***/ })
 /******/ ]);

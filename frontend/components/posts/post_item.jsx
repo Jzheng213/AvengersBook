@@ -32,9 +32,9 @@ class PostItem extends React.Component{
           <p className='post-body'>{this.props.post.body}</p>
         </div>
         <div className='post-buttons'>
-          <button><span>Like</span></button>
-          <button><span>Comment</span></button>
-          <button><span>Share</span></button>
+          <button className='post-item-buttons'><i className="far fa-thumbs-up"></i><span>Like</span></button>
+          <button className='post-item-buttons'><i className="far fa-comment"></i><span>Comment</span></button>
+          <button className='post-item-buttons'><i className="fas fa-share"></i><span>Share</span></button>
         </div>
       </div>
     );

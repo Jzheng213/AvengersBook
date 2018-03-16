@@ -28,7 +28,7 @@
   top: 265px;
   left: 205px;
   color: white;
-  text-shadow: rgba(0,0,0,.8);
+  text-shadow: 2px 2px rgba(0,0,0,0.5);
 }
 
 .hidden{
