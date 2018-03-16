@@ -15,7 +15,12 @@ class PostItem extends React.Component{
               <img className='post-profile-pic' src={this.props.post.author_profile_pic_url} />
             </Link>
             <div className='post-header-detail'>
-              <Link className='author-home-page' to={`/user/${this.props.post.author_id}`} >{this.props.post.author_name}</Link>
+              <div className='post-header-link'>
+                <Link className='author-home-page' to={`/user/${this.props.post.author_id}`} >{this.props.post.author_name}</Link>
+                { this.props.post.author_id !== this.props.post.wall_owner_id &&
+                  <Link className='author-home-page' to={`/user/${this.props.post.wall_owner_id}`} ><span className='post-left-carot'> &#x25BA; </span>{this.props.post.wall_owner_name}</Link>
+                }
+              </div>
               <div className='timeStamp'>
                 <Moment interval={120000} fromNow ago>{dateToFormat}</Moment>
                 <span className='mid-dot'>  &middot;  </span>

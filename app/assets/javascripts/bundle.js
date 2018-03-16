@@ -47767,9 +47767,23 @@ var PostItem = function (_React$Component) {
               'div',
               { className: 'post-header-detail' },
               _react2.default.createElement(
-                _reactRouterDom.Link,
-                { className: 'author-home-page', to: '/user/' + this.props.post.author_id },
-                this.props.post.author_name
+                'div',
+                { className: 'post-header-link' },
+                _react2.default.createElement(
+                  _reactRouterDom.Link,
+                  { className: 'author-home-page', to: '/user/' + this.props.post.author_id },
+                  this.props.post.author_name
+                ),
+                this.props.post.author_id !== this.props.post.wall_owner_id && _react2.default.createElement(
+                  _reactRouterDom.Link,
+                  { className: 'author-home-page', to: '/user/' + this.props.post.wall_owner_id },
+                  _react2.default.createElement(
+                    'span',
+                    { className: 'post-left-carot' },
+                    ' \u25BA '
+                  ),
+                  this.props.post.wall_owner_name
+                )
               ),
               _react2.default.createElement(
                 'div',

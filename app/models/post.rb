@@ -8,4 +8,9 @@ class Post < ApplicationRecord
     class_name: :User,
     foreign_key: :author_id
 
+  belongs_to :wall_owner,
+    class_name: :User,
+    foreign_key: :wall_owner_id,
+    optional: true
+    
 end

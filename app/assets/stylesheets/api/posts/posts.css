@@ -59,10 +59,19 @@
   border-radius: 50%;
 }
 
+.post-header-link{
+
+}
+
 .author-home-page{
   color: rgb(54, 88, 153);
-  font-size: 14px;
-  font-weight: 550;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.post-left-carot{
+  color: rgb(97, 103, 112);
+  font-size: 12px;
 }
 
 .post-header{
