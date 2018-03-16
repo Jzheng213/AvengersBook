@@ -46,6 +46,7 @@ class Profile extends React.Component{
         () => this.props.requestFriends(this.props.user)
       );
     }
+
     this.setState({ modal: newProps.modal });
   }
 

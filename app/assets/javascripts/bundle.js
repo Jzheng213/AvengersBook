@@ -47338,9 +47338,7 @@ var NavBar = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).call(this, props));
 
-    _this.settingsContents = { 'Create Page': null, 'Manage Page': function ManagePage() {
-        console.log('whatever');
-      }, 'Log Out': _this.props.logout };
+    _this.settingsContents = { 'Create Page': null, 'Manage Page': null, 'Log Out': _this.props.logout };
     _this.helpContents = { 'Adding a Cover': null, 'Activity Log': null, 'starring and hiding stories': null };
     _this.defaultContents = { 'feature working in progess': null };
     return _this;
@@ -47358,9 +47356,6 @@ var NavBar = function (_React$Component) {
       this.props.requestPendingFriendRequests(this.props.currentUser.id);
     }
   }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(newProps) {}
-  }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       document.removeEventListener('mousedown', this.handleClickInside);
@@ -47372,6 +47367,7 @@ var NavBar = function (_React$Component) {
       return _react2.default.createElement(
         'nav',
         { className: 'logged-in-nav-bar' },
+        _react2.default.createElement('nav', { className: 'navbuffer' }),
         _react2.default.createElement(
           'nav',
           { className: 'logged-in-nav-bar-container' },
@@ -48489,6 +48485,7 @@ var Profile = function (_React$Component) {
           return _this3.props.requestFriends(_this3.props.user);
         });
       }
+
       this.setState({ modal: newProps.modal });
     }
   }, {
@@ -49146,6 +49143,7 @@ var ProfileHeaderLinks = function ProfileHeaderLinks(_ref) {
       handleSubmit = _ref.handleSubmit,
       friend_ids = _ref.friend_ids;
 
+
   return _react2.default.createElement(
     'div',
     { className: 'header-links-container' },
@@ -49160,7 +49158,9 @@ var ProfileHeaderLinks = function ProfileHeaderLinks(_ref) {
           null,
           _react2.default.createElement(
             'a',
-            { href: '#' },
+            { href: '#', onClick: function onClick(e) {
+                return e.preventDefault();
+              } },
             'Timeline'
           )
         ),
@@ -49169,7 +49169,9 @@ var ProfileHeaderLinks = function ProfileHeaderLinks(_ref) {
           null,
           _react2.default.createElement(
             'a',
-            { href: '#' },
+            { href: '#', onClick: function onClick(e) {
+                return e.preventDefault();
+              } },
             'About'
           )
         ),
@@ -49178,7 +49180,9 @@ var ProfileHeaderLinks = function ProfileHeaderLinks(_ref) {
           null,
           _react2.default.createElement(
             'a',
-            { href: '#' },
+            { href: '#', onClick: function onClick(e) {
+                return e.preventDefault();
+              } },
             'Friends',
             _react2.default.createElement(
               'span',
@@ -49192,7 +49196,9 @@ var ProfileHeaderLinks = function ProfileHeaderLinks(_ref) {
           null,
           _react2.default.createElement(
             'a',
-            { href: '#' },
+            { href: '#', onClick: function onClick(e) {
+                return e.preventDefault();
+              } },
             'Photos'
           )
         ),
@@ -49201,7 +49207,9 @@ var ProfileHeaderLinks = function ProfileHeaderLinks(_ref) {
           null,
           _react2.default.createElement(
             'a',
-            { href: '#' },
+            { href: '#', onClick: function onClick(e) {
+                return e.preventDefault();
+              } },
             'More'
           )
         )

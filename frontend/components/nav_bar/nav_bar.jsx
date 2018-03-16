@@ -10,22 +10,18 @@ import FriendRequestDropDown from '../notification/notification';
 export default class NavBar extends React.Component {
   constructor(props){
     super(props);
-    this.settingsContents = {'Create Page': null,'Manage Page': ()=>{console.log('whatever');}, 'Log Out': this.props.logout};
-    this.helpContents = {'Adding a Cover': null, 'Activity Log': null, 'starring and hiding stories': null}
-    this.defaultContents = {'feature working in progess': null}
+    this.settingsContents = {'Create Page': null,'Manage Page': null, 'Log Out': this.props.logout};
+    this.helpContents = {'Adding a Cover': null, 'Activity Log': null, 'starring and hiding stories': null};
+    this.defaultContents = {'feature working in progess': null};
   }
 
   componentWillMount(){
     this.props.requestPendingFriendRequests(this.props.currentUser.id);
-    
+
   }
   componentDidMount(){
     document.addEventListener('mousedown', this.handleClickInside);
     this.props.requestPendingFriendRequests(this.props.currentUser.id);
-  }
-
-  componentWillReceiveProps(newProps){
-    
   }
 
   componentWillUnmount(){
@@ -33,9 +29,10 @@ export default class NavBar extends React.Component {
   }
 
   render(){
-    this.friendRequest = this.props
+    this.friendRequest = this.props;
     return(
       <nav className='logged-in-nav-bar'>
+        <nav className='navbuffer' />
         <nav className='logged-in-nav-bar-container'>
           <section className='left-section'>
             <div className='home-link-container'>
