@@ -41,10 +41,6 @@ class CreatePostForm extends React.Component {
     return(
       <form className='create-post'>
         <div className='create-post-type-container'>
-          <span>Make Post</span>
-          <span>Photo/Video</span>
-          <span>Live Video</span>
-          <span>Live Event</span>
         </div>
         <div className='create-post-input-container'>
           <Link to={`/user/${this.props.currentUser.id}`}>
@@ -57,17 +53,6 @@ class CreatePostForm extends React.Component {
           />
         </div>
         <div className='create-post-add-container'>
-          <button className='create-post-add-button'>
-            <span>Photo/Video</span>
-          </button>
-
-          <button className='create-post-add-button'>
-            <span>Feeling/Activity</span>
-          </button>
-
-          <button className='create-post-add-button'>
-            <span>...</span>
-          </button>
         </div>
         <div className='create-post-submit-container'>
           <button className='create-post-submit-button' onClick={this.handleSubmit}>Post</button>

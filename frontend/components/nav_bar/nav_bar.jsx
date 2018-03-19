@@ -10,9 +10,7 @@ import FriendRequestDropDown from '../notification/notification';
 export default class NavBar extends React.Component {
   constructor(props){
     super(props);
-    this.settingsContents = {'Create Page': null,'Manage Page': null, 'Log Out': this.props.logout};
-    this.helpContents = {'Adding a Cover': null, 'Activity Log': null, 'starring and hiding stories': null};
-    this.defaultContents = {'feature working in progess': null};
+    this.settingsContents = {'Log Out': this.props.logout};
   }
 
   componentWillMount(){
@@ -41,7 +39,6 @@ export default class NavBar extends React.Component {
               </NavLink>
             </div>
 
-            <SearchBar />
           </section>
           <section className='right-section'>
             <Link to={`/user/${this.props.currentUser.id}`} className='nav-link nav-profile-link'>
@@ -53,19 +50,13 @@ export default class NavBar extends React.Component {
               <span>Home</span>
             </Link>
             <nav className='nav-button-container'>
-              <nav className='util-container'>
-
-                <FriendRequestDropDown
-                  accept={this.props.accept}
-                  reject={this.props.reject}
-                  currentUser ={this.props.currentUser}
-                  friendRequestors={this.props.pendingFriendRequests}
-                  img={window.navPeople}
-                />
-                <DropDown customClass='nav-button' list={this.defaultContents} img={window.navMessenger} />
-                <DropDown customClass='nav-button' list={this.defaultContents} img={window.navGlobe} />
-              </nav>
-              <DropDown customClass='nav-button' list={this.helpContents} img={window.navHelp} />
+              <FriendRequestDropDown
+                accept={this.props.accept}
+                reject={this.props.reject}
+                currentUser ={this.props.currentUser}
+                friendRequestors={this.props.pendingFriendRequests}
+                img={window.navPeople}
+              />
               <DropDown customClass='nav-button' list={this.settingsContents} img={window.navDownArrow} />
             </nav>
           </section>

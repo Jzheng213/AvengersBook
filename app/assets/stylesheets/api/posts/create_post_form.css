@@ -2,7 +2,6 @@
   display: flex;
   background-color: #fff;
   flex-direction: column;
-  height: 194px;
   width: 516px;
   border: 1px solid #dddfe2;
   margin-bottom: 12px;
@@ -42,7 +41,7 @@
 .create-post-input{
   height: 35px;
   width: 404px;
-  
+
   padding: 23px 48px 13px 12px;
 }
 
