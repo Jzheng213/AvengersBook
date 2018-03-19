@@ -33,13 +33,13 @@ gem 'jquery-rails'
 # gem 'capistrano-rails', group: :development
 gem 'aws-sdk', '< 3.0'
 gem 'paperclip', '~> 5.2.0'
-gem 'pry-rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a  console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
-
+  gem 'pry-rails'
   gem 'figaro'
   gem 'selenium-webdriver'
 end
@@ -51,8 +51,6 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-
-
   gem 'better_errors'
   gem 'binding_of_caller'
 end

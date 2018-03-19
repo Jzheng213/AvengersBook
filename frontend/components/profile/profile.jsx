@@ -143,7 +143,8 @@ class Profile extends React.Component{
 
             <span className='profile-user-name'>{this.props.user.full_name}</span>
 
-            {this.props.currentUser && this.props.user.id &&
+            {
+              this.props.currentUser && this.props.user.id &&
               <div className='float-button'>
                 <FriendRequestButton
                   currentUser={this.props.currentUser}

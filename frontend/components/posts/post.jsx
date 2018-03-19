@@ -22,7 +22,7 @@ class Post extends React.Component{
       if(this.props.match.params.userId !== newProps.match.params.userId){
         this.props.requestPosts(newProps.match.params.userId);
       }
-    }  
+    }
   }
 
   render(){
@@ -31,7 +31,7 @@ class Post extends React.Component{
         <ul>
           {
             this.props.posts.map((post) => {
-              return <PostItem key={post.id} post={post} />
+              return <PostItem key={post.id} post={post} />;
             })
           }
         </ul>
