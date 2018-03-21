@@ -1,6 +1,8 @@
 import React from 'react';
 
-const ImagePreview = ({imageUrl, cancelUpdate, handleSubmit}) => {
+
+const ImagePreview = ({profileImageUrl, cancelUpdate, handleSubmit}) => {
+
   return (
     <div className='image-preview-form'>
       <header className='image-preview-form-header'>
@@ -8,7 +10,7 @@ const ImagePreview = ({imageUrl, cancelUpdate, handleSubmit}) => {
       </header>
 
       <section>
-        <img className='profile-image-preview' src={imageUrl} />
+        <img className='profile-image-preview' src={profileImageUrl} />
       </section>
 
       <footer>
