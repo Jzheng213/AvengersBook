@@ -1,6 +1,6 @@
 import {
   TOGGLE_UPLOAD_PHOTO
-} from '../../actions/modal_actions';
+} from '../../actions/cover_load_actions';
 
 import merge from 'lodash/merge';
 

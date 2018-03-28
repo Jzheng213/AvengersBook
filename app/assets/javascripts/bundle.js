@@ -49237,9 +49237,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var ProfileHeaderLinks = function ProfileHeaderLinks(_ref) {
   var hideDuringCoverUpload = _ref.hideDuringCoverUpload,
-      unhideDuringCoverUpload = _ref.unhideDuringCoverUpload,
-      cancelUpdate = _ref.cancelUpdate,
-      handleSubmit = _ref.handleSubmit,
       friend_ids = _ref.friend_ids;
 
 
@@ -49312,20 +49309,6 @@ var ProfileHeaderLinks = function ProfileHeaderLinks(_ref) {
             'More'
           )
         )
-      )
-    ),
-    _react2.default.createElement(
-      'span',
-      { className: unhideDuringCoverUpload + ' upload-buttons' },
-      _react2.default.createElement(
-        'button',
-        { className: 'cover-upload-button cancel', onClick: cancelUpdate },
-        'Cancel'
-      ),
-      _react2.default.createElement(
-        'button',
-        { className: 'cover-upload-button submit', onClick: handleSubmit },
-        'Save Changes'
       )
     )
   );
@@ -51971,16 +51954,16 @@ var _modal_reducer = __webpack_require__(542);
 
 var _modal_reducer2 = _interopRequireDefault(_modal_reducer);
 
-var _cover_photo = __webpack_require__(549);
+var _cover_photo_reducer = __webpack_require__(550);
 
-var _cover_photo2 = _interopRequireDefault(_cover_photo);
+var _cover_photo_reducer2 = _interopRequireDefault(_cover_photo_reducer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import filters from './filters_reducer';
 exports.default = (0, _redux.combineReducers)({
   // filters,
-  coverPhoto: _cover_photo2.default,
+  coverPhoto: _cover_photo_reducer2.default,
   modal: _modal_reducer2.default
 });
 
@@ -52191,6 +52174,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _user_actions = __webpack_require__(37);
 
+var _cover_load_actions = __webpack_require__(552);
+
 var _reactRedux = __webpack_require__(18);
 
 var _reactRouterDom = __webpack_require__(9);
@@ -52209,17 +52194,21 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
     state: state,
     user: ownProps.user,
-    currentUser: state.session.currentUser
+    currentUser: state.session.currentUser,
+    cover_updating: state.ui.coverPhoto.uploadingCover
   };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    saveUserPhoto: function saveUserPhoto() {
-      return dispatch((0, _user_actions.saveUserPhoto)());
+    saveUserPhoto: function saveUserPhoto(formData) {
+      return dispatch((0, _user_actions.saveUserPhoto)(formData));
     },
-    fetchUser: function fetchUser() {
-      return dispatch((0, _user_actions.fetchUser)());
+    requestUser: function requestUser(id) {
+      return dispatch((0, _user_actions.fetchUser)(id));
+    },
+    toggleUploadUploadPhoto: function toggleUploadUploadPhoto() {
+      return dispatch((0, _cover_load_actions.toggleUploadPhoto)());
     }
   };
 };
@@ -52254,8 +52243,8 @@ var CoverPicture = function (_React$Component) {
         fileReader.onloadend = function () {
           var _this2$setState;
 
-          if (field === 'cover') _this2.setState({ uploadingCover: !_this2.state.uploadingCover });
-
+          if (field === 'cover') _this2.props.toggleUploadUploadPhoto();
+          debugger;
           _this2.setState((_this2$setState = {}, _defineProperty(_this2$setState, field + 'File', file), _defineProperty(_this2$setState, field + 'ImageUrl', fileReader.result), _this2$setState));
         };
         if (file) fileReader.readAsDataURL(file);
@@ -52268,7 +52257,7 @@ var CoverPicture = function (_React$Component) {
 
       this.fileInput.value = '';
       this.setState((_setState = {}, _defineProperty(_setState, field + 'File', null), _defineProperty(_setState, field + 'ImageUrl', null), _setState));
-      if (field === 'cover') this.setState({ uploadingCover: !this.state.uploadingCover });
+      if (field === 'cover') this.props.toggleUploadUploadPhoto();
     }
   }, {
     key: 'handleSubmit',
@@ -52278,11 +52267,12 @@ var CoverPicture = function (_React$Component) {
       var formData = new FormData();
       formData.append('user[' + field + '_pic]', this.state[field + 'File']);
       formData.append('user[id]', this.props.user.id);
+      debugger;
       this.props.saveUserPhoto(formData).then(function () {
         var _this3$setState;
 
         _this3.setState((_this3$setState = {}, _defineProperty(_this3$setState, field + 'File', null), _defineProperty(_this3$setState, field + 'ImageUrl', null), _this3$setState));
-        if (field === 'cover') _this3.setState({ uploadingCover: !_this3.state.uploadingCover });
+        if (field === 'cover') _this3.props.toggleUploadUploadPhoto();
         _this3.props.requestUser(_this3.props.user.id);
       });
     }
@@ -52293,6 +52283,8 @@ var CoverPicture = function (_React$Component) {
 
       var currentUserPage = this.props.currentUser.id === parseInt(this.props.match.params.userId) ? '' : 'hidden';
       var coverUrl = this.state.coverImageUrl || this.props.user.cover_pic_url;
+
+      var unhideDuringCoverUpload = this.props.cover_updating ? '' : 'hidden';
       return _react2.default.createElement(
         'div',
         { className: 'cover-picture-container' },
@@ -52321,6 +52313,20 @@ var CoverPicture = function (_React$Component) {
               }
             })
           )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: unhideDuringCoverUpload + ' upload-buttons' },
+          _react2.default.createElement(
+            'button',
+            { className: 'cover-upload-button cancel', onClick: this.cancelUpdate.bind(this, 'cover') },
+            'Cancel'
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'cover-upload-button submit', onClick: this.handleSubmit.bind(this, 'cover') },
+            'Save Changes'
+          )
         )
       );
     }
@@ -52332,7 +52338,8 @@ var CoverPicture = function (_React$Component) {
 exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CoverPicture));
 
 /***/ }),
-/* 549 */
+/* 549 */,
+/* 550 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52342,7 +52349,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _modal_actions = __webpack_require__(85);
+var _cover_load_actions = __webpack_require__(552);
 
 var _merge = __webpack_require__(38);
 
@@ -52360,7 +52367,7 @@ var coverPhotoReducer = function coverPhotoReducer() {
 
   Object.freeze(state);
   switch (action.type) {
-    case _modal_actions.TOGGLE_UPLOAD_PHOTO:
+    case _cover_load_actions.TOGGLE_UPLOAD_PHOTO:
       return (0, _merge2.default)({}, state, { uploadingCover: !state.uploadingCover });
     default:
       return state;
@@ -52368,6 +52375,25 @@ var coverPhotoReducer = function coverPhotoReducer() {
 };
 
 exports.default = coverPhotoReducer;
+
+/***/ }),
+/* 551 */,
+/* 552 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var TOGGLE_UPLOAD_PHOTO = exports.TOGGLE_UPLOAD_PHOTO = 'TOGGLE_UPLOAD_PHOTO';
+
+var toggleUploadPhoto = exports.toggleUploadPhoto = function toggleUploadPhoto() {
+  return {
+    type: TOGGLE_UPLOAD_PHOTO
+  };
+};
 
 /***/ })
 /******/ ]);

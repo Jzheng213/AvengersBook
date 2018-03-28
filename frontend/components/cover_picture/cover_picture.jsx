@@ -1,5 +1,6 @@
 import React from 'react';
 import { saveUserPhoto,fetchUser} from '../../actions/user_actions';
+import { toggleUploadPhoto } from '../../actions/cover_load_actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
@@ -8,13 +9,15 @@ const mapStateToProps =(state, ownProps)=> {
     state,
     user: ownProps.user,
     currentUser: state.session.currentUser,
+    cover_updating: state.ui.coverPhoto.uploadingCover
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    saveUserPhoto: () => dispatch(saveUserPhoto()),
-    fetchUser: () => dispatch(fetchUser())
+    saveUserPhoto: (formData) => dispatch(saveUserPhoto(formData)),
+    requestUser: (id) => dispatch(fetchUser(id)),
+    toggleUploadUploadPhoto: ()=> dispatch(toggleUploadPhoto())
   };
 };
 
@@ -37,8 +40,8 @@ class CoverPicture extends React.Component{
       const file = e.currentTarget.files[0];
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
-
+        if(field === 'cover') this.props.toggleUploadUploadPhoto();
+        debugger;
         this.setState({[`${field}File`]: file,
           [`${field}ImageUrl`]: fileReader.result
         });
@@ -53,19 +56,20 @@ class CoverPicture extends React.Component{
       [`${field}File`]: null,
       [`${field}ImageUrl`]: null
     });
-    if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
+    if(field === 'cover') this.props.toggleUploadUploadPhoto();
   }
 
   handleSubmit(field){
     let formData = new FormData();
     formData.append(`user[${field}_pic]`, this.state[`${field}File`]);
     formData.append('user[id]', this.props.user.id);
+    debugger;
     this.props.saveUserPhoto(formData).then(()=>{
       this.setState({
         [`${field}File`]: null,
         [`${field}ImageUrl`]: null
       });
-      if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
+      if(field === 'cover') this.props.toggleUploadUploadPhoto();
       this.props.requestUser(this.props.user.id);
     });
   }
@@ -73,6 +77,8 @@ class CoverPicture extends React.Component{
   render(){
     let currentUserPage = this.props.currentUser.id === parseInt(this.props.match.params.userId) ? '' : 'hidden';
     let coverUrl = this.state.coverImageUrl || this.props.user.cover_pic_url;
+
+    let unhideDuringCoverUpload =  this.props.cover_updating ? '' : 'hidden';
     return(
       <div className='cover-picture-container'>
         <img className='cover-picture' src={coverUrl} />
@@ -88,6 +94,10 @@ class CoverPicture extends React.Component{
               ref={(element) => { this.fileInput = element; }}
             />
           </div>
+        </div>
+        <div className={`${unhideDuringCoverUpload} upload-buttons`}>
+          <button className='cover-upload-button cancel' onClick={this.cancelUpdate.bind(this, 'cover')}>Cancel</button>
+          <button className='cover-upload-button submit' onClick={this.handleSubmit.bind(this, 'cover')}>Save Changes</button>
         </div>
       </div>
     );
