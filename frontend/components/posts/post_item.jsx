@@ -4,6 +4,7 @@ import DropDown from '../util/drop_down';
 import Moment from 'react-moment';
 
 class PostItem extends React.Component{
+  
   render(){
     const list = {'Public':null, 'Friends':null, 'Friends except...': null};
     const dateToFormat = this.props.post.updated_at;

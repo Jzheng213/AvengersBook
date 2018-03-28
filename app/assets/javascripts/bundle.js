@@ -47189,6 +47189,7 @@ var Main = function Main() {
     _react2.default.createElement(
       _reactRouterDom.Switch,
       null,
+      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _newsfeed_container2.default }),
       _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/newsfeed', component: _newsfeed_container2.default }),
       _react2.default.createElement(_reactRouterDom.Route, { path: '/user/:userId', component: _profile_container2.default })
     )
@@ -48854,6 +48855,7 @@ var CreatePostForm = function (_React$Component) {
 
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.update = _this.update.bind(_this);
+    _this.addPicture = _this.addPicture.bind(_this);
     return _this;
   }
 
@@ -48883,6 +48885,9 @@ var CreatePostForm = function (_React$Component) {
         _this3.setState(_defineProperty({}, field, e.target.value));
       };
     }
+  }, {
+    key: 'addPicture',
+    value: function addPicture() {}
   }, {
     key: 'render',
     value: function render() {
@@ -48932,7 +48937,7 @@ var CreatePostForm = function (_React$Component) {
           { className: 'create-post-add-container' },
           _react2.default.createElement(
             'button',
-            { className: 'create-post-add-button' },
+            { className: 'create-post-add-button', onClick: this.addPicture() },
             _react2.default.createElement(
               'span',
               null,

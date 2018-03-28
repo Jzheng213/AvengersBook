@@ -13,6 +13,7 @@ class CreatePostForm extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.update = this.update.bind(this);
+    this.addPicture = this.addPicture.bind(this);
   }
 
   handleSubmit(e){
@@ -37,6 +38,10 @@ class CreatePostForm extends React.Component {
     };
   }
 
+  addPicture(){
+    
+  }
+
   render(){
     return(
       <form className='create-post'>
@@ -57,7 +62,7 @@ class CreatePostForm extends React.Component {
           />
         </div>
         <div className='create-post-add-container'>
-          <button className='create-post-add-button'>
+          <button className='create-post-add-button' onClick={this.addPicture()}>
             <span>Photo/Video</span>
           </button>
 
