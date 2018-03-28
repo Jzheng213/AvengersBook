@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 //Components
 import {
   fetchUser,
-  saveUserPhoto,
   fetchFriends,
   newFriendRequest,
   cancelFriendRequest,
@@ -35,13 +34,13 @@ const mapStateToProps = (state, ownProps) => {
     user: state.entities.users[ownProps.match.params.userId] || defaultUser,
     currentUser: state.session.currentUser,
     modal: state.ui.modal.profPicModal,
+    uploadingCover: state.ui.coverPhoto.uploadingCover,
     friends
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    saveUserPhoto: (formData) => dispatch(saveUserPhoto(formData)),
     requestUser: (id) => dispatch(fetchUser(id)),
     toggleProfPicModal: ()=> dispatch(toggleProfPicModal()),
     requestFriends: (user)=> dispatch(fetchFriends(user)),

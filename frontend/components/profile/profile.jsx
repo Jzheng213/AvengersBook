@@ -10,31 +10,21 @@ import Modal from '../modal';
 import ProfileHeaderLinks from './profile_header_links';
 import FriendsList from '../friends/friends_list';
 import FriendRequestButton from '../friends/friend_request_button';
-
-// import CoverPhoto from './cover_photo';
+import CoverPicture from '../cover_picture/cover_picture';
 
 class Profile extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      modal: this.props.modal,
-      coverFile: null,
-      coverImageUrl: null,
-      uploadingCover: false,
-      profileFile: null,
-      profileImageUrl: null
+      modal: this.props.modal
     };
-
-    this.updateFile = this.updateFile;
-    this.cancelUpdate = this.cancelUpdate;
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount(){
     this.props.requestUser(this.props.match.params.userId).then(
       () => {
-        return this.props.requestFriends(this.props.user);
         window.scrollTo(0, 0);
+        return this.props.requestFriends(this.props.user);
       }
     );
   }
@@ -50,94 +40,38 @@ class Profile extends React.Component{
     this.setState({ modal: newProps.modal });
   }
 
-  updateFile(field, e){
-    if(parseInt(this.props.match.params.userId) === this.props.currentUser.id){
-      const file = e.currentTarget.files[0];
-      const fileReader = new FileReader();
-      fileReader.onloadend = () => {
-        if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
-
-        this.setState({[`${field}File`]: file,
-          [`${field}ImageUrl`]: fileReader.result
-        });
-      };
-      if (file) fileReader.readAsDataURL(file);
-    }
-  }
-
-  cancelUpdate(field){
-    this.fileInput.value = '';
-    this.setState({
-      [`${field}File`]: null,
-      [`${field}ImageUrl`]: null
-    });
-    if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
-  }
-
-  handleSubmit(field){
-    let formData = new FormData();
-    formData.append(`user[${field}_pic]`, this.state[`${field}File`]);
-    formData.append('user[id]', this.props.user.id);
-    this.props.saveUserPhoto(formData).then(()=>{
-      this.setState({
-        [`${field}File`]: null,
-        [`${field}ImageUrl`]: null
-      });
-      if(field === 'cover') this.setState({uploadingCover: !this.state.uploadingCover});
-      this.props.requestUser(this.props.user.id);
-    });
-  }
   render(){
-    let currentUserPage = this.props.currentUser.id === parseInt(this.props.match.params.userId) ? '' : 'hidden';
-
     let modalProfPicScreen = '';
     if (this.state.modal) modalProfPicScreen = 'prof-picture-modal-screen';
 
-    let coverUrl = this.state.coverImageUrl || this.props.user.cover_pic_url;
-
     let hideDuringCoverUpload = '';
     let unhideDuringCoverUpload = 'hidden';
-    if (this.state.uploadingCover){
+
+    if (this.props.uploadingCover){
       hideDuringCoverUpload = 'hidden';
       unhideDuringCoverUpload = '';
     }
+
     return(
       <div className='profile-container'>
         <div className= 'profile-wrapper'>
           <Modal component={
-            <ProfilePictureForm
-              fileInput={this.fileInput}
-              profilePicUrl={this.state.profileImageUrl}
-              handleSubmit={this.handleSubmit.bind(this, 'profile')}
-              cancelUpdate={this.cancelUpdate.bind(this,'profile')}
-              updateFile={this.updateFile.bind(this, 'profile')} />}
+            <ProfilePictureForm  user={this.props.user}/>}
           modalScreen={modalProfPicScreen}
           />
 
           <div className='header-container'>
-            <div className='cover-picture-container'>
-              <img className='cover-picture' src={coverUrl} />
-              <div className={`${hideDuringCoverUpload} edit-cover-picture-button`}>
-                <div className={`${currentUserPage} cover-image-upload`}>
-                  <label htmlFor='cover-image-input'>
-                    <i className="fas fa-camera"></i>
-                    <span className='cover-update-text'>Update Cover Photo</span>
-                  </label>
-                  <input id='cover-image-input'
-                    type='file'
-                    onChange={this.updateFile.bind(this, 'cover')}
-                    ref={(element) => { this.fileInput = element; }}
-                  />
-                </div>
-              </div>
-            </div>
+            <CoverPicture
+              user={this.props.user}
+              hideDuringCoverUpload={`${hideDuringCoverUpload}`}
+              unhideDuringCoverUpload={`${unhideDuringCoverUpload}`}
+            />
 
             <div className={'profile-picture-container'}>
               <ProfilePicture
                 currentUser={this.props.currentUser}
                 user={this.props.user}
                 toggleProfPicModal={this.props.toggleProfPicModal}
-                modal={this.props.modal}
               />
             </div>
 
@@ -159,8 +93,6 @@ class Profile extends React.Component{
             <ProfileHeaderLinks
               hideDuringCoverUpload={hideDuringCoverUpload}
               unhideDuringCoverUpload={unhideDuringCoverUpload}
-              cancelUpdate={this.cancelUpdate.bind(this, 'cover')}
-              handleSubmit={this.handleSubmit.bind(this, 'cover')}
               friend_ids={this.props.user.friend_ids}
             />
           </div>
