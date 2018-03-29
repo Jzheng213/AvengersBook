@@ -20,14 +20,12 @@ class Api::PostsController < ApplicationController
   end
 
   def create
-    debugger
     @post = Post.new(post_params)
     @post.author = current_user
 
     if @post.save
       render :show
     else
-      debugger
       render json: @post.errors.full_messages, status: 422
     end
   end

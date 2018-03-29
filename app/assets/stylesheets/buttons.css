@@ -1,0 +1,31 @@
+.button{
+  color: white;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 500px;
+  padding: 2px 6px;
+  margin: 2px;
+}
+
+.blue-button{
+  border: 1px solid #4267b2;
+  background-color: #4267b2;
+}
+
+.blue-button:hover{
+  border: 1px solid #365899;
+  background-color: #365899;
+}
+
+
+.white-button{
+  color: #4b4f56;
+  border: 1px solid #ced0d4;
+  background-color: #f6f7f9;
+}
+
+.white-button:hover{
+  color: #4b4f56;
+  border: 1px solid #ced0d4;
+  background-color: #d9dade;
+}

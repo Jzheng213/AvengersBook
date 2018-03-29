@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PostContentItem from './post_content_item';
-
+import ErrorModal from '../error_modal';
+import ErrorMessage from '../errors/error_message';
 class CreatePostForm extends React.Component {
   constructor(props){
     super(props);
@@ -23,6 +24,7 @@ class CreatePostForm extends React.Component {
 
   handleSubmit(e){
     e.preventDefault();
+
     let formData = new FormData();
     formData.append('post[body]', this.state.body);
     formData.append('post[wall_owner_id]', this.props.wallOwnerId);
@@ -31,9 +33,12 @@ class CreatePostForm extends React.Component {
     this.props.submitPost(formData).then(()=>{
       this.props.fetchPosts(this.props.wallOwnerId);
       this.setState({body: '', content: null, contentUrl: null});
+      this.props.togglePostModal();
+    }, (reason) => {
+      this.props.toggleErrorModal();
     });
-    this.props.togglePostModal();
   }
+
 
   update(field){
     return e => {
@@ -65,6 +70,8 @@ class CreatePostForm extends React.Component {
 
   render(){
     let modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
+    let errorModalScreen = this.props.errorModal ? 'error-modal-screen' : '';
+    let errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
     return(
       <div className='create-post-shell' onClick={this.addPostFocused}>
         <form className={'create-post'}>
@@ -110,6 +117,14 @@ class CreatePostForm extends React.Component {
         </form>
 
         <div className={modalPostScreen} onClick={this.props.togglePostModal}></div>
+        <ErrorModal component={
+          <ErrorMessage
+            errorHeader={'Post Is Empty'}
+            errorBody={errorBody}
+            toggleErrorModal={this.props.toggleErrorModal}
+          />
+        } modalScreen={errorModalScreen}
+        />
       </div>
     );
   }

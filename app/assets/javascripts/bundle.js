@@ -12780,6 +12780,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var TOGGLE_PROF_PIC_MODAL = exports.TOGGLE_PROF_PIC_MODAL = 'TOGGLE_PROF_PIC_MODAL';
 var TOGGLE_POST_MODAL = exports.TOGGLE_POST_MODAL = 'TOGGLE_POST_MODAL';
+var TOGGLE_ERROR_MODAL = exports.TOGGLE_ERROR_MODAL = 'TOGGLE_ERROR_MODAL';
 
 var toggleProfPicModal = exports.toggleProfPicModal = function toggleProfPicModal() {
   return {
@@ -12787,10 +12788,16 @@ var toggleProfPicModal = exports.toggleProfPicModal = function toggleProfPicModa
   };
 };
 
-var togglePostModal = exports.togglePostModal = function togglePostModal(on) {
+var togglePostModal = exports.togglePostModal = function togglePostModal() {
   return {
-    type: TOGGLE_POST_MODAL,
-    on: on
+    type: TOGGLE_POST_MODAL
+  };
+};
+
+var toggleErrorModal = exports.toggleErrorModal = function toggleErrorModal() {
+
+  return {
+    type: TOGGLE_ERROR_MODAL
   };
 };
 
@@ -48721,6 +48728,7 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
     currentUser: state.session.currentUser,
     postModalFocused: state.ui.modal.postModalFocused,
+    errorModal: state.ui.modal.errorModal,
     ownProps: ownProps
   };
 };
@@ -48735,6 +48743,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     togglePostModal: function togglePostModal() {
       return dispatch((0, _modal_actions.togglePostModal)());
+    },
+    toggleErrorModal: function toggleErrorModal() {
+      return dispatch((0, _modal_actions.toggleErrorModal)());
     }
   };
 };
@@ -48763,6 +48774,14 @@ var _reactRouterDom = __webpack_require__(9);
 var _post_content_item = __webpack_require__(553);
 
 var _post_content_item2 = _interopRequireDefault(_post_content_item);
+
+var _error_modal = __webpack_require__(555);
+
+var _error_modal2 = _interopRequireDefault(_error_modal);
+
+var _error_message = __webpack_require__(554);
+
+var _error_message2 = _interopRequireDefault(_error_message);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48804,6 +48823,7 @@ var CreatePostForm = function (_React$Component) {
       var _this2 = this;
 
       e.preventDefault();
+
       var formData = new FormData();
       formData.append('post[body]', this.state.body);
       formData.append('post[wall_owner_id]', this.props.wallOwnerId);
@@ -48812,8 +48832,10 @@ var CreatePostForm = function (_React$Component) {
       this.props.submitPost(formData).then(function () {
         _this2.props.fetchPosts(_this2.props.wallOwnerId);
         _this2.setState({ body: '', content: null, contentUrl: null });
+        _this2.props.togglePostModal();
+      }, function (reason) {
+        _this2.props.toggleErrorModal();
       });
-      this.props.togglePostModal();
     }
   }, {
     key: 'update',
@@ -48852,6 +48874,8 @@ var CreatePostForm = function (_React$Component) {
     key: 'render',
     value: function render() {
       var modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
+      var errorModalScreen = this.props.errorModal ? 'error-modal-screen' : '';
+      var errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
       return _react2.default.createElement(
         'div',
         { className: 'create-post-shell', onClick: this.addPostFocused },
@@ -48943,7 +48967,13 @@ var CreatePostForm = function (_React$Component) {
           ),
           _react2.default.createElement('input', { className: 'file-input', id: 'add-post-image', type: 'file', onChange: this.addPicture })
         ),
-        _react2.default.createElement('div', { className: modalPostScreen, onClick: this.props.togglePostModal })
+        _react2.default.createElement('div', { className: modalPostScreen, onClick: this.props.togglePostModal }),
+        _react2.default.createElement(_error_modal2.default, { component: _react2.default.createElement(_error_message2.default, {
+            errorHeader: 'Post Is Empty',
+            errorBody: errorBody,
+            toggleErrorModal: this.props.toggleErrorModal
+          }), modalScreen: errorModalScreen
+        })
       );
     }
   }]);
@@ -52050,7 +52080,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var defaultState = {
   profPicModal: false,
-  postModalFocused: false
+  postModalFocused: false,
+  errorModal: false
 };
 
 var modalReducer = function modalReducer() {
@@ -52063,6 +52094,8 @@ var modalReducer = function modalReducer() {
       return (0, _merge2.default)({}, state, { profPicModal: !state.profPicModal });
     case _modal_actions.TOGGLE_POST_MODAL:
       return (0, _merge2.default)({}, state, { postModalFocused: !state.postModalFocused });
+    case _modal_actions.TOGGLE_ERROR_MODAL:
+      return (0, _merge2.default)({}, state, { errorModal: !state.errorModal });
     default:
       return state;
   }
@@ -52489,6 +52522,114 @@ var PostContentItem = function PostContentItem(_ref) {
 };
 
 exports.default = PostContentItem;
+
+/***/ }),
+/* 554 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ErrorMessage = function ErrorMessage(_ref) {
+  var errorHeader = _ref.errorHeader,
+      errorBody = _ref.errorBody,
+      toggleErrorModal = _ref.toggleErrorModal;
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'error-messages' },
+    _react2.default.createElement(
+      'header',
+      null,
+      ' ',
+      errorHeader
+    ),
+    _react2.default.createElement(
+      'article',
+      null,
+      errorBody
+    ),
+    _react2.default.createElement(
+      'footer',
+      null,
+      _react2.default.createElement(
+        'button',
+        { className: 'button blue-button', onClick: toggleErrorModal },
+        'Close'
+      )
+    )
+  );
+};
+
+exports.default = ErrorMessage;
+
+/***/ }),
+/* 555 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(18);
+
+var _modal_actions = __webpack_require__(85);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    toggleErrorModal: function toggleErrorModal() {
+      return dispatch((0, _modal_actions.toggleErrorModal)());
+    }
+  };
+};
+//Components
+//React
+
+
+var Modal = function Modal(_ref) {
+  var component = _ref.component,
+      modalScreen = _ref.modalScreen,
+      toggleErrorModal = _ref.toggleErrorModal;
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'body-container' },
+    _react2.default.createElement(
+      'div',
+      { className: modalScreen, onClick: function onClick() {
+          return toggleErrorModal();
+        } },
+      _react2.default.createElement(
+        'div',
+        { className: 'modal-child', onClick: function onClick(e) {
+            return e.stopPropagation();
+          } },
+        component
+      )
+    )
+  );
+};
+
+exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(Modal);
 
 /***/ })
 /******/ ]);
