@@ -1,3 +1,4 @@
+
 .create-post-shell{
   display: flex;
   height: 194px;
@@ -13,6 +14,9 @@
   z-index: 20;
 }
 
+.create-post .file-input{
+  display: none;
+}
 .create-post-type-container{
   background-color: #f6f7f9;
   display: flex;
@@ -60,7 +64,9 @@
 }
 
 .create-post-add-button {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 32px;
   min-width: 50px;
   box-sizing: border-box;
@@ -70,8 +76,6 @@
   background-color: #f6f7f9;
   border-radius: 18px;
   margin: 0px 2px;
-  text-align: center;
-  vertical-align: middle;
 }
 
 .create-post-add-button span {

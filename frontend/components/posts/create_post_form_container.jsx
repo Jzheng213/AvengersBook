@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { createPost, fetchPosts } from '../../actions/post_actions';
 import { togglePostModal } from '../../actions/modal_actions';
 import CreatePostForm from './create_post_form';
-
+import {withRouter} from 'react-router-dom';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -20,4 +20,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreatePostForm);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreatePostForm));

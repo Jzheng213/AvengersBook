@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PostContentItem from './post_content_item';
 
 class CreatePostForm extends React.Component {
   constructor(props){
@@ -7,10 +8,11 @@ class CreatePostForm extends React.Component {
 
     this.state = {
       body: '',
-      content: '',
+      content: null,
+      contentUrl: null,
       placeholderText: 'What\'s on your mind?',
       postFocused: '',
-      postScreen: ''
+      postScreen: '',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,15 +23,14 @@ class CreatePostForm extends React.Component {
 
   handleSubmit(e){
     e.preventDefault();
-    const post = {
-      body: this.state.body,
-      wall_owner_id: this.props.wallOwnerId,
-      content: this.state.content
-    };
+    let formData = new FormData();
+    formData.append('post[body]', this.state.body);
+    formData.append('post[wall_owner_id]', this.props.wallOwnerId);
+    formData.append('post[content]', this.state.content || '');
 
-    this.props.submitPost(post).then(()=>{
+    this.props.submitPost(formData).then(()=>{
       this.props.fetchPosts(this.props.wallOwnerId);
-      this.setState({body: '', content: ''});
+      this.setState({body: '', content: null, contentUrl: null});
     });
     this.props.togglePostModal();
   }
@@ -49,12 +50,21 @@ class CreatePostForm extends React.Component {
     }
   }
 
-  addPicture(){
-
+  addPicture(e){
+    if(parseInt(this.props.match.params.userId) === this.props.currentUser.id){
+      const file = e.currentTarget.files[0];
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        this.setState({content: file,
+          contentUrl: fileReader.result
+        });
+      };
+      if (file) fileReader.readAsDataURL(file);
+    }
   }
+
   render(){
     let modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
-    debugger;
     return(
       <div className='create-post-shell' onClick={this.addPostFocused}>
         <form className={'create-post'}>
@@ -74,10 +84,16 @@ class CreatePostForm extends React.Component {
               onChange={this.update('body')}
             />
           </div>
+          { this.props.postModalFocused && this.state.contentUrl &&
+            <PostContentItem contentUrl={this.state.contentUrl}/>
+          }
+
           <div className='create-post-add-container'>
-            <button className='create-post-add-button' onClick={this.addPicture()}>
-              <span>Photo/Video</span>
-            </button>
+            <label htmlFor='add-post-image'>
+              <div className='create-post-add-button'>
+                <span>Photo/Video</span>
+              </div>
+            </label>
 
             <button className='create-post-add-button'>
               <span>Feeling/Activity</span>
@@ -90,7 +106,9 @@ class CreatePostForm extends React.Component {
           <div className='create-post-submit-container'>
             <button className='create-post-submit-button' onClick={this.handleSubmit}>Post</button>
           </div>
+          <input className='file-input' id='add-post-image' type='file' onChange={this.addPicture} />
         </form>
+
         <div className={modalPostScreen} onClick={this.props.togglePostModal}></div>
       </div>
     );

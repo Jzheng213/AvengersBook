@@ -1,0 +1,6 @@
+.contentPreviewContainer{
+  height: 100px;
+  width: 100px;
+  object-fit: contain;
+  margin: 20px, 10px;
+}

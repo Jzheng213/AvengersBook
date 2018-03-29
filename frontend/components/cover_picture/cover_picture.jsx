@@ -41,7 +41,7 @@ class CoverPicture extends React.Component{
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
         if(field === 'cover') this.props.toggleUploadUploadPhoto();
-        debugger;
+        
         this.setState({[`${field}File`]: file,
           [`${field}ImageUrl`]: fileReader.result
         });
@@ -63,7 +63,7 @@ class CoverPicture extends React.Component{
     let formData = new FormData();
     formData.append(`user[${field}_pic]`, this.state[`${field}File`]);
     formData.append('user[id]', this.props.user.id);
-    debugger;
+    
     this.props.saveUserPhoto(formData).then(()=>{
       this.setState({
         [`${field}File`]: null,

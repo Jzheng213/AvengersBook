@@ -47814,7 +47814,10 @@ var createPost = exports.createPost = function createPost(post) {
   return $.ajax({
     method: 'POST',
     url: '/api/posts',
-    data: { post: post }
+    processData: false,
+    contentType: false,
+    dataType: 'json',
+    data: post
   });
 };
 
@@ -48710,6 +48713,8 @@ var _create_post_form = __webpack_require__(458);
 
 var _create_post_form2 = _interopRequireDefault(_create_post_form);
 
+var _reactRouterDom = __webpack_require__(9);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state, ownProps) {
@@ -48734,7 +48739,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_create_post_form2.default);
+exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_create_post_form2.default));
 
 /***/ }),
 /* 458 */
@@ -48754,6 +48759,10 @@ var _react = __webpack_require__(2);
 var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(9);
+
+var _post_content_item = __webpack_require__(553);
+
+var _post_content_item2 = _interopRequireDefault(_post_content_item);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48775,7 +48784,8 @@ var CreatePostForm = function (_React$Component) {
 
     _this.state = {
       body: '',
-      content: '',
+      content: null,
+      contentUrl: null,
       placeholderText: 'What\'s on your mind?',
       postFocused: '',
       postScreen: ''
@@ -48794,15 +48804,14 @@ var CreatePostForm = function (_React$Component) {
       var _this2 = this;
 
       e.preventDefault();
-      var post = {
-        body: this.state.body,
-        wall_owner_id: this.props.wallOwnerId,
-        content: this.state.content
-      };
+      var formData = new FormData();
+      formData.append('post[body]', this.state.body);
+      formData.append('post[wall_owner_id]', this.props.wallOwnerId);
+      formData.append('post[content]', this.state.content || '');
 
-      this.props.submitPost(post).then(function () {
+      this.props.submitPost(formData).then(function () {
         _this2.props.fetchPosts(_this2.props.wallOwnerId);
-        _this2.setState({ body: '', content: '' });
+        _this2.setState({ body: '', content: null, contentUrl: null });
       });
       this.props.togglePostModal();
     }
@@ -48825,12 +48834,24 @@ var CreatePostForm = function (_React$Component) {
     }
   }, {
     key: 'addPicture',
-    value: function addPicture() {}
+    value: function addPicture(e) {
+      var _this4 = this;
+
+      if (parseInt(this.props.match.params.userId) === this.props.currentUser.id) {
+        var file = e.currentTarget.files[0];
+        var fileReader = new FileReader();
+        fileReader.onloadend = function () {
+          _this4.setState({ content: file,
+            contentUrl: fileReader.result
+          });
+        };
+        if (file) fileReader.readAsDataURL(file);
+      }
+    }
   }, {
     key: 'render',
     value: function render() {
       var modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
-      debugger;
       return _react2.default.createElement(
         'div',
         { className: 'create-post-shell', onClick: this.addPostFocused },
@@ -48875,16 +48896,21 @@ var CreatePostForm = function (_React$Component) {
               onChange: this.update('body')
             })
           ),
+          this.props.postModalFocused && this.state.contentUrl && _react2.default.createElement(_post_content_item2.default, { contentUrl: this.state.contentUrl }),
           _react2.default.createElement(
             'div',
             { className: 'create-post-add-container' },
             _react2.default.createElement(
-              'button',
-              { className: 'create-post-add-button', onClick: this.addPicture() },
+              'label',
+              { htmlFor: 'add-post-image' },
               _react2.default.createElement(
-                'span',
-                null,
-                'Photo/Video'
+                'div',
+                { className: 'create-post-add-button' },
+                _react2.default.createElement(
+                  'span',
+                  null,
+                  'Photo/Video'
+                )
               )
             ),
             _react2.default.createElement(
@@ -48914,7 +48940,8 @@ var CreatePostForm = function (_React$Component) {
               { className: 'create-post-submit-button', onClick: this.handleSubmit },
               'Post'
             )
-          )
+          ),
+          _react2.default.createElement('input', { className: 'file-input', id: 'add-post-image', type: 'file', onChange: this.addPicture })
         ),
         _react2.default.createElement('div', { className: modalPostScreen, onClick: this.props.togglePostModal })
       );
@@ -52282,7 +52309,7 @@ var CoverPicture = function (_React$Component) {
           var _this2$setState;
 
           if (field === 'cover') _this2.props.toggleUploadUploadPhoto();
-          debugger;
+
           _this2.setState((_this2$setState = {}, _defineProperty(_this2$setState, field + 'File', file), _defineProperty(_this2$setState, field + 'ImageUrl', fileReader.result), _this2$setState));
         };
         if (file) fileReader.readAsDataURL(file);
@@ -52305,7 +52332,7 @@ var CoverPicture = function (_React$Component) {
       var formData = new FormData();
       formData.append('user[' + field + '_pic]', this.state[field + 'File']);
       formData.append('user[id]', this.props.user.id);
-      debugger;
+
       this.props.saveUserPhoto(formData).then(function () {
         var _this3$setState;
 
@@ -52432,6 +52459,36 @@ var toggleUploadPhoto = exports.toggleUploadPhoto = function toggleUploadPhoto()
     type: TOGGLE_UPLOAD_PHOTO
   };
 };
+
+/***/ }),
+/* 553 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var PostContentItem = function PostContentItem(_ref) {
+  var contentUrl = _ref.contentUrl;
+
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'contentPreviewContainer' },
+    _react2.default.createElement('img', { className: 'contentPreview', src: contentUrl })
+  );
+};
+
+exports.default = PostContentItem;
 
 /***/ })
 /******/ ]);
