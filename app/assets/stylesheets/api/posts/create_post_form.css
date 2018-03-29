@@ -1,12 +1,16 @@
-.create-post{
+.create-post-shell{
   display: flex;
-  background-color: #fff;
-  flex-direction: column;
   height: 194px;
   width: 516px;
-  border: 1px solid #dddfe2;
+  flex-direction: column;
   margin-bottom: 12px;
+}
+
+.create-post{
+  background-color: #fff;
+  border: 1px solid #dddfe2;
   border-radius: 2px;
+  z-index: 20;
 }
 
 .create-post-type-container{
@@ -42,7 +46,7 @@
 .create-post-input{
   height: 35px;
   width: 404px;
-  
+
   padding: 23px 48px 13px 12px;
 }
 

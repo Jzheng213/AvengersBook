@@ -59,7 +59,6 @@ class UpdateProfilePicForm extends React.Component{
 
   handleSubmit(){
     let formData = new FormData();
-    debugger
     formData.append('user[profile_pic]', this.state.profileFile);
     formData.append('user[id]', this.props.user.id);
     this.props.saveUserPhoto(formData).then(()=>{

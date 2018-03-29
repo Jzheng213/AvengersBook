@@ -1,11 +1,13 @@
 import {
-  TOGGLE_PROF_PIC_MODAL
+  TOGGLE_PROF_PIC_MODAL,
+  TOGGLE_POST_MODAL
 } from '../actions/modal_actions';
 
 import merge from 'lodash/merge';
 
 const defaultState = {
-  profPicModal: false
+  profPicModal: false,
+  postModalFocused: false
 };
 
 const modalReducer = (state = defaultState, action) => {
@@ -13,6 +15,8 @@ const modalReducer = (state = defaultState, action) => {
   switch (action.type){
   case TOGGLE_PROF_PIC_MODAL:
     return merge({}, state, { profPicModal: !state.profPicModal});
+  case TOGGLE_POST_MODAL:
+    return merge({}, state, { postModalFocused: !state.postModalFocused});
   default:
     return state;
   }

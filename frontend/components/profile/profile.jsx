@@ -16,7 +16,7 @@ class Profile extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      modal: this.props.modal
+      modal: this.props.modal,
     };
   }
 
@@ -43,7 +43,6 @@ class Profile extends React.Component{
   render(){
     let modalProfPicScreen = '';
     if (this.state.modal) modalProfPicScreen = 'prof-picture-modal-screen';
-
     let hideDuringCoverUpload = '';
     let unhideDuringCoverUpload = 'hidden';
 

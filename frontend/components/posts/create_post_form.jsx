@@ -8,12 +8,15 @@ class CreatePostForm extends React.Component {
     this.state = {
       body: '',
       content: '',
-      placeholderText: 'What\'s on your mind?'
+      placeholderText: 'What\'s on your mind?',
+      postFocused: '',
+      postScreen: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.update = this.update.bind(this);
     this.addPicture = this.addPicture.bind(this);
+    this.addPostFocused = this.addPostFocused.bind(this);
   }
 
   handleSubmit(e){
@@ -28,6 +31,7 @@ class CreatePostForm extends React.Component {
       this.props.fetchPosts(this.props.wallOwnerId);
       this.setState({body: '', content: ''});
     });
+    this.props.togglePostModal();
   }
 
   update(field){
@@ -38,46 +42,57 @@ class CreatePostForm extends React.Component {
     };
   }
 
-  addPicture(){
-    
+  addPostFocused(){
+    if(!this.props.postModalFocused){
+      this.setState({postFocused:'post-focused'});
+      this.props.togglePostModal();
+    }
   }
 
+  addPicture(){
+
+  }
   render(){
+    let modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
+    debugger;
     return(
-      <form className='create-post'>
-        <div className='create-post-type-container'>
-          <span>Make Post</span>
-          <span>Photo/Video</span>
-          <span>Live Video</span>
-          <span>Live Event</span>
-        </div>
-        <div className='create-post-input-container'>
-          <Link to={`/user/${this.props.currentUser.id}`}>
-            <img className='post-profile-pic' src={this.props.currentUser.profile_pic_url} />
-          </Link>
-          <textarea className='create-post-input'
-            type='text'
-            value={this.state.body}
-            onChange={this.update('body')}
-          />
-        </div>
-        <div className='create-post-add-container'>
-          <button className='create-post-add-button' onClick={this.addPicture()}>
+      <div className='create-post-shell' onClick={this.addPostFocused}>
+        <form className={'create-post'}>
+          <div className='create-post-type-container'>
+            <span>Make Post</span>
             <span>Photo/Video</span>
-          </button>
+            <span>Live Video</span>
+            <span>Live Event</span>
+          </div>
+          <div className='create-post-input-container'>
+            <Link to={`/user/${this.props.currentUser.id}`}>
+              <img className='post-profile-pic' src={this.props.currentUser.profile_pic_url} />
+            </Link>
+            <textarea className='create-post-input'
+              type='text'
+              value={this.state.body}
+              onChange={this.update('body')}
+            />
+          </div>
+          <div className='create-post-add-container'>
+            <button className='create-post-add-button' onClick={this.addPicture()}>
+              <span>Photo/Video</span>
+            </button>
 
-          <button className='create-post-add-button'>
-            <span>Feeling/Activity</span>
-          </button>
+            <button className='create-post-add-button'>
+              <span>Feeling/Activity</span>
+            </button>
 
-          <button className='create-post-add-button'>
-            <span>...</span>
-          </button>
-        </div>
-        <div className='create-post-submit-container'>
-          <button className='create-post-submit-button' onClick={this.handleSubmit}>Post</button>
-        </div>
-      </form>
+            <button className='create-post-add-button'>
+              <span>...</span>
+            </button>
+          </div>
+          <div className='create-post-submit-container'>
+            <button className='create-post-submit-button' onClick={this.handleSubmit}>Post</button>
+          </div>
+        </form>
+        <div className={modalPostScreen} onClick={this.props.togglePostModal}></div>
+      </div>
     );
   }
 }

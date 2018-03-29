@@ -12779,10 +12779,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var TOGGLE_PROF_PIC_MODAL = exports.TOGGLE_PROF_PIC_MODAL = 'TOGGLE_PROF_PIC_MODAL';
+var TOGGLE_POST_MODAL = exports.TOGGLE_POST_MODAL = 'TOGGLE_POST_MODAL';
 
 var toggleProfPicModal = exports.toggleProfPicModal = function toggleProfPicModal() {
   return {
     type: TOGGLE_PROF_PIC_MODAL
+  };
+};
+
+var togglePostModal = exports.togglePostModal = function togglePostModal(on) {
+  return {
+    type: TOGGLE_POST_MODAL,
+    on: on
   };
 };
 
@@ -48456,6 +48464,7 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
     user: state.entities.users[ownProps.match.params.userId] || defaultUser,
     currentUser: state.session.currentUser,
     modal: state.ui.modal.profPicModal,
+    postModal: state.ui.modal.postModalFocused,
     uploadingCover: state.ui.coverPhoto.uploadingCover,
     friends: friends
   };
@@ -48469,6 +48478,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     toggleProfPicModal: function toggleProfPicModal() {
       return dispatch((0, _modal_actions.toggleProfPicModal)());
+    },
+    toggleCreatePostModal: function toggleCreatePostModal() {
+      return dispatch((0, _modal_actions.togglePostModal)());
     },
     requestFriends: function requestFriends(user) {
       return dispatch((0, _user_actions.fetchFriends)(user));
@@ -48596,7 +48608,6 @@ var Profile = function (_React$Component) {
     value: function render() {
       var modalProfPicScreen = '';
       if (this.state.modal) modalProfPicScreen = 'prof-picture-modal-screen';
-
       var hideDuringCoverUpload = '';
       var unhideDuringCoverUpload = 'hidden';
 
@@ -48693,6 +48704,8 @@ var _reactRedux = __webpack_require__(18);
 
 var _post_actions = __webpack_require__(84);
 
+var _modal_actions = __webpack_require__(85);
+
 var _create_post_form = __webpack_require__(458);
 
 var _create_post_form2 = _interopRequireDefault(_create_post_form);
@@ -48702,6 +48715,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
     currentUser: state.session.currentUser,
+    postModalFocused: state.ui.modal.postModalFocused,
     ownProps: ownProps
   };
 };
@@ -48713,6 +48727,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     fetchPosts: function fetchPosts(wallOwnerId) {
       return dispatch((0, _post_actions.fetchPosts)(wallOwnerId));
+    },
+    togglePostModal: function togglePostModal() {
+      return dispatch((0, _modal_actions.togglePostModal)());
     }
   };
 };
@@ -48759,12 +48776,15 @@ var CreatePostForm = function (_React$Component) {
     _this.state = {
       body: '',
       content: '',
-      placeholderText: 'What\'s on your mind?'
+      placeholderText: 'What\'s on your mind?',
+      postFocused: '',
+      postScreen: ''
     };
 
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.update = _this.update.bind(_this);
     _this.addPicture = _this.addPicture.bind(_this);
+    _this.addPostFocused = _this.addPostFocused.bind(_this);
     return _this;
   }
 
@@ -48784,6 +48804,7 @@ var CreatePostForm = function (_React$Component) {
         _this2.props.fetchPosts(_this2.props.wallOwnerId);
         _this2.setState({ body: '', content: '' });
       });
+      this.props.togglePostModal();
     }
   }, {
     key: 'update',
@@ -48795,92 +48816,107 @@ var CreatePostForm = function (_React$Component) {
       };
     }
   }, {
+    key: 'addPostFocused',
+    value: function addPostFocused() {
+      if (!this.props.postModalFocused) {
+        this.setState({ postFocused: 'post-focused' });
+        this.props.togglePostModal();
+      }
+    }
+  }, {
     key: 'addPicture',
     value: function addPicture() {}
   }, {
     key: 'render',
     value: function render() {
+      var modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
+      debugger;
       return _react2.default.createElement(
-        'form',
-        { className: 'create-post' },
+        'div',
+        { className: 'create-post-shell', onClick: this.addPostFocused },
         _react2.default.createElement(
-          'div',
-          { className: 'create-post-type-container' },
+          'form',
+          { className: 'create-post' },
           _react2.default.createElement(
-            'span',
-            null,
-            'Make Post'
-          ),
-          _react2.default.createElement(
-            'span',
-            null,
-            'Photo/Video'
-          ),
-          _react2.default.createElement(
-            'span',
-            null,
-            'Live Video'
-          ),
-          _react2.default.createElement(
-            'span',
-            null,
-            'Live Event'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'create-post-input-container' },
-          _react2.default.createElement(
-            _reactRouterDom.Link,
-            { to: '/user/' + this.props.currentUser.id },
-            _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.currentUser.profile_pic_url })
-          ),
-          _react2.default.createElement('textarea', { className: 'create-post-input',
-            type: 'text',
-            value: this.state.body,
-            onChange: this.update('body')
-          })
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'create-post-add-container' },
-          _react2.default.createElement(
-            'button',
-            { className: 'create-post-add-button', onClick: this.addPicture() },
+            'div',
+            { className: 'create-post-type-container' },
+            _react2.default.createElement(
+              'span',
+              null,
+              'Make Post'
+            ),
             _react2.default.createElement(
               'span',
               null,
               'Photo/Video'
-            )
-          ),
-          _react2.default.createElement(
-            'button',
-            { className: 'create-post-add-button' },
+            ),
             _react2.default.createElement(
               'span',
               null,
-              'Feeling/Activity'
-            )
-          ),
-          _react2.default.createElement(
-            'button',
-            { className: 'create-post-add-button' },
+              'Live Video'
+            ),
             _react2.default.createElement(
               'span',
               null,
-              '...'
+              'Live Event'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'create-post-input-container' },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/user/' + this.props.currentUser.id },
+              _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.currentUser.profile_pic_url })
+            ),
+            _react2.default.createElement('textarea', { className: 'create-post-input',
+              type: 'text',
+              value: this.state.body,
+              onChange: this.update('body')
+            })
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'create-post-add-container' },
+            _react2.default.createElement(
+              'button',
+              { className: 'create-post-add-button', onClick: this.addPicture() },
+              _react2.default.createElement(
+                'span',
+                null,
+                'Photo/Video'
+              )
+            ),
+            _react2.default.createElement(
+              'button',
+              { className: 'create-post-add-button' },
+              _react2.default.createElement(
+                'span',
+                null,
+                'Feeling/Activity'
+              )
+            ),
+            _react2.default.createElement(
+              'button',
+              { className: 'create-post-add-button' },
+              _react2.default.createElement(
+                'span',
+                null,
+                '...'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'create-post-submit-container' },
+            _react2.default.createElement(
+              'button',
+              { className: 'create-post-submit-button', onClick: this.handleSubmit },
+              'Post'
             )
           )
         ),
-        _react2.default.createElement(
-          'div',
-          { className: 'create-post-submit-container' },
-          _react2.default.createElement(
-            'button',
-            { className: 'create-post-submit-button', onClick: this.handleSubmit },
-            'Post'
-          )
-        )
+        _react2.default.createElement('div', { className: modalPostScreen, onClick: this.props.togglePostModal })
       );
     }
   }]);
@@ -49045,7 +49081,6 @@ var UpdateProfilePicForm = function (_React$Component) {
       var _this3 = this;
 
       var formData = new FormData();
-      debugger;
       formData.append('user[profile_pic]', this.state.profileFile);
       formData.append('user[id]', this.props.user.id);
       this.props.saveUserPhoto(formData).then(function () {
@@ -51987,7 +52022,8 @@ var _merge2 = _interopRequireDefault(_merge);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var defaultState = {
-  profPicModal: false
+  profPicModal: false,
+  postModalFocused: false
 };
 
 var modalReducer = function modalReducer() {
@@ -51998,6 +52034,8 @@ var modalReducer = function modalReducer() {
   switch (action.type) {
     case _modal_actions.TOGGLE_PROF_PIC_MODAL:
       return (0, _merge2.default)({}, state, { profPicModal: !state.profPicModal });
+    case _modal_actions.TOGGLE_POST_MODAL:
+      return (0, _merge2.default)({}, state, { postModalFocused: !state.postModalFocused });
     default:
       return state;
   }
