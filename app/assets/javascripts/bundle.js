@@ -12656,7 +12656,6 @@ var DropDown = function (_React$Component) {
   }, {
     key: 'toggleShow',
     value: function toggleShow() {
-      // const show = this.state.show === 'show' ? '' : 'show';
       this.setState(function (prevState) {
         return { show: prevState.show === '' ? 'show' : '' };
       });
@@ -47892,6 +47891,8 @@ var Post = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         null,
@@ -47899,7 +47900,7 @@ var Post = function (_React$Component) {
           'ul',
           null,
           this.props.posts.map(function (post) {
-            return _react2.default.createElement(_post_item2.default, { key: post.id, post: post });
+            return _react2.default.createElement(_post_item2.default, { key: post.id, post: post, currentUser: _this2.props.currentUser });
           })
         )
       );
@@ -47958,8 +47959,10 @@ var PostItem = function (_React$Component) {
   _createClass(PostItem, [{
     key: 'render',
     value: function render() {
+
       var list = { 'Public': null, 'Friends': null, 'Friends except...': null };
       var dateToFormat = this.props.post.updated_at;
+      debugger;
       return _react2.default.createElement(
         'div',
         { className: 'post-container' },
@@ -47970,48 +47973,53 @@ var PostItem = function (_React$Component) {
             'div',
             { className: 'post-header' },
             _react2.default.createElement(
-              _reactRouterDom.Link,
-              { to: '/user/' + this.props.post.author_id },
-              _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.post.author_profile_pic_url })
-            ),
-            _react2.default.createElement(
               'div',
-              { className: 'post-header-detail' },
+              { className: 'post-header-section' },
               _react2.default.createElement(
-                'div',
-                { className: 'post-header-link' },
-                _react2.default.createElement(
-                  _reactRouterDom.Link,
-                  { className: 'author-home-page', to: '/user/' + this.props.post.author_id },
-                  this.props.post.author_name
-                ),
-                this.props.post.author_id !== this.props.post.wall_owner_id && _react2.default.createElement(
-                  _reactRouterDom.Link,
-                  { className: 'author-home-page', to: '/user/' + this.props.post.wall_owner_id },
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'post-left-carot' },
-                    ' \u25BA '
-                  ),
-                  this.props.post.wall_owner_name
-                )
+                _reactRouterDom.Link,
+                { to: '/user/' + this.props.post.author_id },
+                _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.post.author_profile_pic_url })
               ),
               _react2.default.createElement(
                 'div',
-                { className: 'timeStamp' },
+                { className: 'post-header-detail' },
                 _react2.default.createElement(
-                  _reactMoment2.default,
-                  { interval: 120000, fromNow: true, ago: true },
-                  dateToFormat
+                  'div',
+                  { className: 'post-header-link' },
+                  _react2.default.createElement(
+                    _reactRouterDom.Link,
+                    { className: 'author-home-page', to: '/user/' + this.props.post.author_id },
+                    this.props.post.author_name
+                  ),
+                  this.props.post.author_id !== this.props.post.wall_owner_id && _react2.default.createElement(
+                    _reactRouterDom.Link,
+                    { className: 'author-home-page', to: '/user/' + this.props.post.wall_owner_id },
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'post-left-carot' },
+                      ' \u25BA '
+                    ),
+                    this.props.post.wall_owner_name
+                  )
                 ),
                 _react2.default.createElement(
-                  'span',
-                  { className: 'mid-dot' },
-                  '  \xB7  '
-                ),
-                _react2.default.createElement(_drop_down2.default, { customClass: 'security-button', list: list, img: window.navPeople })
+                  'div',
+                  { className: 'timeStamp' },
+                  _react2.default.createElement(
+                    _reactMoment2.default,
+                    { interval: 120000, fromNow: true, ago: true },
+                    dateToFormat
+                  ),
+                  _react2.default.createElement(
+                    'span',
+                    { className: 'mid-dot' },
+                    '  \xB7  '
+                  ),
+                  _react2.default.createElement(_drop_down2.default, { customClass: 'security-button', list: list, img: window.navPeople })
+                )
               )
-            )
+            ),
+            this.props.post.author_id === this.props.currentUser.id && _react2.default.createElement(_drop_down2.default, { customClass: 'post-modification', list: { 'Edit Post': null, 'Delete Post': null }, content: '...' })
           ),
           _react2.default.createElement('img', { className: 'post-image', src: this.props.post.content_url }),
           _react2.default.createElement(
@@ -52681,13 +52689,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _merge = __webpack_require__(38);
-
-var _merge2 = _interopRequireDefault(_merge);
-
 var _error_actions = __webpack_require__(557);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var postReducer = function postReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];

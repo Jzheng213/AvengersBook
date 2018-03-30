@@ -1,5 +1,3 @@
-import merge from 'lodash/merge';
-
 import {LOG_POST_ERROR} from '../../actions/error_actions';
 
 

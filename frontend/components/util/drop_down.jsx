@@ -17,7 +17,6 @@ export default class DropDown extends React.Component{
   }
 
   toggleShow(){
-    // const show = this.state.show === 'show' ? '' : 'show';
     this.setState(prevState => ({show: prevState.show === '' ? 'show': ''}));
   }
 
@@ -42,7 +41,7 @@ export default class DropDown extends React.Component{
           }
         </div>
       </button>
-    )
+    );
   }
 
 }
