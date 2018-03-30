@@ -20,6 +20,7 @@ class CreatePostForm extends React.Component {
     this.update = this.update.bind(this);
     this.addPicture = this.addPicture.bind(this);
     this.addPostFocused = this.addPostFocused.bind(this);
+    this.cancelUpdate = this.cancelUpdate.bind(this);
   }
 
   handleSubmit(e){
@@ -67,6 +68,14 @@ class CreatePostForm extends React.Component {
       if (file) fileReader.readAsDataURL(file);
     }
   }
+  cancelUpdate(){
+    this.fileInput.value = '';
+    this.setState({
+      content: null,
+      contentUrl: null
+    });
+  }
+
 
   render(){
     let modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
@@ -92,7 +101,7 @@ class CreatePostForm extends React.Component {
             />
           </div>
           { this.props.postModalFocused && this.state.contentUrl &&
-            <PostContentItem contentUrl={this.state.contentUrl}/>
+            <PostContentItem contentUrl={this.state.contentUrl} cancel={this.cancelUpdate}/>
           }
 
           <div className='create-post-add-container'>
@@ -113,7 +122,12 @@ class CreatePostForm extends React.Component {
           <div className='create-post-submit-container'>
             <button className='create-post-submit-button' onClick={this.handleSubmit}>Post</button>
           </div>
-          <input className='file-input' id='add-post-image' type='file' onChange={this.addPicture} />
+          <input className='file-input'
+            id='add-post-image'
+            type='file'
+            onChange={this.addPicture}
+            ref={(element) => { this.fileInput = element; }}
+            />
         </form>
 
         <div className={modalPostScreen} onClick={this.props.togglePostModal}></div>

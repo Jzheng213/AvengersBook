@@ -48814,6 +48814,7 @@ var CreatePostForm = function (_React$Component) {
     _this.update = _this.update.bind(_this);
     _this.addPicture = _this.addPicture.bind(_this);
     _this.addPostFocused = _this.addPostFocused.bind(_this);
+    _this.cancelUpdate = _this.cancelUpdate.bind(_this);
     return _this;
   }
 
@@ -48871,8 +48872,19 @@ var CreatePostForm = function (_React$Component) {
       }
     }
   }, {
+    key: 'cancelUpdate',
+    value: function cancelUpdate() {
+      this.fileInput.value = '';
+      this.setState({
+        content: null,
+        contentUrl: null
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this5 = this;
+
       var modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
       var errorModalScreen = this.props.errorModal ? 'error-modal-screen' : '';
       var errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
@@ -48920,7 +48932,7 @@ var CreatePostForm = function (_React$Component) {
               onChange: this.update('body')
             })
           ),
-          this.props.postModalFocused && this.state.contentUrl && _react2.default.createElement(_post_content_item2.default, { contentUrl: this.state.contentUrl }),
+          this.props.postModalFocused && this.state.contentUrl && _react2.default.createElement(_post_content_item2.default, { contentUrl: this.state.contentUrl, cancel: this.cancelUpdate }),
           _react2.default.createElement(
             'div',
             { className: 'create-post-add-container' },
@@ -48965,7 +48977,14 @@ var CreatePostForm = function (_React$Component) {
               'Post'
             )
           ),
-          _react2.default.createElement('input', { className: 'file-input', id: 'add-post-image', type: 'file', onChange: this.addPicture })
+          _react2.default.createElement('input', { className: 'file-input',
+            id: 'add-post-image',
+            type: 'file',
+            onChange: this.addPicture,
+            ref: function ref(element) {
+              _this5.fileInput = element;
+            }
+          })
         ),
         _react2.default.createElement('div', { className: modalPostScreen, onClick: this.props.togglePostModal }),
         _react2.default.createElement(_error_modal2.default, { component: _react2.default.createElement(_error_message2.default, {
@@ -52511,12 +52530,18 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var PostContentItem = function PostContentItem(_ref) {
-  var contentUrl = _ref.contentUrl;
+  var contentUrl = _ref.contentUrl,
+      cancel = _ref.cancel;
 
 
   return _react2.default.createElement(
     'div',
     { className: 'contentPreviewContainer' },
+    _react2.default.createElement(
+      'span',
+      { className: 'cancel-content-update', onClick: cancel },
+      _react2.default.createElement('i', { className: 'fas fa-times' })
+    ),
     _react2.default.createElement('img', { className: 'contentPreview', src: contentUrl })
   );
 };
