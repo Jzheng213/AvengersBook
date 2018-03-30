@@ -48716,6 +48716,8 @@ var _post_actions = __webpack_require__(84);
 
 var _modal_actions = __webpack_require__(85);
 
+var _error_actions = __webpack_require__(557);
+
 var _create_post_form = __webpack_require__(458);
 
 var _create_post_form2 = _interopRequireDefault(_create_post_form);
@@ -48729,6 +48731,7 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
     currentUser: state.session.currentUser,
     postModalFocused: state.ui.modal.postModalFocused,
     errorModal: state.ui.modal.errorModal,
+    postErrMsg: state.errors.post,
     ownProps: ownProps
   };
 };
@@ -48746,6 +48749,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     toggleErrorModal: function toggleErrorModal() {
       return dispatch((0, _modal_actions.toggleErrorModal)());
+    },
+    logPostError: function logPostError(err) {
+      return dispatch((0, _error_actions.logPostError)(err));
     }
   };
 };
@@ -48835,6 +48841,7 @@ var CreatePostForm = function (_React$Component) {
         _this2.setState({ body: '', content: null, contentUrl: null });
         _this2.props.togglePostModal();
       }, function (reason) {
+        _this2.props.logPostError(reason);
         _this2.props.toggleErrorModal();
       });
     }
@@ -48887,7 +48894,9 @@ var CreatePostForm = function (_React$Component) {
 
       var modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
       var errorModalScreen = this.props.errorModal ? 'error-modal-screen' : '';
-      var errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
+      var errorBody = '';
+
+      if (this.props.postErrMsg[0] === 'Body can\'t be blank') errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
       return _react2.default.createElement(
         'div',
         { className: 'create-post-shell', onClick: this.addPostFocused },
@@ -52197,11 +52206,16 @@ var _signup_errors_reducer = __webpack_require__(546);
 
 var _signup_errors_reducer2 = _interopRequireDefault(_signup_errors_reducer);
 
+var _post_errors_reducer = __webpack_require__(556);
+
+var _post_errors_reducer2 = _interopRequireDefault(_post_errors_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({
   signup: _signup_errors_reducer2.default,
-  session: _session_errors_reducer2.default
+  session: _session_errors_reducer2.default,
+  post: _post_errors_reducer2.default
 });
 
 /***/ }),
@@ -52655,6 +52669,60 @@ var Modal = function Modal(_ref) {
 };
 
 exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(Modal);
+
+/***/ }),
+/* 556 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _merge = __webpack_require__(38);
+
+var _merge2 = _interopRequireDefault(_merge);
+
+var _error_actions = __webpack_require__(557);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var postReducer = function postReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+
+  Object.freeze(state);
+  switch (action.type) {
+    case _error_actions.LOG_POST_ERROR:
+      return action.err.responseJSON;
+    default:
+      return state;
+  }
+};
+
+exports.default = postReducer;
+
+/***/ }),
+/* 557 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var LOG_POST_ERROR = exports.LOG_POST_ERROR = 'LOG_POST_ERROR';
+
+var logPostError = exports.logPostError = function logPostError(err) {
+  return {
+    type: LOG_POST_ERROR,
+    err: err
+  };
+};
 
 /***/ })
 /******/ ]);

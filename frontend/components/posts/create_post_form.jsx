@@ -36,6 +36,7 @@ class CreatePostForm extends React.Component {
       this.setState({body: '', content: null, contentUrl: null});
       this.props.togglePostModal();
     }, (reason) => {
+      this.props.logPostError(reason);
       this.props.toggleErrorModal();
     });
   }
@@ -80,7 +81,10 @@ class CreatePostForm extends React.Component {
   render(){
     let modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
     let errorModalScreen = this.props.errorModal ? 'error-modal-screen' : '';
-    let errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
+    let errorBody = '';
+
+    if (this.props.postErrMsg[0] === ('Body can\'t be blank')) 
+      errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
     return(
       <div className='create-post-shell' onClick={this.addPostFocused}>
         <form className={'create-post'}>
@@ -127,7 +131,7 @@ class CreatePostForm extends React.Component {
             type='file'
             onChange={this.addPicture}
             ref={(element) => { this.fileInput = element; }}
-            />
+          />
         </form>
 
         <div className={modalPostScreen} onClick={this.props.togglePostModal}></div>
