@@ -19,8 +19,7 @@ export default class DropDown extends React.Component{
   toggleShow(){
     this.setState(prevState => ({show: prevState.show === '' ? 'show': ''}));
   }
-
-
+  
   hide(e){
     if(e && e.relatedTarget && e.relatedTarget.tagName === 'A'){
       e.relatedTarget.click();

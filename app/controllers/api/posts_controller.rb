@@ -40,6 +40,13 @@ class Api::PostsController < ApplicationController
   end
 
   def destroy
+    @currentUser = User.find(current_user.id)
+    @post = @currentUser.posts.find(params[:id])
+    if Post.destroy(@post.id)
+      render json: @post.id
+    else
+      render json: @post.errors.full_messages, status: 422
+    end
   end
 
   private

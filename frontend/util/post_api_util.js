@@ -32,3 +32,11 @@ export const createPost = (post) => {
     data: post
   });
 };
+
+export const deletePost = (id) =>{
+
+  return $.ajax({
+    method: 'DELETE',
+    url: `/api/posts/${id}`
+  });
+};

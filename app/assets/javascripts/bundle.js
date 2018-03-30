@@ -12710,7 +12710,7 @@ exports.default = DropDown;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createPost = exports.fetchPost = exports.fetchFriendsPosts = exports.fetchPosts = exports.RECEIVE_POST = exports.RECEIVE_POSTS = undefined;
+exports.deletePost = exports.createPost = exports.fetchPost = exports.fetchFriendsPosts = exports.fetchPosts = exports.RECEIVE_POST = exports.RECEIVE_POSTS = exports.REMOVE_POST = undefined;
 
 var _post_api_util = __webpack_require__(448);
 
@@ -12718,6 +12718,7 @@ var APIUtil = _interopRequireWildcard(_post_api_util);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+var REMOVE_POST = exports.REMOVE_POST = 'REMOVE_POST';
 var RECEIVE_POSTS = exports.RECEIVE_POSTS = 'RECEIVE_POSTS';
 var RECEIVE_POST = exports.RECEIVE_POST = 'RECEIVE_POST';
 
@@ -12732,6 +12733,13 @@ var receivePost = function receivePost(post) {
   return {
     type: RECEIVE_POST,
     post: post
+  };
+};
+
+var removePost = function removePost(id) {
+  return {
+    type: REMOVE_POST,
+    id: id
   };
 };
 
@@ -12763,6 +12771,14 @@ var createPost = exports.createPost = function createPost(post) {
   return function (dispatch) {
     return APIUtil.createPost(post).then(function (postFromServer) {
       return dispatch(receivePost(postFromServer));
+    });
+  };
+};
+
+var deletePost = exports.deletePost = function deletePost(id) {
+  return function (dispatch) {
+    return APIUtil.deletePost(id).then(function (deletedPostId) {
+      return dispatch(removePost(deletedPostId));
     });
   };
 };
@@ -18106,6 +18122,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     requestFriendsPosts: function requestFriendsPosts(currentUserId) {
       return dispatch((0, _post_actions.fetchFriendsPosts)(currentUserId));
+    },
+    deletePost: function deletePost(id) {
+      return dispatch((0, _post_actions.deletePost)(id));
     }
   };
 };
@@ -47827,6 +47846,14 @@ var createPost = exports.createPost = function createPost(post) {
   });
 };
 
+var deletePost = exports.deletePost = function deletePost(id) {
+
+  return $.ajax({
+    method: 'DELETE',
+    url: '/api/posts/' + id
+  });
+};
+
 /***/ }),
 /* 449 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -47900,7 +47927,7 @@ var Post = function (_React$Component) {
           'ul',
           null,
           this.props.posts.map(function (post) {
-            return _react2.default.createElement(_post_item2.default, { key: post.id, post: post, currentUser: _this2.props.currentUser });
+            return _react2.default.createElement(_post_item2.default, { key: post.id, post: post, currentUser: _this2.props.currentUser, deletePost: _this2.props.deletePost });
           })
         )
       );
@@ -47959,10 +47986,11 @@ var PostItem = function (_React$Component) {
   _createClass(PostItem, [{
     key: 'render',
     value: function render() {
+      var _this2 = this;
 
       var list = { 'Public': null, 'Friends': null, 'Friends except...': null };
       var dateToFormat = this.props.post.updated_at;
-      debugger;
+
       return _react2.default.createElement(
         'div',
         { className: 'post-container' },
@@ -48019,7 +48047,11 @@ var PostItem = function (_React$Component) {
                 )
               )
             ),
-            this.props.post.author_id === this.props.currentUser.id && _react2.default.createElement(_drop_down2.default, { customClass: 'post-modification', list: { 'Edit Post': null, 'Delete Post': null }, content: '...' })
+            this.props.post.author_id === this.props.currentUser.id && _react2.default.createElement(_drop_down2.default, { customClass: 'post-modification',
+              list: { 'Edit Post': null, 'Delete Post': function DeletePost() {
+                  return _this2.props.deletePost(_this2.props.post.id);
+                } },
+              content: '...' })
           ),
           _react2.default.createElement('img', { className: 'post-image', src: this.props.post.content_url }),
           _react2.default.createElement(
@@ -52014,6 +52046,11 @@ var postReducer = function postReducer() {
       return action.posts;
     case _post_actions.RECEIVE_POST:
       return (0, _merge3.default)({}, state, _defineProperty({}, action.post.id, action.post));
+    case _post_actions.REMOVE_POST:
+      debugger;
+      var newState = (0, _merge3.default)({}, state);
+      delete newState[action.id];
+      return newState;
     default:
       return state;
   }
