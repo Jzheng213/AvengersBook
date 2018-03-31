@@ -46725,6 +46725,7 @@ var SessionForm = function (_React$Component) {
       password: ''
     };
     _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handleDemo = _this.handleDemo.bind(_this);
     return _this;
   }
 
@@ -46742,6 +46743,17 @@ var SessionForm = function (_React$Component) {
     value: function handleSubmit(e) {
       e.preventDefault();
       var user = Object.assign({}, this.state);
+      this.props.processForm(user);
+    }
+  }, {
+    key: 'handleDemo',
+    value: function handleDemo(e) {
+      e.preventDefault();
+      var user = {
+        email: 'spiderman@avengers.com',
+        password: 'starwars'
+      };
+
       this.props.processForm(user);
     }
   }, {
@@ -46798,7 +46810,8 @@ var SessionForm = function (_React$Component) {
             className: 'login-input'
           })
         ),
-        _react2.default.createElement('input', { className: 'session-submit', type: 'submit', value: 'Log In' })
+        _react2.default.createElement('input', { className: 'session-submit', type: 'submit', value: 'Log In' }),
+        _react2.default.createElement('input', { className: 'session-submit', type: 'submit', value: 'Demo Log In', onClick: this.handleDemo })
       );
     }
   }]);
