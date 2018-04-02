@@ -21,7 +21,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     submitPost: (post) => dispatch(editPost(post)),
-    
     toggleEditPostModal: (post) => dispatch(toggleEditPostModal(post)),
     toggleErrorModal: () => dispatch(toggleErrorModal()),
     logPostError: (err)=> dispatch(logPostError(err))
@@ -68,7 +67,7 @@ class EditPostForm extends React.Component{
 
   handleSubmit(e){
     e.preventDefault();
-
+    debugger;
     let formData = new FormData();
     formData.append('post[id]', this.state.id);
     formData.append('post[body]', this.state.body);
@@ -79,6 +78,7 @@ class EditPostForm extends React.Component{
       this.setState({body: '', content: null, contentUrl: null, wallOwnerId: null});
       this.props.toggleEditPostModal();
     }, (reason) => {
+      debugger;
       this.props.logPostError(reason);
       this.props.toggleEditPostModal();
     });

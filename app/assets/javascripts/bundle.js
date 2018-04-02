@@ -52873,7 +52873,6 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     submitPost: function submitPost(post) {
       return dispatch((0, _post_actions.editPost)(post));
     },
-
     toggleEditPostModal: function toggleEditPostModal(post) {
       return dispatch((0, _modal_actions.toggleEditPostModal)(post));
     },
@@ -52938,7 +52937,7 @@ var EditPostForm = function (_React$Component) {
       var _this3 = this;
 
       e.preventDefault();
-
+      debugger;
       var formData = new FormData();
       formData.append('post[id]', this.state.id);
       formData.append('post[body]', this.state.body);
@@ -52949,6 +52948,7 @@ var EditPostForm = function (_React$Component) {
         _this3.setState({ body: '', content: null, contentUrl: null, wallOwnerId: null });
         _this3.props.toggleEditPostModal();
       }, function (reason) {
+        debugger;
         _this3.props.logPostError(reason);
         _this3.props.toggleEditPostModal();
       });

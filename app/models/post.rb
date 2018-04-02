@@ -4,7 +4,7 @@ class Post < ApplicationRecord
   has_attached_file :content, styles: { medium: "300x300>", thumb: "100x100>" },
                     default_url: ""
   validates_attachment_content_type :content, content_type: /\Aimage\/.*\z/
-  
+
   belongs_to :author,
     class_name: :User,
     foreign_key: :author_id
@@ -13,4 +13,8 @@ class Post < ApplicationRecord
     class_name: :User,
     foreign_key: :wall_owner_id,
     optional: true
+
+  def remove_content
+    self.content.clear
+  end
 end
