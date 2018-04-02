@@ -33,6 +33,17 @@ export const createPost = (post) => {
   });
 };
 
+export const editPost = (post) => {
+  return $.ajax({
+    method: 'PATCH',
+    url: `/api/posts/${post.id}`,
+    processData: false,
+    contentType: false,
+    dataType: 'json',
+    data: post
+  });
+};
+
 export const deletePost = (id) =>{
 
   return $.ajax({

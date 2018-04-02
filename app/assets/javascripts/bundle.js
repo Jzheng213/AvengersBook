@@ -12710,7 +12710,7 @@ exports.default = DropDown;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deletePost = exports.createPost = exports.fetchPost = exports.fetchFriendsPosts = exports.fetchPosts = exports.RECEIVE_POST = exports.RECEIVE_POSTS = exports.REMOVE_POST = undefined;
+exports.deletePost = exports.editPost = exports.createPost = exports.fetchPost = exports.fetchFriendsPosts = exports.fetchPosts = exports.RECEIVE_POST = exports.RECEIVE_POSTS = exports.REMOVE_POST = undefined;
 
 var _post_api_util = __webpack_require__(448);
 
@@ -12775,6 +12775,14 @@ var createPost = exports.createPost = function createPost(post) {
   };
 };
 
+var editPost = exports.editPost = function editPost(post) {
+  return function (dispatch) {
+    return APIUtil.editPost(post).then(function (postFromServer) {
+      return dispatch(receivePost(postFromServer));
+    });
+  };
+};
+
 var deletePost = exports.deletePost = function deletePost(id) {
   return function (dispatch) {
     return APIUtil.deletePost(id).then(function (deletedPostId) {
@@ -12795,6 +12803,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var TOGGLE_PROF_PIC_MODAL = exports.TOGGLE_PROF_PIC_MODAL = 'TOGGLE_PROF_PIC_MODAL';
 var TOGGLE_POST_MODAL = exports.TOGGLE_POST_MODAL = 'TOGGLE_POST_MODAL';
+var TOGGLE_EDIT_POST_MODAL = exports.TOGGLE_EDIT_POST_MODAL = 'TOGGLE_EDIT_POST_MODAL';
 var TOGGLE_ERROR_MODAL = exports.TOGGLE_ERROR_MODAL = 'TOGGLE_ERROR_MODAL';
 
 var toggleProfPicModal = exports.toggleProfPicModal = function toggleProfPicModal() {
@@ -12813,6 +12822,13 @@ var toggleErrorModal = exports.toggleErrorModal = function toggleErrorModal() {
 
   return {
     type: TOGGLE_ERROR_MODAL
+  };
+};
+
+var toggleEditPostModal = exports.toggleEditPostModal = function toggleEditPostModal(post) {
+  return {
+    type: TOGGLE_EDIT_POST_MODAL,
+    post: post
   };
 };
 
@@ -18096,6 +18112,8 @@ var _reactRedux = __webpack_require__(18);
 
 var _post_actions = __webpack_require__(84);
 
+var _modal_actions = __webpack_require__(85);
+
 var _post = __webpack_require__(449);
 
 var _post2 = _interopRequireDefault(_post);
@@ -18119,6 +18137,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     requestPosts: function requestPosts(wallOwnerId) {
       return dispatch((0, _post_actions.fetchPosts)(wallOwnerId));
+    },
+    toggleEditPostModal: function toggleEditPostModal(post) {
+      return dispatch((0, _modal_actions.toggleEditPostModal)(post));
     },
     requestFriendsPosts: function requestFriendsPosts(currentUserId) {
       return dispatch((0, _post_actions.fetchFriendsPosts)(currentUserId));
@@ -47859,6 +47880,17 @@ var createPost = exports.createPost = function createPost(post) {
   });
 };
 
+var editPost = exports.editPost = function editPost(post) {
+  return $.ajax({
+    method: 'PATCH',
+    url: '/api/posts/' + post.id,
+    processData: false,
+    contentType: false,
+    dataType: 'json',
+    data: post
+  });
+};
+
 var deletePost = exports.deletePost = function deletePost(id) {
 
   return $.ajax({
@@ -47940,7 +47972,12 @@ var Post = function (_React$Component) {
           'ul',
           null,
           this.props.posts.map(function (post) {
-            return _react2.default.createElement(_post_item2.default, { key: post.id, post: post, currentUser: _this2.props.currentUser, deletePost: _this2.props.deletePost });
+            return _react2.default.createElement(_post_item2.default, { key: post.id,
+              post: post,
+              currentUser: _this2.props.currentUser,
+              deletePost: _this2.props.deletePost,
+              toggleEditPostModal: _this2.props.toggleEditPostModal
+            });
           })
         )
       );
@@ -48003,7 +48040,6 @@ var PostItem = function (_React$Component) {
 
       var list = { 'Public': null, 'Friends': null, 'Friends except...': null };
       var dateToFormat = this.props.post.updated_at;
-
       return _react2.default.createElement(
         'div',
         { className: 'post-container' },
@@ -48061,7 +48097,11 @@ var PostItem = function (_React$Component) {
               )
             ),
             this.props.post.author_id === this.props.currentUser.id && _react2.default.createElement(_drop_down2.default, { customClass: 'post-modification',
-              list: { 'Edit Post': null, 'Delete Post': function DeletePost() {
+              list: {
+                'Edit Post': function EditPost() {
+                  return _this2.props.toggleEditPostModal(_this2.props.post);
+                },
+                'Delete Post': function DeletePost() {
                   return _this2.props.deletePost(_this2.props.post.id);
                 } },
               content: '...' })
@@ -48522,12 +48562,12 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
   if (state.entities.users[ownProps.match.params.userId]) {
     friends = (0, _selector.filterFriends)(state.entities.users, state.entities.users[ownProps.match.params.userId]);
   }
-
   return {
     user: state.entities.users[ownProps.match.params.userId] || defaultUser,
     currentUser: state.session.currentUser,
     modal: state.ui.modal.profPicModal,
     postModal: state.ui.modal.postModalFocused,
+    editPostModal: state.ui.modal.editPostModal,
     uploadingCover: state.ui.coverPhoto.uploadingCover,
     friends: friends
   };
@@ -48544,6 +48584,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     toggleCreatePostModal: function toggleCreatePostModal() {
       return dispatch((0, _modal_actions.togglePostModal)());
+    },
+    toggleEditPostModal: function toggleEditPostModal() {
+      return dispatch((0, _modal_actions.toggleEditPostModal)());
     },
     requestFriends: function requestFriends(user) {
       return dispatch((0, _user_actions.fetchFriends)(user));
@@ -48589,6 +48632,10 @@ var _create_post_form_container = __webpack_require__(457);
 
 var _create_post_form_container2 = _interopRequireDefault(_create_post_form_container);
 
+var _edit_post_form = __webpack_require__(558);
+
+var _edit_post_form2 = _interopRequireDefault(_edit_post_form);
+
 var _profile_picture = __webpack_require__(459);
 
 var _profile_picture2 = _interopRequireDefault(_profile_picture);
@@ -48631,15 +48678,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Profile = function (_React$Component) {
   _inherits(Profile, _React$Component);
 
-  function Profile(props) {
+  function Profile() {
     _classCallCheck(this, Profile);
 
-    var _this = _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).call(this, props));
-
-    _this.state = {
-      modal: _this.props.modal
-    };
-    return _this;
+    return _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).apply(this, arguments));
   }
 
   _createClass(Profile, [{
@@ -48669,8 +48711,9 @@ var Profile = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var modalProfPicScreen = '';
-      if (this.state.modal) modalProfPicScreen = 'prof-picture-modal-screen';
+      var modalProfPicScreen = this.props.modal ? 'prof-picture-modal-screen' : '';
+      var EditPostScreen = this.props.editPostModal ? 'edit-post-screen' : '';
+
       var hideDuringCoverUpload = '';
       var unhideDuringCoverUpload = 'hidden';
 
@@ -48686,7 +48729,12 @@ var Profile = function (_React$Component) {
           'div',
           { className: 'profile-wrapper' },
           _react2.default.createElement(_modal2.default, { component: _react2.default.createElement(_update_profile_pic_form2.default, { user: this.props.user }),
-            modalScreen: modalProfPicScreen
+            modalScreen: modalProfPicScreen,
+            toggleModal: this.props.toggleProfPicModal
+          }),
+          _react2.default.createElement(_modal2.default, { component: _react2.default.createElement(_edit_post_form2.default, { post: this.props.editPost }),
+            modalScreen: EditPostScreen,
+            toggleModal: this.props.toggleEditPostModal
           }),
           _react2.default.createElement(
             'div',
@@ -48890,7 +48938,6 @@ var CreatePostForm = function (_React$Component) {
       formData.append('post[content]', this.state.content || '');
 
       this.props.submitPost(formData).then(function () {
-        _this2.props.fetchPosts(_this2.props.wallOwnerId);
         _this2.setState({ body: '', content: null, contentUrl: null });
         _this2.props.togglePostModal();
       }, function (reason) {
@@ -49348,27 +49395,12 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(18);
-
-var _modal_actions = __webpack_require__(85);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    toggleProfPicModal: function toggleProfPicModal() {
-      return dispatch((0, _modal_actions.toggleProfPicModal)());
-    }
-  };
-};
-//Components
-//React
-
 
 var Modal = function Modal(_ref) {
   var component = _ref.component,
       modalScreen = _ref.modalScreen,
-      toggleProfPicModal = _ref.toggleProfPicModal;
+      toggleModal = _ref.toggleModal;
 
   return _react2.default.createElement(
     'div',
@@ -49376,7 +49408,7 @@ var Modal = function Modal(_ref) {
     _react2.default.createElement(
       'div',
       { className: modalScreen, onClick: function onClick() {
-          return toggleProfPicModal();
+          return toggleModal();
         } },
       _react2.default.createElement(
         'div',
@@ -49389,7 +49421,7 @@ var Modal = function Modal(_ref) {
   );
 };
 
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(Modal);
+exports.default = Modal;
 
 /***/ }),
 /* 463 */
@@ -49856,6 +49888,10 @@ var _posts_reducer = __webpack_require__(539);
 
 var _posts_reducer2 = _interopRequireDefault(_posts_reducer);
 
+var _edit_posts_reducer = __webpack_require__(559);
+
+var _edit_posts_reducer2 = _interopRequireDefault(_edit_posts_reducer);
+
 var _friend_requests_reducer = __webpack_require__(540);
 
 var _friend_requests_reducer2 = _interopRequireDefault(_friend_requests_reducer);
@@ -49865,6 +49901,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = (0, _redux.combineReducers)({
   friend_requests: _friend_requests_reducer2.default,
   posts: _posts_reducer2.default,
+  editPost: _edit_posts_reducer2.default,
   users: _users_reducer2.default
 });
 
@@ -52058,9 +52095,9 @@ var postReducer = function postReducer() {
     case _post_actions.RECEIVE_POSTS:
       return action.posts;
     case _post_actions.RECEIVE_POST:
+      debugger;
       return (0, _merge3.default)({}, state, _defineProperty({}, action.post.id, action.post));
     case _post_actions.REMOVE_POST:
-      debugger;
       var newState = (0, _merge3.default)({}, state);
       delete newState[action.id];
       return newState;
@@ -52167,7 +52204,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var defaultState = {
   profPicModal: false,
   postModalFocused: false,
-  errorModal: false
+  errorModal: false,
+  editPostModal: false
 };
 
 var modalReducer = function modalReducer() {
@@ -52182,6 +52220,8 @@ var modalReducer = function modalReducer() {
       return (0, _merge2.default)({}, state, { postModalFocused: !state.postModalFocused });
     case _modal_actions.TOGGLE_ERROR_MODAL:
       return (0, _merge2.default)({}, state, { errorModal: !state.errorModal });
+    case _modal_actions.TOGGLE_EDIT_POST_MODAL:
+      return (0, _merge2.default)({}, state, { editPostModal: !state.editPostModal });
     default:
       return state;
   }
@@ -52775,6 +52815,216 @@ var logPostError = exports.logPostError = function logPostError(err) {
     err: err
   };
 };
+
+/***/ }),
+/* 558 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(18);
+
+var _reactRouterDom = __webpack_require__(9);
+
+var _post_actions = __webpack_require__(84);
+
+var _modal_actions = __webpack_require__(85);
+
+var _error_actions = __webpack_require__(557);
+
+var _post_content_item = __webpack_require__(553);
+
+var _post_content_item2 = _interopRequireDefault(_post_content_item);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    currentUser: state.session.currentUser,
+    postModalFocused: state.ui.modal.postModalFocused,
+    editPostModal: state.ui.modal.editPostModal,
+    postErrMsg: state.errors.post,
+    editPost: state.entities.editPost,
+    ownProps: ownProps
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    submitPost: function submitPost(post) {
+      return dispatch((0, _post_actions.editPost)(post));
+    },
+
+    toggleEditPostModal: function toggleEditPostModal(post) {
+      return dispatch((0, _modal_actions.toggleEditPostModal)(post));
+    },
+    toggleErrorModal: function toggleErrorModal() {
+      return dispatch((0, _modal_actions.toggleErrorModal)());
+    },
+    logPostError: function logPostError(err) {
+      return dispatch((0, _error_actions.logPostError)(err));
+    }
+  };
+};
+
+var EditPostForm = function (_React$Component) {
+  _inherits(EditPostForm, _React$Component);
+
+  function EditPostForm(props) {
+    _classCallCheck(this, EditPostForm);
+
+    var _this = _possibleConstructorReturn(this, (EditPostForm.__proto__ || Object.getPrototypeOf(EditPostForm)).call(this, props));
+
+    _this.state = {
+      id: null,
+      body: '',
+      content: null,
+      contentUrl: null
+    };
+    _this.cancelUpdate = _this.cancelUpdate.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
+  }
+
+  _createClass(EditPostForm, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      this.setState({
+        id: newProps.editPost.id || null,
+        body: newProps.editPost.body || '',
+        contentUrl: newProps.editPost.content_url || ''
+      });
+    }
+  }, {
+    key: 'update',
+    value: function update(field) {
+      var _this2 = this;
+
+      return function (e) {
+        _this2.setState(_defineProperty({}, field, e.target.value));
+      };
+    }
+  }, {
+    key: 'cancelUpdate',
+    value: function cancelUpdate() {
+      if (this.fileInput) this.fileInput.value = '';
+      this.setState({
+        content: null,
+        contentUrl: null
+      });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(e) {
+      var _this3 = this;
+
+      e.preventDefault();
+
+      var formData = new FormData();
+      formData.append('post[id]', this.state.id);
+      formData.append('post[body]', this.state.body);
+      formData.append('post[wall_owner_id]', this.props.match.params.userId);
+      formData.append('post[content]', this.state.content || '');
+
+      this.props.submitPost(formData).then(function () {
+        _this3.setState({ body: '', content: null, contentUrl: null, wallOwnerId: null });
+        _this3.props.toggleEditPostModal();
+      }, function (reason) {
+        _this3.props.logPostError(reason);
+        _this3.props.toggleEditPostModal();
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'error-messages' },
+        _react2.default.createElement(
+          'header',
+          null,
+          'Edit Post'
+        ),
+        this.props.editPost.body && _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/user/' + this.props.editPost.author_id },
+            _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.editPost.author_profile_pic_url })
+          ),
+          _react2.default.createElement('textarea', { className: 'create-post-input',
+            type: 'text',
+            value: this.state.body,
+            onChange: this.update('body')
+          }),
+          this.state.contentUrl && _react2.default.createElement(_post_content_item2.default, { contentUrl: this.state.contentUrl, cancel: this.cancelUpdate })
+        ),
+        _react2.default.createElement(
+          'footer',
+          null,
+          _react2.default.createElement(
+            'button',
+            { className: 'button blue-button', onClick: this.handleSubmit },
+            'Save'
+          )
+        )
+      );
+    }
+  }]);
+
+  return EditPostForm;
+}(_react2.default.Component);
+
+exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(EditPostForm));
+
+/***/ }),
+/* 559 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _modal_actions = __webpack_require__(85);
+
+var editPostReducer = function editPostReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+
+  Object.freeze(state);
+  switch (action.type) {
+    case _modal_actions.TOGGLE_EDIT_POST_MODAL:
+      return action.post || {};
+    default:
+      return state;
+  }
+};
+
+exports.default = editPostReducer;
 
 /***/ })
 /******/ ]);

@@ -9,7 +9,6 @@ class PostItem extends React.Component{
 
     const list = {'Public':null, 'Friends':null, 'Friends except...': null};
     const dateToFormat = this.props.post.updated_at;
-
     return(
       <div className='post-container'>
         <div className='post-item'>
@@ -34,7 +33,10 @@ class PostItem extends React.Component{
             </div>
             { this.props.post.author_id === this.props.currentUser.id &&
               <DropDown customClass='post-modification'
-                list={{'Edit Post':null, 'Delete Post': ()=> this.props.deletePost(this.props.post.id)}}
+                list={{
+                  'Edit Post': ()=> this.props.toggleEditPostModal(this.props.post),
+                  'Delete Post': ()=> this.props.deletePost(this.props.post.id)}
+                }
                 content={'...'}>
               </DropDown>
             }
@@ -47,6 +49,7 @@ class PostItem extends React.Component{
           <button className='post-item-buttons'><i className="far fa-comment"></i><span>Comment</span></button>
           <button className='post-item-buttons'><i className="fas fa-share"></i><span>Share</span></button>
         </div>
+
       </div>
     );
   }

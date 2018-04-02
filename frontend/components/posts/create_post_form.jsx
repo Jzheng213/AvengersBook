@@ -32,7 +32,6 @@ class CreatePostForm extends React.Component {
     formData.append('post[content]', this.state.content || '');
 
     this.props.submitPost(formData).then(()=>{
-      this.props.fetchPosts(this.props.wallOwnerId);
       this.setState({body: '', content: null, contentUrl: null});
       this.props.togglePostModal();
     }, (reason) => {
@@ -69,6 +68,7 @@ class CreatePostForm extends React.Component {
       if (file) fileReader.readAsDataURL(file);
     }
   }
+
   cancelUpdate(){
     this.fileInput.value = '';
     this.setState({
@@ -83,7 +83,7 @@ class CreatePostForm extends React.Component {
     let errorModalScreen = this.props.errorModal ? 'error-modal-screen' : '';
     let errorBody = '';
 
-    if (this.props.postErrMsg[0] === ('Body can\'t be blank')) 
+    if (this.props.postErrMsg[0] === ('Body can\'t be blank'))
       errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
     return(
       <div className='create-post-shell' onClick={this.addPostFocused}>

@@ -31,17 +31,18 @@ class Api::PostsController < ApplicationController
   end
 
   def update
-    @post.find(params[:id])
-    if @post.save
-      render 'api/post/show'
+    @post = current_user.posts.find(params[:post][:id])
+    @post.author = current_user
+
+    if @post.update(post_params)
+      render :show
     else
       render json: @post.errors.full_messages, status: 422
     end
   end
 
   def destroy
-    @currentUser = User.find(current_user.id)
-    @post = @currentUser.posts.find(params[:id])
+    @post = current_user.posts.find(params[:id])
     if Post.destroy(@post.id)
       render json: @post.id
     else

@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 //Component
 import PostsContainer from '../posts/post_container';
 import CreatePostFormContainer from '../posts/create_post_form_container';
+import EditPostForm from '../posts/edit_post_form';
 import ProfilePicture from './profile_picture';
 import ProfilePictureForm from './update_profile_pic_form';
 import Modal from '../modal';
@@ -13,12 +14,6 @@ import FriendRequestButton from '../friends/friend_request_button';
 import CoverPicture from '../cover_picture/cover_picture';
 
 class Profile extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      modal: this.props.modal,
-    };
-  }
 
   componentDidMount(){
     this.props.requestUser(this.props.match.params.userId).then(
@@ -41,8 +36,9 @@ class Profile extends React.Component{
   }
 
   render(){
-    let modalProfPicScreen = '';
-    if (this.state.modal) modalProfPicScreen = 'prof-picture-modal-screen';
+    let modalProfPicScreen = this.props.modal ? 'prof-picture-modal-screen' : '';
+    let EditPostScreen = this.props.editPostModal ? 'edit-post-screen' : '';
+
     let hideDuringCoverUpload = '';
     let unhideDuringCoverUpload = 'hidden';
 
@@ -54,9 +50,13 @@ class Profile extends React.Component{
     return(
       <div className='profile-container'>
         <div className= 'profile-wrapper'>
-          <Modal component={
-            <ProfilePictureForm  user={this.props.user}/>}
-          modalScreen={modalProfPicScreen}
+          <Modal component={<ProfilePictureForm  user={this.props.user}/>}
+            modalScreen={modalProfPicScreen}
+            toggleModal={this.props.toggleProfPicModal}
+          />
+          <Modal component={<EditPostForm post={this.props.editPost}/>}
+            modalScreen={EditPostScreen}
+            toggleModal={this.props.toggleEditPostModal}
           />
 
           <div className='header-container'>
