@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { editPost, fetchPost } from '../../actions/post_actions';
+import { editPost } from '../../actions/post_actions';
 import { toggleEditPostModal, toggleErrorModal } from '../../actions/modal_actions';
 import { logPostError } from '../../actions/error_actions';
 import {withRouter} from 'react-router-dom';
@@ -67,7 +67,6 @@ class EditPostForm extends React.Component{
 
   handleSubmit(e){
     e.preventDefault();
-    debugger;
     let formData = new FormData();
     formData.append('post[id]', this.state.id);
     formData.append('post[body]', this.state.body);
@@ -78,7 +77,6 @@ class EditPostForm extends React.Component{
       this.setState({body: '', content: null, contentUrl: null, wallOwnerId: null});
       this.props.toggleEditPostModal();
     }, (reason) => {
-      debugger;
       this.props.logPostError(reason);
       this.props.toggleEditPostModal();
     });
@@ -86,7 +84,7 @@ class EditPostForm extends React.Component{
 
   render(){
     return (
-      <div className='error-messages'>
+      <div className='edit-post-form'>
         <header>Edit Post</header>
         {this.props.editPost.body &&
           <div>

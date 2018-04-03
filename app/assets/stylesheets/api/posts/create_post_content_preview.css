@@ -1,9 +1,15 @@
 .contentPreviewContainer{
   position: relative;
+  margin: 20px 10px;
   height: 100px;
   width: 100px;
-  object-fit: contain;
-  margin: 20px, 10px;
+}
+
+.contentPreview{
+  object-fit: cover;
+  object-position: center;
+  height: 100%;
+  width: 100%;
 }
 
 .cancel-content-update{

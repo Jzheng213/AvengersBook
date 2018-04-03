@@ -64,6 +64,8 @@
   height: 22px;
   width: 22px;
   border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .logged-in-nav-bar-container section {
