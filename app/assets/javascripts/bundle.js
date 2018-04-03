@@ -7397,10 +7397,33 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var TOGGLE_PROF_PIC_MODAL = exports.TOGGLE_PROF_PIC_MODAL = 'TOGGLE_PROF_PIC_MODAL';
+var TOGGLE_POST_MODAL = exports.TOGGLE_POST_MODAL = 'TOGGLE_POST_MODAL';
+var TOGGLE_EDIT_POST_MODAL = exports.TOGGLE_EDIT_POST_MODAL = 'TOGGLE_EDIT_POST_MODAL';
+var TOGGLE_ERROR_MODAL = exports.TOGGLE_ERROR_MODAL = 'TOGGLE_ERROR_MODAL';
 
 var toggleProfPicModal = exports.toggleProfPicModal = function toggleProfPicModal() {
   return {
     type: TOGGLE_PROF_PIC_MODAL
+  };
+};
+
+var togglePostModal = exports.togglePostModal = function togglePostModal() {
+  return {
+    type: TOGGLE_POST_MODAL
+  };
+};
+
+var toggleErrorModal = exports.toggleErrorModal = function toggleErrorModal() {
+
+  return {
+    type: TOGGLE_ERROR_MODAL
+  };
+};
+
+var toggleEditPostModal = exports.toggleEditPostModal = function toggleEditPostModal(post) {
+  return {
+    type: TOGGLE_EDIT_POST_MODAL,
+    post: post
   };
 };
 
@@ -9991,7 +10014,7 @@ var locationsAreEqual = function locationsAreEqual(a, b) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createPost = exports.fetchPost = exports.fetchFriendsPosts = exports.fetchPosts = exports.RECEIVE_POST = exports.RECEIVE_POSTS = undefined;
+exports.deletePost = exports.editPost = exports.createPost = exports.fetchPost = exports.fetchFriendsPosts = exports.fetchPosts = exports.RECEIVE_POST = exports.RECEIVE_POSTS = exports.REMOVE_POST = undefined;
 
 var _post_api_util = __webpack_require__(451);
 
@@ -9999,6 +10022,7 @@ var APIUtil = _interopRequireWildcard(_post_api_util);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+var REMOVE_POST = exports.REMOVE_POST = 'REMOVE_POST';
 var RECEIVE_POSTS = exports.RECEIVE_POSTS = 'RECEIVE_POSTS';
 var RECEIVE_POST = exports.RECEIVE_POST = 'RECEIVE_POST';
 
@@ -10013,6 +10037,13 @@ var receivePost = function receivePost(post) {
   return {
     type: RECEIVE_POST,
     post: post
+  };
+};
+
+var removePost = function removePost(id) {
+  return {
+    type: REMOVE_POST,
+    id: id
   };
 };
 
@@ -10044,6 +10075,22 @@ var createPost = exports.createPost = function createPost(post) {
   return function (dispatch) {
     return APIUtil.createPost(post).then(function (postFromServer) {
       return dispatch(receivePost(postFromServer));
+    });
+  };
+};
+
+var editPost = exports.editPost = function editPost(post) {
+  return function (dispatch) {
+    return APIUtil.editPost(post).then(function (postFromServer) {
+      return dispatch(receivePost(postFromServer));
+    });
+  };
+};
+
+var deletePost = exports.deletePost = function deletePost(id) {
+  return function (dispatch) {
+    return APIUtil.deletePost(id).then(function (deletedPostId) {
+      return dispatch(removePost(deletedPostId));
     });
   };
 };
@@ -12741,7 +12788,6 @@ var DropDown = function (_React$Component) {
   }, {
     key: 'toggleShow',
     value: function toggleShow() {
-      // const show = this.state.show === 'show' ? '' : 'show';
       this.setState(function (prevState) {
         return { show: prevState.show === '' ? 'show' : '' };
       });
@@ -12787,7 +12833,25 @@ var DropDown = function (_React$Component) {
 exports.default = DropDown;
 
 /***/ }),
-/* 86 */,
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var LOG_POST_ERROR = exports.LOG_POST_ERROR = 'LOG_POST_ERROR';
+
+var logPostError = exports.logPostError = function logPostError(err) {
+  return {
+    type: LOG_POST_ERROR,
+    err: err
+  };
+};
+
+/***/ }),
 /* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18067,6 +18131,8 @@ var _reactRedux = __webpack_require__(13);
 
 var _post_actions = __webpack_require__(51);
 
+var _modal_actions = __webpack_require__(25);
+
 var _post = __webpack_require__(452);
 
 var _post2 = _interopRequireDefault(_post);
@@ -18091,8 +18157,14 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     requestPosts: function requestPosts(wallOwnerId) {
       return dispatch((0, _post_actions.fetchPosts)(wallOwnerId));
     },
+    toggleEditPostModal: function toggleEditPostModal(post) {
+      return dispatch((0, _modal_actions.toggleEditPostModal)(post));
+    },
     requestFriendsPosts: function requestFriendsPosts(currentUserId) {
       return dispatch((0, _post_actions.fetchFriendsPosts)(currentUserId));
+    },
+    deletePost: function deletePost(id) {
+      return dispatch((0, _post_actions.deletePost)(id));
     }
   };
 };
@@ -29773,8 +29845,60 @@ return zhTw;
 
 
 /***/ }),
-/* 264 */,
-/* 265 */,
+/* 264 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var PostContentItem = function PostContentItem(_ref) {
+  var contentUrl = _ref.contentUrl,
+      cancel = _ref.cancel;
+
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'contentPreviewContainer' },
+    _react2.default.createElement(
+      'span',
+      { className: 'cancel-content-update', onClick: cancel },
+      _react2.default.createElement('i', { className: 'fas fa-times' })
+    ),
+    _react2.default.createElement('img', { className: 'contentPreview', src: contentUrl })
+  );
+};
+
+exports.default = PostContentItem;
+
+/***/ }),
+/* 265 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var TOGGLE_UPLOAD_PHOTO = exports.TOGGLE_UPLOAD_PHOTO = 'TOGGLE_UPLOAD_PHOTO';
+
+var toggleUploadPhoto = exports.toggleUploadPhoto = function toggleUploadPhoto() {
+  return {
+    type: TOGGLE_UPLOAD_PHOTO
+  };
+};
+
+/***/ }),
 /* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -46695,6 +46819,7 @@ var SessionForm = function (_React$Component) {
       password: ''
     };
     _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handleDemo = _this.handleDemo.bind(_this);
     return _this;
   }
 
@@ -46712,6 +46837,17 @@ var SessionForm = function (_React$Component) {
     value: function handleSubmit(e) {
       e.preventDefault();
       var user = Object.assign({}, this.state);
+      this.props.processForm(user);
+    }
+  }, {
+    key: 'handleDemo',
+    value: function handleDemo(e) {
+      e.preventDefault();
+      var user = {
+        email: 'spiderman@avengers.com',
+        password: 'starwars'
+      };
+
       this.props.processForm(user);
     }
   }, {
@@ -46768,7 +46904,8 @@ var SessionForm = function (_React$Component) {
             className: 'login-input'
           })
         ),
-        _react2.default.createElement('input', { className: 'session-submit', type: 'submit', value: 'Log In' })
+        _react2.default.createElement('input', { className: 'session-submit', type: 'submit', value: 'Log In' }),
+        _react2.default.createElement('input', { className: 'session-submit', type: 'submit', value: 'Demo Log In', onClick: this.handleDemo })
       );
     }
   }]);
@@ -47192,6 +47329,7 @@ var Main = function Main() {
     _react2.default.createElement(
       _reactRouterDom.Switch,
       null,
+      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _newsfeed_container2.default }),
       _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/newsfeed', component: _newsfeed_container2.default }),
       _react2.default.createElement(_reactRouterDom.Route, { path: '/user/:userId', component: _profile_container2.default })
     )
@@ -47798,7 +47936,29 @@ var createPost = exports.createPost = function createPost(post) {
   return $.ajax({
     method: 'POST',
     url: '/api/posts',
-    data: { post: post }
+    processData: false,
+    contentType: false,
+    dataType: 'json',
+    data: post
+  });
+};
+
+var editPost = exports.editPost = function editPost(post) {
+  return $.ajax({
+    method: 'PATCH',
+    url: '/api/posts/' + post.id,
+    processData: false,
+    contentType: false,
+    dataType: 'json',
+    data: post
+  });
+};
+
+var deletePost = exports.deletePost = function deletePost(id) {
+
+  return $.ajax({
+    method: 'DELETE',
+    url: '/api/posts/' + id
   });
 };
 
@@ -47866,6 +48026,8 @@ var Post = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         null,
@@ -47873,7 +48035,12 @@ var Post = function (_React$Component) {
           'ul',
           null,
           this.props.posts.map(function (post) {
-            return _react2.default.createElement(_post_item2.default, { key: post.id, post: post });
+            return _react2.default.createElement(_post_item2.default, { key: post.id,
+              post: post,
+              currentUser: _this2.props.currentUser,
+              deletePost: _this2.props.deletePost,
+              toggleEditPostModal: _this2.props.toggleEditPostModal
+            });
           })
         )
       );
@@ -47932,6 +48099,8 @@ var PostItem = function (_React$Component) {
   _createClass(PostItem, [{
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var list = { 'Public': null, 'Friends': null, 'Friends except...': null };
       var dateToFormat = this.props.post.updated_at;
       return _react2.default.createElement(
@@ -47944,48 +48113,61 @@ var PostItem = function (_React$Component) {
             'div',
             { className: 'post-header' },
             _react2.default.createElement(
-              _reactRouterDom.Link,
-              { to: '/user/' + this.props.post.author_id },
-              _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.post.author_profile_pic_url })
-            ),
-            _react2.default.createElement(
               'div',
-              { className: 'post-header-detail' },
+              { className: 'post-header-section' },
               _react2.default.createElement(
-                'div',
-                { className: 'post-header-link' },
-                _react2.default.createElement(
-                  _reactRouterDom.Link,
-                  { className: 'author-home-page', to: '/user/' + this.props.post.author_id },
-                  this.props.post.author_name
-                ),
-                this.props.post.author_id !== this.props.post.wall_owner_id && _react2.default.createElement(
-                  _reactRouterDom.Link,
-                  { className: 'author-home-page', to: '/user/' + this.props.post.wall_owner_id },
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'post-left-carot' },
-                    ' \u25BA '
-                  ),
-                  this.props.post.wall_owner_name
-                )
+                _reactRouterDom.Link,
+                { to: '/user/' + this.props.post.author_id },
+                _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.post.author_profile_pic_url })
               ),
               _react2.default.createElement(
                 'div',
-                { className: 'timeStamp' },
+                { className: 'post-header-detail' },
                 _react2.default.createElement(
-                  _reactMoment2.default,
-                  { interval: 120000, fromNow: true, ago: true },
-                  dateToFormat
+                  'div',
+                  { className: 'post-header-link' },
+                  _react2.default.createElement(
+                    _reactRouterDom.Link,
+                    { className: 'author-home-page', to: '/user/' + this.props.post.author_id },
+                    this.props.post.author_name
+                  ),
+                  this.props.post.author_id !== this.props.post.wall_owner_id && _react2.default.createElement(
+                    _reactRouterDom.Link,
+                    { className: 'author-home-page', to: '/user/' + this.props.post.wall_owner_id },
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'post-left-carot' },
+                      ' \u25BA '
+                    ),
+                    this.props.post.wall_owner_name
+                  )
                 ),
                 _react2.default.createElement(
-                  'span',
-                  { className: 'mid-dot' },
-                  '  \xB7  '
-                ),
-                _react2.default.createElement(_drop_down2.default, { customClass: 'security-button', list: list, img: window.navPeople })
+                  'div',
+                  { className: 'timeStamp' },
+                  _react2.default.createElement(
+                    _reactMoment2.default,
+                    { interval: 120000, fromNow: true, ago: true },
+                    dateToFormat
+                  ),
+                  _react2.default.createElement(
+                    'span',
+                    { className: 'mid-dot' },
+                    '  \xB7  '
+                  ),
+                  _react2.default.createElement(_drop_down2.default, { customClass: 'security-button', list: list, img: window.navPeople })
+                )
               )
-            )
+            ),
+            this.props.post.author_id === this.props.currentUser.id && _react2.default.createElement(_drop_down2.default, { customClass: 'post-modification',
+              list: {
+                'Edit Post': function EditPost() {
+                  return _this2.props.toggleEditPostModal(_this2.props.post);
+                },
+                'Delete Post': function DeletePost() {
+                  return _this2.props.deletePost(_this2.props.post.id);
+                } },
+              content: '...' })
           ),
           _react2.default.createElement('img', { className: 'post-image', src: this.props.post.content_url }),
           _react2.default.createElement(
@@ -48410,11 +48592,13 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
   if (state.entities.users[ownProps.match.params.userId]) {
     friends = (0, _selector.filterFriends)(state.entities.users, state.entities.users[ownProps.match.params.userId]);
   }
-
   return {
     user: state.entities.users[ownProps.match.params.userId] || defaultUser,
     currentUser: state.session.currentUser,
     modal: state.ui.modal.profPicModal,
+    postModal: state.ui.modal.postModalFocused,
+    editPostModal: state.ui.modal.editPostModal,
+    uploadingCover: state.ui.coverPhoto.uploadingCover,
     friends: friends
   };
 }; //React
@@ -48422,14 +48606,17 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    saveUserPhoto: function saveUserPhoto(formData) {
-      return dispatch((0, _user_actions.saveUserPhoto)(formData));
-    },
     requestUser: function requestUser(id) {
       return dispatch((0, _user_actions.fetchUser)(id));
     },
     toggleProfPicModal: function toggleProfPicModal() {
       return dispatch((0, _modal_actions.toggleProfPicModal)());
+    },
+    toggleCreatePostModal: function toggleCreatePostModal() {
+      return dispatch((0, _modal_actions.togglePostModal)());
+    },
+    toggleEditPostModal: function toggleEditPostModal() {
+      return dispatch((0, _modal_actions.toggleEditPostModal)());
     },
     requestFriends: function requestFriends(user) {
       return dispatch((0, _user_actions.fetchFriends)(user));
@@ -48475,6 +48662,10 @@ var _create_post_form_container = __webpack_require__(460);
 
 var _create_post_form_container2 = _interopRequireDefault(_create_post_form_container);
 
+var _edit_post_form = __webpack_require__(464);
+
+var _edit_post_form2 = _interopRequireDefault(_edit_post_form);
+
 var _profile_picture = __webpack_require__(465);
 
 var _profile_picture2 = _interopRequireDefault(_profile_picture);
@@ -48499,9 +48690,11 @@ var _friend_request_button = __webpack_require__(472);
 
 var _friend_request_button2 = _interopRequireDefault(_friend_request_button);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _cover_picture = __webpack_require__(473);
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _cover_picture2 = _interopRequireDefault(_cover_picture);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -48512,29 +48705,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 //Component
 
 
-// import CoverPhoto from './cover_photo';
-
 var Profile = function (_React$Component) {
   _inherits(Profile, _React$Component);
 
-  function Profile(props) {
+  function Profile() {
     _classCallCheck(this, Profile);
 
-    var _this = _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).call(this, props));
-
-    _this.state = {
-      modal: _this.props.modal,
-      coverFile: null,
-      coverImageUrl: null,
-      uploadingCover: false,
-      profileFile: null,
-      profileImageUrl: null
-    };
-
-    _this.updateFile = _this.updateFile;
-    _this.cancelUpdate = _this.cancelUpdate;
-    _this.handleSubmit = _this.handleSubmit.bind(_this);
-    return _this;
+    return _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).apply(this, arguments));
   }
 
   _createClass(Profile, [{
@@ -48543,8 +48720,8 @@ var Profile = function (_React$Component) {
       var _this2 = this;
 
       this.props.requestUser(this.props.match.params.userId).then(function () {
-        return _this2.props.requestFriends(_this2.props.user);
         window.scrollTo(0, 0);
+        return _this2.props.requestFriends(_this2.props.user);
       });
     }
   }, {
@@ -48562,121 +48739,48 @@ var Profile = function (_React$Component) {
       this.setState({ modal: newProps.modal });
     }
   }, {
-    key: 'updateFile',
-    value: function updateFile(field, e) {
-      var _this4 = this;
-
-      if (parseInt(this.props.match.params.userId) === this.props.currentUser.id) {
-        var file = e.currentTarget.files[0];
-        var fileReader = new FileReader();
-        fileReader.onloadend = function () {
-          var _this4$setState;
-
-          if (field === 'cover') _this4.setState({ uploadingCover: !_this4.state.uploadingCover });
-
-          _this4.setState((_this4$setState = {}, _defineProperty(_this4$setState, field + 'File', file), _defineProperty(_this4$setState, field + 'ImageUrl', fileReader.result), _this4$setState));
-        };
-        if (file) fileReader.readAsDataURL(file);
-      }
-    }
-  }, {
-    key: 'cancelUpdate',
-    value: function cancelUpdate(field) {
-      var _setState;
-
-      this.fileInput.value = '';
-      this.setState((_setState = {}, _defineProperty(_setState, field + 'File', null), _defineProperty(_setState, field + 'ImageUrl', null), _setState));
-      if (field === 'cover') this.setState({ uploadingCover: !this.state.uploadingCover });
-    }
-  }, {
-    key: 'handleSubmit',
-    value: function handleSubmit(field) {
-      var _this5 = this;
-
-      var formData = new FormData();
-      formData.append('user[' + field + '_pic]', this.state[field + 'File']);
-      formData.append('user[id]', this.props.user.id);
-      this.props.saveUserPhoto(formData).then(function () {
-        var _this5$setState;
-
-        _this5.setState((_this5$setState = {}, _defineProperty(_this5$setState, field + 'File', null), _defineProperty(_this5$setState, field + 'ImageUrl', null), _this5$setState));
-        if (field === 'cover') _this5.setState({ uploadingCover: !_this5.state.uploadingCover });
-        _this5.props.requestUser(_this5.props.user.id);
-      });
-    }
-  }, {
     key: 'render',
     value: function render() {
-      var _this6 = this;
-
-      var currentUserPage = this.props.currentUser.id === parseInt(this.props.match.params.userId) ? '' : 'hidden';
-
-      var modalProfPicScreen = '';
-      if (this.state.modal) modalProfPicScreen = 'prof-picture-modal-screen';
-
-      var coverUrl = this.state.coverImageUrl || this.props.user.cover_pic_url;
+      var modalProfPicScreen = this.props.modal ? 'prof-picture-modal-screen' : '';
+      var EditPostScreen = this.props.editPostModal ? 'edit-post-screen' : '';
 
       var hideDuringCoverUpload = '';
       var unhideDuringCoverUpload = 'hidden';
-      if (this.state.uploadingCover) {
+
+      if (this.props.uploadingCover) {
         hideDuringCoverUpload = 'hidden';
         unhideDuringCoverUpload = '';
       }
+
       return _react2.default.createElement(
         'div',
         { className: 'profile-container' },
         _react2.default.createElement(
           'div',
           { className: 'profile-wrapper' },
-          _react2.default.createElement(_modal2.default, { component: _react2.default.createElement(_update_profile_pic_form2.default, {
-              fileInput: this.fileInput,
-              profilePicUrl: this.state.profileImageUrl,
-              handleSubmit: this.handleSubmit.bind(this, 'profile'),
-              cancelUpdate: this.cancelUpdate.bind(this, 'profile'),
-              updateFile: this.updateFile.bind(this, 'profile') }),
-            modalScreen: modalProfPicScreen
+          _react2.default.createElement(_modal2.default, { component: _react2.default.createElement(_update_profile_pic_form2.default, { user: this.props.user }),
+            modalScreen: modalProfPicScreen,
+            toggleModal: this.props.toggleProfPicModal
+          }),
+          _react2.default.createElement(_modal2.default, { component: _react2.default.createElement(_edit_post_form2.default, { post: this.props.editPost }),
+            modalScreen: EditPostScreen,
+            toggleModal: this.props.toggleEditPostModal
           }),
           _react2.default.createElement(
             'div',
             { className: 'header-container' },
-            _react2.default.createElement(
-              'div',
-              { className: 'cover-picture-container' },
-              _react2.default.createElement('img', { className: 'cover-picture', src: coverUrl }),
-              _react2.default.createElement(
-                'div',
-                { className: hideDuringCoverUpload + ' edit-cover-picture-button' },
-                _react2.default.createElement(
-                  'div',
-                  { className: currentUserPage + ' cover-image-upload' },
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'cover-image-input' },
-                    _react2.default.createElement('i', { className: 'fas fa-camera' }),
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'cover-update-text' },
-                      'Update Cover Photo'
-                    )
-                  ),
-                  _react2.default.createElement('input', { id: 'cover-image-input',
-                    type: 'file',
-                    onChange: this.updateFile.bind(this, 'cover'),
-                    ref: function ref(element) {
-                      _this6.fileInput = element;
-                    }
-                  })
-                )
-              )
-            ),
+            _react2.default.createElement(_cover_picture2.default, {
+              user: this.props.user,
+              hideDuringCoverUpload: '' + hideDuringCoverUpload,
+              unhideDuringCoverUpload: '' + unhideDuringCoverUpload
+            }),
             _react2.default.createElement(
               'div',
               { className: 'profile-picture-container' },
               _react2.default.createElement(_profile_picture2.default, {
                 currentUser: this.props.currentUser,
                 user: this.props.user,
-                toggleProfPicModal: this.props.toggleProfPicModal,
-                modal: this.props.modal
+                toggleProfPicModal: this.props.toggleProfPicModal
               })
             ),
             _react2.default.createElement(
@@ -48698,8 +48802,6 @@ var Profile = function (_React$Component) {
             _react2.default.createElement(_profile_header_links2.default, {
               hideDuringCoverUpload: hideDuringCoverUpload,
               unhideDuringCoverUpload: unhideDuringCoverUpload,
-              cancelUpdate: this.cancelUpdate.bind(this, 'cover'),
-              handleSubmit: this.handleSubmit.bind(this, 'cover'),
               friend_ids: this.props.user.friend_ids
             })
           ),
@@ -48743,15 +48845,24 @@ var _reactRedux = __webpack_require__(13);
 
 var _post_actions = __webpack_require__(51);
 
+var _modal_actions = __webpack_require__(25);
+
+var _error_actions = __webpack_require__(86);
+
 var _create_post_form = __webpack_require__(461);
 
 var _create_post_form2 = _interopRequireDefault(_create_post_form);
+
+var _reactRouterDom = __webpack_require__(8);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
     currentUser: state.session.currentUser,
+    postModalFocused: state.ui.modal.postModalFocused,
+    errorModal: state.ui.modal.errorModal,
+    postErrMsg: state.errors.post,
     ownProps: ownProps
   };
 };
@@ -48763,11 +48874,20 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     },
     fetchPosts: function fetchPosts(wallOwnerId) {
       return dispatch((0, _post_actions.fetchPosts)(wallOwnerId));
+    },
+    togglePostModal: function togglePostModal() {
+      return dispatch((0, _modal_actions.togglePostModal)());
+    },
+    toggleErrorModal: function toggleErrorModal() {
+      return dispatch((0, _modal_actions.toggleErrorModal)());
+    },
+    logPostError: function logPostError(err) {
+      return dispatch((0, _error_actions.logPostError)(err));
     }
   };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_create_post_form2.default);
+exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_create_post_form2.default));
 
 /***/ }),
 /* 461 */
@@ -48787,6 +48907,18 @@ var _react = __webpack_require__(2);
 var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(8);
+
+var _post_content_item = __webpack_require__(264);
+
+var _post_content_item2 = _interopRequireDefault(_post_content_item);
+
+var _error_modal = __webpack_require__(462);
+
+var _error_modal2 = _interopRequireDefault(_error_modal);
+
+var _error_message = __webpack_require__(463);
+
+var _error_message2 = _interopRequireDefault(_error_message);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48808,12 +48940,18 @@ var CreatePostForm = function (_React$Component) {
 
     _this.state = {
       body: '',
-      content: '',
-      placeholderText: 'What\'s on your mind?'
+      content: null,
+      contentUrl: null,
+      placeholderText: 'What\'s on your mind?',
+      postFocused: '',
+      postScreen: ''
     };
 
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.update = _this.update.bind(_this);
+    _this.addPicture = _this.addPicture.bind(_this);
+    _this.addPostFocused = _this.addPostFocused.bind(_this);
+    _this.cancelUpdate = _this.cancelUpdate.bind(_this);
     return _this;
   }
 
@@ -48823,15 +48961,18 @@ var CreatePostForm = function (_React$Component) {
       var _this2 = this;
 
       e.preventDefault();
-      var post = {
-        body: this.state.body,
-        wall_owner_id: this.props.wallOwnerId,
-        content: this.state.content
-      };
 
-      this.props.submitPost(post).then(function () {
-        _this2.props.fetchPosts(_this2.props.wallOwnerId);
-        _this2.setState({ body: '', content: '' });
+      var formData = new FormData();
+      formData.append('post[body]', this.state.body);
+      formData.append('post[wall_owner_id]', this.props.wallOwnerId);
+      formData.append('post[content]', this.state.content || '');
+
+      this.props.submitPost(formData).then(function () {
+        _this2.setState({ body: '', content: null, contentUrl: null });
+        _this2.props.togglePostModal();
+      }, function (reason) {
+        _this2.props.logPostError(reason);
+        _this2.props.toggleErrorModal();
       });
     }
   }, {
@@ -48844,36 +48985,153 @@ var CreatePostForm = function (_React$Component) {
       };
     }
   }, {
+    key: 'addPostFocused',
+    value: function addPostFocused() {
+      if (!this.props.postModalFocused) {
+        this.setState({ postFocused: 'post-focused' });
+        this.props.togglePostModal();
+      }
+    }
+  }, {
+    key: 'addPicture',
+    value: function addPicture(e) {
+      var _this4 = this;
+
+      if (parseInt(this.props.match.params.userId) === this.props.currentUser.id) {
+        var file = e.currentTarget.files[0];
+        var fileReader = new FileReader();
+        fileReader.onloadend = function () {
+          _this4.setState({ content: file,
+            contentUrl: fileReader.result
+          });
+        };
+        if (file) fileReader.readAsDataURL(file);
+      }
+    }
+  }, {
+    key: 'cancelUpdate',
+    value: function cancelUpdate() {
+      this.fileInput.value = '';
+      this.setState({
+        content: null,
+        contentUrl: null
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this5 = this;
+
+      var modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
+      var errorModalScreen = this.props.errorModal ? 'error-modal-screen' : '';
+      var errorBody = '';
+
+      if (this.props.postErrMsg[0] === 'Body can\'t be blank') errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
       return _react2.default.createElement(
-        'form',
-        { className: 'create-post' },
-        _react2.default.createElement('div', { className: 'create-post-type-container' }),
+        'div',
+        { className: 'create-post-shell', onClick: this.addPostFocused },
         _react2.default.createElement(
-          'div',
-          { className: 'create-post-input-container' },
+          'form',
+          { className: 'create-post' },
           _react2.default.createElement(
-            _reactRouterDom.Link,
-            { to: '/user/' + this.props.currentUser.id },
-            _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.currentUser.profile_pic_url })
+            'div',
+            { className: 'create-post-type-container' },
+            _react2.default.createElement(
+              'span',
+              null,
+              'Make Post'
+            ),
+            _react2.default.createElement(
+              'span',
+              null,
+              'Photo/Video'
+            ),
+            _react2.default.createElement(
+              'span',
+              null,
+              'Live Video'
+            ),
+            _react2.default.createElement(
+              'span',
+              null,
+              'Live Event'
+            )
           ),
-          _react2.default.createElement('textarea', { className: 'create-post-input',
-            type: 'text',
-            value: this.state.body,
-            onChange: this.update('body')
+          _react2.default.createElement(
+            'div',
+            { className: 'create-post-input-container' },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/user/' + this.props.currentUser.id },
+              _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.currentUser.profile_pic_url })
+            ),
+            _react2.default.createElement('textarea', { className: 'create-post-input',
+              type: 'text',
+              value: this.state.body,
+              onChange: this.update('body')
+            })
+          ),
+          this.props.postModalFocused && this.state.contentUrl && _react2.default.createElement(_post_content_item2.default, { contentUrl: this.state.contentUrl, cancel: this.cancelUpdate }),
+          _react2.default.createElement(
+            'div',
+            { className: 'create-post-add-container' },
+            _react2.default.createElement(
+              'label',
+              { htmlFor: 'add-post-image' },
+              _react2.default.createElement(
+                'div',
+                { className: 'create-post-add-button' },
+                _react2.default.createElement(
+                  'span',
+                  null,
+                  'Photo/Video'
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'button',
+              { className: 'create-post-add-button' },
+              _react2.default.createElement(
+                'span',
+                null,
+                'Feeling/Activity'
+              )
+            ),
+            _react2.default.createElement(
+              'button',
+              { className: 'create-post-add-button' },
+              _react2.default.createElement(
+                'span',
+                null,
+                '...'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'create-post-submit-container' },
+            _react2.default.createElement(
+              'button',
+              { className: 'create-post-submit-button', onClick: this.handleSubmit },
+              'Post'
+            )
+          ),
+          _react2.default.createElement('input', { className: 'file-input',
+            id: 'add-post-image',
+            type: 'file',
+            onChange: this.addPicture,
+            ref: function ref(element) {
+              _this5.fileInput = element;
+            }
           })
         ),
-        _react2.default.createElement('div', { className: 'create-post-add-container' }),
-        _react2.default.createElement(
-          'div',
-          { className: 'create-post-submit-container' },
-          _react2.default.createElement(
-            'button',
-            { className: 'create-post-submit-button', onClick: this.handleSubmit },
-            'Post'
-          )
-        )
+        _react2.default.createElement('div', { className: modalPostScreen, onClick: this.props.togglePostModal }),
+        _react2.default.createElement(_error_modal2.default, { component: _react2.default.createElement(_error_message2.default, {
+            errorHeader: 'Post Is Empty',
+            errorBody: errorBody,
+            toggleErrorModal: this.props.toggleErrorModal
+          }), modalScreen: errorModalScreen
+        })
       );
     }
   }]);
@@ -48884,10 +49142,115 @@ var CreatePostForm = function (_React$Component) {
 exports.default = CreatePostForm;
 
 /***/ }),
-/* 462 */,
-/* 463 */,
-/* 464 */,
-/* 465 */
+/* 462 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(13);
+
+var _modal_actions = __webpack_require__(25);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    toggleErrorModal: function toggleErrorModal() {
+      return dispatch((0, _modal_actions.toggleErrorModal)());
+    }
+  };
+};
+//Components
+//React
+
+
+var Modal = function Modal(_ref) {
+  var component = _ref.component,
+      modalScreen = _ref.modalScreen,
+      toggleErrorModal = _ref.toggleErrorModal;
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'body-container' },
+    _react2.default.createElement(
+      'div',
+      { className: modalScreen, onClick: function onClick() {
+          return toggleErrorModal();
+        } },
+      _react2.default.createElement(
+        'div',
+        { className: 'modal-child', onClick: function onClick(e) {
+            return e.stopPropagation();
+          } },
+        component
+      )
+    )
+  );
+};
+
+exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(Modal);
+
+/***/ }),
+/* 463 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ErrorMessage = function ErrorMessage(_ref) {
+  var errorHeader = _ref.errorHeader,
+      errorBody = _ref.errorBody,
+      toggleErrorModal = _ref.toggleErrorModal;
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'error-messages' },
+    _react2.default.createElement(
+      'header',
+      null,
+      ' ',
+      errorHeader
+    ),
+    _react2.default.createElement(
+      'article',
+      null,
+      errorBody
+    ),
+    _react2.default.createElement(
+      'footer',
+      null,
+      _react2.default.createElement(
+        'button',
+        { className: 'button blue-button', onClick: toggleErrorModal },
+        'Close'
+      )
+    )
+  );
+};
+
+exports.default = ErrorMessage;
+
+/***/ }),
+/* 464 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48903,7 +49266,23 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = __webpack_require__(13);
+
+var _reactRouterDom = __webpack_require__(8);
+
+var _post_actions = __webpack_require__(51);
+
+var _modal_actions = __webpack_require__(25);
+
+var _error_actions = __webpack_require__(86);
+
+var _post_content_item = __webpack_require__(264);
+
+var _post_content_item2 = _interopRequireDefault(_post_content_item);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -48911,52 +49290,189 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ProfilePicture = function (_React$Component) {
-  _inherits(ProfilePicture, _React$Component);
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    currentUser: state.session.currentUser,
+    postModalFocused: state.ui.modal.postModalFocused,
+    editPostModal: state.ui.modal.editPostModal,
+    postErrMsg: state.errors.post,
+    editPost: state.entities.editPost,
+    ownProps: ownProps
+  };
+};
 
-  function ProfilePicture(props) {
-    _classCallCheck(this, ProfilePicture);
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    submitPost: function submitPost(post) {
+      return dispatch((0, _post_actions.editPost)(post));
+    },
+    toggleEditPostModal: function toggleEditPostModal(post) {
+      return dispatch((0, _modal_actions.toggleEditPostModal)(post));
+    },
+    toggleErrorModal: function toggleErrorModal() {
+      return dispatch((0, _modal_actions.toggleErrorModal)());
+    },
+    logPostError: function logPostError(err) {
+      return dispatch((0, _error_actions.logPostError)(err));
+    }
+  };
+};
 
-    var _this = _possibleConstructorReturn(this, (ProfilePicture.__proto__ || Object.getPrototypeOf(ProfilePicture)).call(this, props));
+var EditPostForm = function (_React$Component) {
+  _inherits(EditPostForm, _React$Component);
+
+  function EditPostForm(props) {
+    _classCallCheck(this, EditPostForm);
+
+    var _this = _possibleConstructorReturn(this, (EditPostForm.__proto__ || Object.getPrototypeOf(EditPostForm)).call(this, props));
 
     _this.state = {
-      imageFile: null,
-      imageUrl: null
+      id: null,
+      body: '',
+      content: null,
+      contentUrl: null
     };
+    _this.cancelUpdate = _this.cancelUpdate.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
     return _this;
   }
 
-  _createClass(ProfilePicture, [{
-    key: 'render',
-    value: function render() {
+  _createClass(EditPostForm, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      this.setState({
+        id: newProps.editPost.id || null,
+        body: newProps.editPost.body || '',
+        contentUrl: newProps.editPost.content_url || ''
+      });
+    }
+  }, {
+    key: 'update',
+    value: function update(field) {
       var _this2 = this;
 
+      return function (e) {
+        _this2.setState(_defineProperty({}, field, e.target.value));
+      };
+    }
+  }, {
+    key: 'cancelUpdate',
+    value: function cancelUpdate() {
+      if (this.fileInput) this.fileInput.value = '';
+      this.setState({
+        content: null,
+        contentUrl: null
+      });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(e) {
+      var _this3 = this;
+
+      e.preventDefault();
+      var formData = new FormData();
+      formData.append('post[id]', this.state.id);
+      formData.append('post[body]', this.state.body);
+      formData.append('post[wall_owner_id]', this.props.match.params.userId);
+      formData.append('post[content]', this.state.content || '');
+
+      this.props.submitPost(formData).then(function () {
+        _this3.setState({ body: '', content: null, contentUrl: null, wallOwnerId: null });
+        _this3.props.toggleEditPostModal();
+      }, function (reason) {
+        _this3.props.logPostError(reason);
+        _this3.props.toggleEditPostModal();
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'profile-picture-root' },
-        _react2.default.createElement('img', { className: 'profile-picture', src: this.props.user.profile_pic_url }),
-        this.props.currentUser.id === this.props.user.id && _react2.default.createElement(
+        { className: 'edit-post-form' },
+        _react2.default.createElement(
+          'header',
+          null,
+          'Edit Post'
+        ),
+        this.props.editPost.body && _react2.default.createElement(
           'div',
-          { className: 'profile-pic-button', onClick: function onClick() {
-              return _this2.props.toggleProfPicModal();
-            } },
+          null,
           _react2.default.createElement(
-            'label',
-            { className: 'profile-picture-button-label' },
-            _react2.default.createElement('i', { className: 'fas fa-camera' }),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Update Profile Picture'
-            )
+            _reactRouterDom.Link,
+            { to: '/user/' + this.props.editPost.author_id },
+            _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.editPost.author_profile_pic_url })
+          ),
+          _react2.default.createElement('textarea', { className: 'create-post-input',
+            type: 'text',
+            value: this.state.body,
+            onChange: this.update('body')
+          }),
+          this.state.contentUrl && _react2.default.createElement(_post_content_item2.default, { contentUrl: this.state.contentUrl, cancel: this.cancelUpdate })
+        ),
+        _react2.default.createElement(
+          'footer',
+          null,
+          _react2.default.createElement(
+            'button',
+            { className: 'button blue-button', onClick: this.handleSubmit },
+            'Save'
           )
         )
       );
     }
   }]);
 
-  return ProfilePicture;
+  return EditPostForm;
 }(_react2.default.Component);
+
+exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(EditPostForm));
+
+/***/ }),
+/* 465 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ProfilePicture = function ProfilePicture(_ref) {
+  var user = _ref.user,
+      currentUser = _ref.currentUser,
+      toggleProfPicModal = _ref.toggleProfPicModal;
+
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'profile-picture-root' },
+    _react2.default.createElement('img', { className: 'profile-picture', src: user.profile_pic_url }),
+    currentUser.id === user.id && _react2.default.createElement(
+      'div',
+      { className: 'profile-pic-button', onClick: function onClick() {
+          return toggleProfPicModal();
+        } },
+      _react2.default.createElement(
+        'label',
+        { className: 'profile-picture-button-label' },
+        _react2.default.createElement('i', { className: 'fas fa-camera' }),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Update Profile Picture'
+        )
+      )
+    )
+  );
+};
 
 exports.default = ProfilePicture;
 
@@ -48971,9 +49487,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(13);
+
+var _reactRouterDom = __webpack_require__(8);
+
+var _user_actions = __webpack_require__(24);
 
 var _image_preview_form = __webpack_require__(467);
 
@@ -48981,54 +49505,142 @@ var _image_preview_form2 = _interopRequireDefault(_image_preview_form);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//React
-var UpdateProfilePicForm = function UpdateProfilePicForm(_ref) {
-  var profilePicUrl = _ref.profilePicUrl,
-      handleSubmit = _ref.handleSubmit,
-      cancelUpdate = _ref.cancelUpdate,
-      updateFile = _ref.updateFile;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  return _react2.default.createElement(
-    'div',
-    null,
-    _react2.default.createElement(
-      'form',
-      { className: 'edit-profile-form' },
-      _react2.default.createElement(
-        'div',
-        { className: 'profile-header' },
-        _react2.default.createElement(
-          'span',
-          null,
-          'Update Profile Picture'
-        )
-      ),
-      profilePicUrl ? _react2.default.createElement(_image_preview_form2.default, { imageUrl: profilePicUrl,
-        cancelUpdate: cancelUpdate,
-        handleSubmit: handleSubmit
-      }) : _react2.default.createElement(
-        'label',
-        { className: 'profile-body', htmlFor: 'profile-image-input' },
-        _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement('i', { className: 'fas fa-plus' }),
-          _react2.default.createElement(
-            'span',
-            { className: 'profile-update-text' },
-            'Upload Photo'
-          )
-        )
-      ),
-      _react2.default.createElement('input', { id: 'profile-image-input',
-        type: 'file',
-        onChange: updateFile
-      })
-    )
-  );
-};
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } //React
+
 //Component
-exports.default = UpdateProfilePicForm;
+
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+
+  return {
+    currentUser: state.session.currentUser,
+    user: ownProps.user
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    saveUserPhoto: function saveUserPhoto(data) {
+      return dispatch((0, _user_actions.saveUserPhoto)(data));
+    },
+    requestUser: function requestUser(id) {
+      return dispatch((0, _user_actions.fetchUser)(id));
+    }
+  };
+};
+
+var UpdateProfilePicForm = function (_React$Component) {
+  _inherits(UpdateProfilePicForm, _React$Component);
+
+  function UpdateProfilePicForm(props) {
+    _classCallCheck(this, UpdateProfilePicForm);
+
+    var _this = _possibleConstructorReturn(this, (UpdateProfilePicForm.__proto__ || Object.getPrototypeOf(UpdateProfilePicForm)).call(this, props));
+
+    _this.state = {
+      profileFile: null,
+      profileImageUrl: null
+    };
+
+    _this.updateFile = _this.updateFile.bind(_this);
+    _this.cancelUpdate = _this.cancelUpdate.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
+  }
+
+  _createClass(UpdateProfilePicForm, [{
+    key: 'updateFile',
+    value: function updateFile(e) {
+      var _this2 = this;
+
+      if (parseInt(this.props.match.params.userId) === this.props.currentUser.id) {
+        var file = e.currentTarget.files[0];
+        var fileReader = new FileReader();
+        fileReader.onloadend = function () {
+          _this2.setState({ profileFile: file,
+            profileImageUrl: fileReader.result
+          });
+        };
+        if (file) fileReader.readAsDataURL(file);
+      }
+    }
+  }, {
+    key: 'cancelUpdate',
+    value: function cancelUpdate() {
+      this.fileInput.value = '';
+      this.setState({
+        profileFile: null,
+        profileImageUrl: null
+      });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit() {
+      var _this3 = this;
+
+      var formData = new FormData();
+      formData.append('user[profile_pic]', this.state.profileFile);
+      formData.append('user[id]', this.props.user.id);
+      this.props.saveUserPhoto(formData).then(function () {
+        _this3.setState({
+          profileFile: null,
+          profileImageUrl: null
+        });
+        _this3.props.requestUser(_this3.props.user.id);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'form',
+          { className: 'edit-profile-form' },
+          _react2.default.createElement(
+            'div',
+            { className: 'profile-header' },
+            _react2.default.createElement(
+              'span',
+              null,
+              'Update Profile Picture'
+            )
+          ),
+          this.state.profileImageUrl ? _react2.default.createElement(_image_preview_form2.default, { profileImageUrl: this.state.profileImageUrl,
+            cancelUpdate: this.cancelUpdate,
+            handleSubmit: this.handleSubmit
+          }) : _react2.default.createElement(
+            'label',
+            { className: 'profile-body', htmlFor: 'profile-image-input' },
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement('i', { className: 'fas fa-plus' }),
+              _react2.default.createElement(
+                'span',
+                { className: 'profile-update-text' },
+                'Upload Photo'
+              )
+            )
+          ),
+          _react2.default.createElement('input', { id: 'profile-image-input',
+            type: 'file',
+            onChange: this.updateFile
+          })
+        )
+      );
+    }
+  }]);
+
+  return UpdateProfilePicForm;
+}(_react2.default.Component);
+
+exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UpdateProfilePicForm));
 
 /***/ }),
 /* 467 */
@@ -49048,9 +49660,10 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ImagePreview = function ImagePreview(_ref) {
-  var imageUrl = _ref.imageUrl,
+  var profileImageUrl = _ref.profileImageUrl,
       cancelUpdate = _ref.cancelUpdate,
       handleSubmit = _ref.handleSubmit;
+
 
   return _react2.default.createElement(
     'div',
@@ -49063,7 +49676,7 @@ var ImagePreview = function ImagePreview(_ref) {
     _react2.default.createElement(
       'section',
       null,
-      _react2.default.createElement('img', { className: 'profile-image-preview', src: imageUrl })
+      _react2.default.createElement('img', { className: 'profile-image-preview', src: profileImageUrl })
     ),
     _react2.default.createElement(
       'footer',
@@ -49099,27 +49712,12 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(13);
-
-var _modal_actions = __webpack_require__(25);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    toggleProfPicModal: function toggleProfPicModal() {
-      return dispatch((0, _modal_actions.toggleProfPicModal)());
-    }
-  };
-};
-//Components
-//React
-
 
 var Modal = function Modal(_ref) {
   var component = _ref.component,
       modalScreen = _ref.modalScreen,
-      toggleProfPicModal = _ref.toggleProfPicModal;
+      toggleModal = _ref.toggleModal;
 
   return _react2.default.createElement(
     'div',
@@ -49127,7 +49725,7 @@ var Modal = function Modal(_ref) {
     _react2.default.createElement(
       'div',
       { className: modalScreen, onClick: function onClick() {
-          return toggleProfPicModal();
+          return toggleModal();
         } },
       _react2.default.createElement(
         'div',
@@ -49140,7 +49738,7 @@ var Modal = function Modal(_ref) {
   );
 };
 
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(Modal);
+exports.default = Modal;
 
 /***/ }),
 /* 469 */
@@ -49161,30 +49759,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var ProfileHeaderLinks = function ProfileHeaderLinks(_ref) {
   var hideDuringCoverUpload = _ref.hideDuringCoverUpload,
-      unhideDuringCoverUpload = _ref.unhideDuringCoverUpload,
-      cancelUpdate = _ref.cancelUpdate,
-      handleSubmit = _ref.handleSubmit,
       friend_ids = _ref.friend_ids;
 
 
   return _react2.default.createElement(
     'div',
     { className: 'header-links-container' },
-    _react2.default.createElement('span', { className: hideDuringCoverUpload + ' header-link-list' }),
-    _react2.default.createElement(
-      'span',
-      { className: unhideDuringCoverUpload + ' upload-buttons' },
-      _react2.default.createElement(
-        'button',
-        { className: 'cover-upload-button cancel', onClick: cancelUpdate },
-        'Cancel'
-      ),
-      _react2.default.createElement(
-        'button',
-        { className: 'cover-upload-button submit', onClick: handleSubmit },
-        'Save Changes'
-      )
-    )
+    _react2.default.createElement('span', { className: hideDuringCoverUpload + ' header-link-list' })
   );
 };
 
@@ -49408,7 +49989,188 @@ exports.default = (0, _reactRouterDom.withRouter)(FriendRequestButton);
 //
 
 /***/ }),
-/* 473 */,
+/* 473 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _user_actions = __webpack_require__(24);
+
+var _cover_load_actions = __webpack_require__(265);
+
+var _reactRedux = __webpack_require__(13);
+
+var _reactRouterDom = __webpack_require__(8);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    state: state,
+    user: ownProps.user,
+    currentUser: state.session.currentUser,
+    cover_updating: state.ui.coverPhoto.uploadingCover
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    saveUserPhoto: function saveUserPhoto(formData) {
+      return dispatch((0, _user_actions.saveUserPhoto)(formData));
+    },
+    requestUser: function requestUser(id) {
+      return dispatch((0, _user_actions.fetchUser)(id));
+    },
+    toggleUploadUploadPhoto: function toggleUploadUploadPhoto() {
+      return dispatch((0, _cover_load_actions.toggleUploadPhoto)());
+    }
+  };
+};
+
+var CoverPicture = function (_React$Component) {
+  _inherits(CoverPicture, _React$Component);
+
+  function CoverPicture(props) {
+    _classCallCheck(this, CoverPicture);
+
+    var _this = _possibleConstructorReturn(this, (CoverPicture.__proto__ || Object.getPrototypeOf(CoverPicture)).call(this, props));
+
+    _this.state = {
+      coverFile: null,
+      coverImageUrl: null
+    };
+
+    _this.updateFile = _this.updateFile;
+    _this.cancelUpdate = _this.cancelUpdate;
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
+  }
+
+  _createClass(CoverPicture, [{
+    key: 'updateFile',
+    value: function updateFile(field, e) {
+      var _this2 = this;
+
+      if (parseInt(this.props.match.params.userId) === this.props.currentUser.id) {
+        var file = e.currentTarget.files[0];
+        var fileReader = new FileReader();
+        fileReader.onloadend = function () {
+          var _this2$setState;
+
+          if (field === 'cover') _this2.props.toggleUploadUploadPhoto();
+
+          _this2.setState((_this2$setState = {}, _defineProperty(_this2$setState, field + 'File', file), _defineProperty(_this2$setState, field + 'ImageUrl', fileReader.result), _this2$setState));
+        };
+        if (file) fileReader.readAsDataURL(file);
+      }
+    }
+  }, {
+    key: 'cancelUpdate',
+    value: function cancelUpdate(field) {
+      var _setState;
+
+      this.fileInput.value = '';
+      this.setState((_setState = {}, _defineProperty(_setState, field + 'File', null), _defineProperty(_setState, field + 'ImageUrl', null), _setState));
+      if (field === 'cover') this.props.toggleUploadUploadPhoto();
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(field) {
+      var _this3 = this;
+
+      var formData = new FormData();
+      formData.append('user[' + field + '_pic]', this.state[field + 'File']);
+      formData.append('user[id]', this.props.user.id);
+
+      this.props.saveUserPhoto(formData).then(function () {
+        var _this3$setState;
+
+        _this3.setState((_this3$setState = {}, _defineProperty(_this3$setState, field + 'File', null), _defineProperty(_this3$setState, field + 'ImageUrl', null), _this3$setState));
+        if (field === 'cover') _this3.props.toggleUploadUploadPhoto();
+        _this3.props.requestUser(_this3.props.user.id);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this4 = this;
+
+      var currentUserPage = this.props.currentUser.id === parseInt(this.props.match.params.userId) ? '' : 'hidden';
+      var coverUrl = this.state.coverImageUrl || this.props.user.cover_pic_url;
+
+      var unhideDuringCoverUpload = this.props.cover_updating ? '' : 'hidden';
+      return _react2.default.createElement(
+        'div',
+        { className: 'cover-picture-container' },
+        _react2.default.createElement('img', { className: 'cover-picture', src: coverUrl }),
+        _react2.default.createElement(
+          'div',
+          { className: this.props.hideDuringCoverUpload + ' edit-cover-picture-button' },
+          _react2.default.createElement(
+            'div',
+            { className: currentUserPage + ' cover-image-upload' },
+            _react2.default.createElement(
+              'label',
+              { htmlFor: 'cover-image-input' },
+              _react2.default.createElement('i', { className: 'fas fa-camera' }),
+              _react2.default.createElement(
+                'span',
+                { className: 'cover-update-text' },
+                'Update Cover Photo'
+              )
+            ),
+            _react2.default.createElement('input', { id: 'cover-image-input',
+              type: 'file',
+              onChange: this.updateFile.bind(this, 'cover'),
+              ref: function ref(element) {
+                _this4.fileInput = element;
+              }
+            })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: unhideDuringCoverUpload + ' upload-buttons' },
+          _react2.default.createElement(
+            'button',
+            { className: 'cover-upload-button cancel', onClick: this.cancelUpdate.bind(this, 'cover') },
+            'Cancel'
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'cover-upload-button submit', onClick: this.handleSubmit.bind(this, 'cover') },
+            'Save Changes'
+          )
+        )
+      );
+    }
+  }]);
+
+  return CoverPicture;
+}(_react2.default.Component);
+
+exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CoverPicture));
+
+/***/ }),
 /* 474 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -49558,6 +50320,10 @@ var _posts_reducer = __webpack_require__(546);
 
 var _posts_reducer2 = _interopRequireDefault(_posts_reducer);
 
+var _edit_posts_reducer = __webpack_require__(547);
+
+var _edit_posts_reducer2 = _interopRequireDefault(_edit_posts_reducer);
+
 var _friend_requests_reducer = __webpack_require__(548);
 
 var _friend_requests_reducer2 = _interopRequireDefault(_friend_requests_reducer);
@@ -49567,6 +50333,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = (0, _redux.combineReducers)({
   friend_requests: _friend_requests_reducer2.default,
   posts: _posts_reducer2.default,
+  editPost: _edit_posts_reducer2.default,
   users: _users_reducer2.default
 });
 
@@ -51760,7 +52527,12 @@ var postReducer = function postReducer() {
     case _post_actions.RECEIVE_POSTS:
       return action.posts;
     case _post_actions.RECEIVE_POST:
+      debugger;
       return (0, _merge3.default)({}, state, _defineProperty({}, action.post.id, action.post));
+    case _post_actions.REMOVE_POST:
+      var newState = (0, _merge3.default)({}, state);
+      delete newState[action.id];
+      return newState;
     default:
       return state;
   }
@@ -51769,7 +52541,35 @@ var postReducer = function postReducer() {
 exports.default = postReducer;
 
 /***/ }),
-/* 547 */,
+/* 547 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _modal_actions = __webpack_require__(25);
+
+var editPostReducer = function editPostReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+
+  Object.freeze(state);
+  switch (action.type) {
+    case _modal_actions.TOGGLE_EDIT_POST_MODAL:
+      return action.post || {};
+    default:
+      return state;
+  }
+};
+
+exports.default = editPostReducer;
+
+/***/ }),
 /* 548 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -51830,14 +52630,18 @@ var _modal_reducer = __webpack_require__(550);
 
 var _modal_reducer2 = _interopRequireDefault(_modal_reducer);
 
+var _cover_photo_reducer = __webpack_require__(551);
+
+var _cover_photo_reducer2 = _interopRequireDefault(_cover_photo_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import filters from './filters_reducer';
 exports.default = (0, _redux.combineReducers)({
   // filters,
+  coverPhoto: _cover_photo_reducer2.default,
   modal: _modal_reducer2.default
 });
-
-// import filters from './filters_reducer';
 
 /***/ }),
 /* 550 */
@@ -51859,7 +52663,10 @@ var _merge2 = _interopRequireDefault(_merge);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var defaultState = {
-  profPicModal: false
+  profPicModal: false,
+  postModalFocused: false,
+  errorModal: false,
+  editPostModal: false
 };
 
 var modalReducer = function modalReducer() {
@@ -51870,6 +52677,12 @@ var modalReducer = function modalReducer() {
   switch (action.type) {
     case _modal_actions.TOGGLE_PROF_PIC_MODAL:
       return (0, _merge2.default)({}, state, { profPicModal: !state.profPicModal });
+    case _modal_actions.TOGGLE_POST_MODAL:
+      return (0, _merge2.default)({}, state, { postModalFocused: !state.postModalFocused });
+    case _modal_actions.TOGGLE_ERROR_MODAL:
+      return (0, _merge2.default)({}, state, { errorModal: !state.errorModal });
+    case _modal_actions.TOGGLE_EDIT_POST_MODAL:
+      return (0, _merge2.default)({}, state, { editPostModal: !state.editPostModal });
     default:
       return state;
   }
@@ -51878,7 +52691,44 @@ var modalReducer = function modalReducer() {
 exports.default = modalReducer;
 
 /***/ }),
-/* 551 */,
+/* 551 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _cover_load_actions = __webpack_require__(265);
+
+var _merge = __webpack_require__(32);
+
+var _merge2 = _interopRequireDefault(_merge);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultState = {
+  uploadingCover: false
+};
+
+var coverPhotoReducer = function coverPhotoReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
+  var action = arguments[1];
+
+  Object.freeze(state);
+  switch (action.type) {
+    case _cover_load_actions.TOGGLE_UPLOAD_PHOTO:
+      return (0, _merge2.default)({}, state, { uploadingCover: !state.uploadingCover });
+    default:
+      return state;
+  }
+};
+
+exports.default = coverPhotoReducer;
+
+/***/ }),
 /* 552 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -51953,11 +52803,16 @@ var _signup_errors_reducer = __webpack_require__(555);
 
 var _signup_errors_reducer2 = _interopRequireDefault(_signup_errors_reducer);
 
+var _post_errors_reducer = __webpack_require__(556);
+
+var _post_errors_reducer2 = _interopRequireDefault(_post_errors_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({
   signup: _signup_errors_reducer2.default,
-  session: _session_errors_reducer2.default
+  session: _session_errors_reducer2.default,
+  post: _post_errors_reducer2.default
 });
 
 /***/ }),
@@ -52021,7 +52876,35 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 556 */,
+/* 556 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _error_actions = __webpack_require__(86);
+
+var postReducer = function postReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+
+  Object.freeze(state);
+  switch (action.type) {
+    case _error_actions.LOG_POST_ERROR:
+      return action.err.responseJSON;
+    default:
+      return state;
+  }
+};
+
+exports.default = postReducer;
+
+/***/ }),
 /* 557 */
 /***/ (function(module, exports, __webpack_require__) {
 

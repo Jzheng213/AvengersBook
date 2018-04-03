@@ -1,0 +1,35 @@
+.contentPreviewContainer{
+  position: relative;
+  margin: 20px 10px;
+  height: 100px;
+  width: 100px;
+}
+
+.contentPreview{
+  object-fit: cover;
+  object-position: center;
+  height: 100%;
+  width: 100%;
+}
+
+.cancel-content-update{
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  opacity: 0;
+  transition: opacity .13s ease-out;
+  -moz-transition: opacity .13s ease-out;
+  -webkit-transition: opacity .13s ease-out;
+  -o-transition: opacity .13s ease-out;
+}
+
+
+.contentPreviewContainer:hover .cancel-content-update{
+  opacity: 0.75;
+  transition: opacity .13s ease-in;
+  -moz-transition: opacity .13s ease-in;
+  -webkit-transition: opacity .13s ease-in;
+  -o-transition: opacity .13s ease-in;
+}

@@ -1,7 +1,9 @@
 .profile-picture {
   width: 168px;
-  height: auto;
+  height: 168px;
   z-index: 1;
+  object-fit: cover;
+  object-position: center;
 }
 
 .profile-picture-root{

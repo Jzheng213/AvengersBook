@@ -64,6 +64,11 @@
 }
 
 .upload-buttons{
+  opacity: 1;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  z-index: 20;
   margin-left: auto;
   margin-right: 8px;
 }

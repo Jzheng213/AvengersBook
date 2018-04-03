@@ -26,12 +26,18 @@ class Post extends React.Component{
   }
 
   render(){
+
     return(
       <div>
         <ul>
           {
             this.props.posts.map((post) => {
-              return <PostItem key={post.id} post={post} />;
+              return <PostItem key={post.id}
+                post={post}
+                currentUser={this.props.currentUser}
+                deletePost={this.props.deletePost}
+                toggleEditPostModal={this.props.toggleEditPostModal}
+              />;
             })
           }
         </ul>

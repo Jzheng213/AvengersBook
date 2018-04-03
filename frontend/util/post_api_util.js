@@ -26,6 +26,28 @@ export const createPost = (post) => {
   return $.ajax({
     method: 'POST',
     url: '/api/posts',
-    data: { post }
+    processData: false,
+    contentType: false,
+    dataType: 'json',
+    data: post
+  });
+};
+
+export const editPost = (post) => {
+  return $.ajax({
+    method: 'PATCH',
+    url: `/api/posts/${post.id}`,
+    processData: false,
+    contentType: false,
+    dataType: 'json',
+    data: post
+  });
+};
+
+export const deletePost = (id) =>{
+
+  return $.ajax({
+    method: 'DELETE',
+    url: `/api/posts/${id}`
   });
 };

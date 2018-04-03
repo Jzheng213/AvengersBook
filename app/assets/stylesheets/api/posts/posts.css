@@ -68,6 +68,8 @@
   height: 40px;
   width: 40px;
   border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .post-header-link{
@@ -88,11 +90,28 @@
 .post-header{
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
+
+.post-modification{
+  align-self: flex-start;
+}
+
+.post-modification a{
+  font-size: 10px;
+}
+
 .post-profile-pic{
   margin-right: 8px;
   padding-bottom: 3px;
+  object-fit: cover;
+  object-position: center;
 }
+.post-header-section{
+  display: flex;
+  flex-direction: row;
+}
+
 .post-header-detail{
   display: flex;
   flex-direction: column;

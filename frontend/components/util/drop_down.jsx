@@ -17,11 +17,9 @@ export default class DropDown extends React.Component{
   }
 
   toggleShow(){
-    // const show = this.state.show === 'show' ? '' : 'show';
     this.setState(prevState => ({show: prevState.show === '' ? 'show': ''}));
   }
-
-
+  
   hide(e){
     if(e && e.relatedTarget && e.relatedTarget.tagName === 'A'){
       e.relatedTarget.click();
@@ -42,7 +40,7 @@ export default class DropDown extends React.Component{
           }
         </div>
       </button>
-    )
+    );
   }
 
 }

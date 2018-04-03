@@ -15,6 +15,7 @@ const Main = () => {
     <div className='main'>
       <NavBarContainer />
       <Switch>
+        <Route exact path ='/' component={NewsFeedContainer} />
         <Route exact path ='/newsfeed' component={NewsFeedContainer} />
         <Route path ='/user/:userId' component={UserContainer} />
       </Switch>

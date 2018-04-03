@@ -1,5 +1,6 @@
 import * as APIUtil from '../util/post_api_util';
 
+export const REMOVE_POST = 'REMOVE_POST';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const RECEIVE_POST = 'RECEIVE_POST';
 
@@ -14,6 +15,13 @@ const receivePost = (post) => {
   return {
     type: RECEIVE_POST,
     post
+  };
+};
+
+const removePost = (id) => {
+  return {
+    type: REMOVE_POST,
+    id
   };
 };
 
@@ -38,5 +46,17 @@ export const fetchPost = (id) => dispatch => {
 export const createPost = (post) => dispatch => {
   return APIUtil.createPost(post).then((postFromServer) => {
     return dispatch(receivePost(postFromServer));
+  });
+};
+
+export const editPost = (post) => dispatch => {
+  return APIUtil.editPost(post).then((postFromServer) => {
+    return dispatch(receivePost(postFromServer));
+  });
+};
+
+export const deletePost = (id) => dispatch => {
+  return APIUtil.deletePost(id).then((deletedPostId) => {
+    return dispatch(removePost(deletedPostId));
   });
 };

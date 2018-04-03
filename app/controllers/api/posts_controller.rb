@@ -14,12 +14,13 @@ class Api::PostsController < ApplicationController
   end
 
   def show
-    
+
     @post = Post.find(params[:id])
     render :show
   end
 
   def create
+
     @post = Post.new(post_params)
     @post.author = current_user
 
@@ -31,18 +32,27 @@ class Api::PostsController < ApplicationController
   end
 
   def update
-    @post.find(params[:id])
-    if @post.save
-      render 'api/post/show'
+    @post = current_user.posts.find(params[:post][:id])
+    @post.author = current_user
+    if @post.update(post_params)
+      @post.remove_content if post_params[:content] = ''
+      render :show
     else
       render json: @post.errors.full_messages, status: 422
     end
   end
 
   def destroy
+    @post = current_user.posts.find(params[:id])
+    if Post.destroy(@post.id)
+      render json: @post.id
+    else
+      render json: @post.errors.full_messages, status: 422
+    end
   end
 
   private
+
   def post_params
     params.require(:post).permit(:body, :content, :wall_owner_id, :current_user_id)
   end
