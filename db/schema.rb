@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180329202756) do
+ActiveRecord::Schema.define(version: 20180404193149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "comments", force: :cascade do |t|
+    t.string "body", null: false
+    t.string "author_id", null: false
+    t.string "post_id", null: false
+    t.string "parent_comment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_comments_on_author_id", unique: true
+  end
 
   create_table "friends", force: :cascade do |t|
     t.integer "requestor_id", null: false
