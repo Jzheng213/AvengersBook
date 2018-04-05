@@ -1,4 +1,4 @@
-json.extract! post, :id, :body, :author_id, :updated_at, :wall_owner_id
+json.extract! post, :id, :body, :author_id, :updated_at, :wall_owner_id, :comment_ids
 
 author = post.author
 wall_owner = post.wall_owner

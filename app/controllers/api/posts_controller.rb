@@ -1,6 +1,7 @@
 class Api::PostsController < ApplicationController
   def index
-    @posts = Post.where(wall_owner_id: params[:wall_owner_id])
+    @posts = Post.where(wall_owner_id: params[:wall_owner_id]).includes(:comments, :author, :wall_owner)
+
     render :index
   end
 

@@ -22,6 +22,10 @@ class User < ApplicationRecord
     foreign_key: :author_id,
     class_name: :Post
 
+  has_many :comments,
+    foreign_key: :author_id,
+    class_name: :Comment
+
   has_many :requestors,
     foreign_key: :requestor_id,
     class_name: :Friend
