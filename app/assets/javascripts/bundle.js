@@ -49035,30 +49035,6 @@ var CreatePostForm = function (_React$Component) {
           { className: 'create-post' },
           _react2.default.createElement(
             'div',
-            { className: 'create-post-type-container' },
-            _react2.default.createElement(
-              'span',
-              null,
-              'Make Post'
-            ),
-            _react2.default.createElement(
-              'span',
-              null,
-              'Photo/Video'
-            ),
-            _react2.default.createElement(
-              'span',
-              null,
-              'Live Video'
-            ),
-            _react2.default.createElement(
-              'span',
-              null,
-              'Live Event'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
             { className: 'create-post-input-container' },
             _react2.default.createElement(
               _reactRouterDom.Link,
@@ -49086,24 +49062,6 @@ var CreatePostForm = function (_React$Component) {
                   null,
                   'Photo/Video'
                 )
-              )
-            ),
-            _react2.default.createElement(
-              'button',
-              { className: 'create-post-add-button' },
-              _react2.default.createElement(
-                'span',
-                null,
-                'Feeling/Activity'
-              )
-            ),
-            _react2.default.createElement(
-              'button',
-              { className: 'create-post-add-button' },
-              _react2.default.createElement(
-                'span',
-                null,
-                '...'
               )
             )
           ),
