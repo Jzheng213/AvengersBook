@@ -10026,17 +10026,17 @@ var REMOVE_POST = exports.REMOVE_POST = 'REMOVE_POST';
 var RECEIVE_POSTS = exports.RECEIVE_POSTS = 'RECEIVE_POSTS';
 var RECEIVE_POST = exports.RECEIVE_POST = 'RECEIVE_POST';
 
-var receivePosts = function receivePosts(posts) {
+var receivePosts = function receivePosts(payload) {
   return {
     type: RECEIVE_POSTS,
-    posts: posts
+    payload: payload
   };
 };
 
-var receivePost = function receivePost(post) {
+var receivePost = function receivePost(payload) {
   return {
     type: RECEIVE_POST,
-    post: post
+    payload: payload
   };
 };
 
@@ -10049,16 +10049,16 @@ var removePost = function removePost(id) {
 
 var fetchPosts = exports.fetchPosts = function fetchPosts(wallOwnerId) {
   return function (dispatch) {
-    return APIUtil.fetchPosts(wallOwnerId).then(function (postsFromServer) {
-      return dispatch(receivePosts(postsFromServer));
+    return APIUtil.fetchPosts(wallOwnerId).then(function (payload) {
+      return dispatch(receivePosts(payload));
     });
   };
 };
 
 var fetchFriendsPosts = exports.fetchFriendsPosts = function fetchFriendsPosts(currentUserId) {
   return function (dispatch) {
-    return APIUtil.fetchFriendsPosts(currentUserId).then(function (postsFromServer) {
-      return dispatch(receivePosts(postsFromServer));
+    return APIUtil.fetchFriendsPosts(currentUserId).then(function (payload) {
+      return dispatch(receivePosts(payload));
     });
   };
 };
@@ -52640,9 +52640,9 @@ var postReducer = function postReducer() {
   Object.freeze(state);
   switch (action.type) {
     case _post_actions.RECEIVE_POSTS:
-      return action.posts;
+      return action.payload.posts;
     case _post_actions.RECEIVE_POST:
-      return (0, _merge3.default)({}, state, _defineProperty({}, action.post.id, action.post));
+      return (0, _merge3.default)({}, state, _defineProperty({}, action.payload.post.id, action.payload.post));
     case _post_actions.REMOVE_POST:
       var newState = (0, _merge3.default)({}, state);
       delete newState[action.id];
@@ -53041,6 +53041,8 @@ var _merge2 = __webpack_require__(32);
 
 var _merge3 = _interopRequireDefault(_merge2);
 
+var _post_actions = __webpack_require__(51);
+
 var _comment_actions = __webpack_require__(559);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -53054,10 +53056,10 @@ var commentReducer = function commentReducer() {
 
   Object.freeze(state);
   switch (action.type) {
-    case _comment_actions.RECEIVE_COMMENTS:
-      return action.comments;
-    case _comment_actions.RECEIVE_COMMENT:
-      return (0, _merge3.default)({}, state, _defineProperty({}, action.comment.id, action.comment));
+    case _post_actions.RECEIVE_POSTS:
+      return action.payload.comments;
+    case _post_actions.RECEIVE_POST:
+      return (0, _merge3.default)({}, state, _defineProperty({}, action.payload.comment.id, action.payload.comment));
     case _comment_actions.REMOVE_COMMENT:
       var newState = (0, _merge3.default)({}, state);
       delete newState[action.id];

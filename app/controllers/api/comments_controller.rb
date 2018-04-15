@@ -1,6 +1,5 @@
 class Api::CommentsController < ApplicationController
   def index
-    debugger
     @comments = Comment.where(id:params[:ids])
     render :index
   end

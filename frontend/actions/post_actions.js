@@ -4,17 +4,17 @@ export const REMOVE_POST = 'REMOVE_POST';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const RECEIVE_POST = 'RECEIVE_POST';
 
-const receivePosts = (posts) => {
+const receivePosts = (payload) => {
   return {
     type: RECEIVE_POSTS,
-    posts
+    payload
   };
 };
 
-const receivePost = (post) => {
+const receivePost = (payload) => {
   return {
     type: RECEIVE_POST,
-    post
+    payload
   };
 };
 
@@ -26,14 +26,14 @@ const removePost = (id) => {
 };
 
 export const fetchPosts = (wallOwnerId) => dispatch => {
-  return APIUtil.fetchPosts(wallOwnerId).then((postsFromServer) => {
-    return dispatch(receivePosts(postsFromServer));
+  return APIUtil.fetchPosts(wallOwnerId).then((payload) => {
+    return dispatch(receivePosts(payload));
   });
 };
 
 export const fetchFriendsPosts = (currentUserId) => dispatch => {
-  return APIUtil.fetchFriendsPosts(currentUserId).then((postsFromServer) => {
-    return dispatch(receivePosts(postsFromServer));
+  return APIUtil.fetchFriendsPosts(currentUserId).then((payload) => {
+    return dispatch(receivePosts(payload));
   });
 };
 
