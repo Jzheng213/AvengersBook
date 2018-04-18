@@ -3,6 +3,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 //Components
 import PostItem from './post_item';
+import Comment from '../comments/comment';
 
 class Post extends React.Component{
   constructor(props){
@@ -32,12 +33,16 @@ class Post extends React.Component{
         <ul>
           {
             this.props.posts.map((post) => {
-              return <PostItem key={post.id}
-                post={post}
-                currentUser={this.props.currentUser}
-                deletePost={this.props.deletePost}
-                toggleEditPostModal={this.props.toggleEditPostModal}
-              />;
+              return(
+                <div key={post.id}>
+                  <PostItem post={post}
+                    currentUser={this.props.currentUser}
+                    deletePost={this.props.deletePost}
+                    toggleEditPostModal={this.props.toggleEditPostModal}
+                  />
+                  <Comment postId={post.id} />
+                </div>
+              );
             })
           }
         </ul>

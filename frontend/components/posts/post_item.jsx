@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import DropDown from '../util/drop_down';
 import Moment from 'react-moment';
 
+
 class PostItem extends React.Component{
 
   render(){
@@ -49,7 +50,6 @@ class PostItem extends React.Component{
           <button className='post-item-buttons'><i className="far fa-comment"></i><span>Comment</span></button>
           <button className='post-item-buttons'><i className="fas fa-share"></i><span>Share</span></button>
         </div>
-
       </div>
     );
   }

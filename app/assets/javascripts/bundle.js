@@ -18144,6 +18144,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var mapStateToProps = function mapStateToProps(state) {
   var posts = (0, _selector.asArray)(state.entities.posts);
   return {
+    comments: state.entities.comments,
     posts: posts,
     currentUser: state.session.currentUser
   };
@@ -47995,6 +47996,10 @@ var _post_item = __webpack_require__(453);
 
 var _post_item2 = _interopRequireDefault(_post_item);
 
+var _comment = __webpack_require__(561);
+
+var _comment2 = _interopRequireDefault(_comment);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -48045,12 +48050,16 @@ var Post = function (_React$Component) {
           'ul',
           null,
           this.props.posts.map(function (post) {
-            return _react2.default.createElement(_post_item2.default, { key: post.id,
-              post: post,
-              currentUser: _this2.props.currentUser,
-              deletePost: _this2.props.deletePost,
-              toggleEditPostModal: _this2.props.toggleEditPostModal
-            });
+            return _react2.default.createElement(
+              'div',
+              { key: post.id },
+              _react2.default.createElement(_post_item2.default, { post: post,
+                currentUser: _this2.props.currentUser,
+                deletePost: _this2.props.deletePost,
+                toggleEditPostModal: _this2.props.toggleEditPostModal
+              }),
+              _react2.default.createElement(_comment2.default, { postId: post.id })
+            );
           })
         )
       );
@@ -48516,11 +48525,24 @@ webpackContext.id = 455;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var asArray = exports.asArray = function asArray(posts) {
-  var postsArr = Object.keys(posts).map(function (key) {
-    return posts[key];
+var asArray = exports.asArray = function asArray(obj) {
+  var objArr = Object.keys(obj).map(function (key) {
+    return obj[key];
   });
-  return postsArr.reverse();
+  return objArr.reverse();
+};
+
+var asFilteredArray = exports.asFilteredArray = function asFilteredArray(_ref) {
+  var obj = _ref.obj,
+      param = _ref.param,
+      filter = _ref.filter;
+
+  var objArr = Object.keys(obj).map(function (key) {
+    return obj[key];
+  });
+  return objArr.filter(function (obj) {
+    return obj[param] == filter;
+  });
 };
 
 /***/ }),
@@ -53146,6 +53168,120 @@ var fetchComments = exports.fetchComments = function fetchComments(ids) {
     data: { ids: ids }
   });
 };
+
+/***/ }),
+/* 561 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(13);
+
+var _selector = __webpack_require__(456);
+
+var _comment_item = __webpack_require__(562);
+
+var _comment_item2 = _interopRequireDefault(_comment_item);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  var comments = (0, _selector.asFilteredArray)({ obj: state.entities.comments, param: 'post_id', filter: ownProps.postId });
+  return {
+    comments: comments,
+    currentUser: state.session.currentUser
+  };
+};
+
+var Comment = function Comment(props) {
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(
+      'ul',
+      null,
+      props.comments.map(function (comment) {
+        return _react2.default.createElement(_comment_item2.default, { comment: comment, key: comment.id });
+      })
+    )
+  );
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(Comment);
+
+/***/ }),
+/* 562 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(8);
+
+var _reactMoment = __webpack_require__(454);
+
+var _reactMoment2 = _interopRequireDefault(_reactMoment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CommentItem = function CommentItem(_ref) {
+  var comment = _ref.comment;
+
+  var dateToFormat = comment.updated_at;
+  return _react2.default.createElement(
+    'div',
+    { className: 'comment-container' },
+    _react2.default.createElement(
+      _reactRouterDom.Link,
+      { to: '/user/' + comment.author_id },
+      _react2.default.createElement('img', { className: 'comment-profile-pic', src: comment.author_profile_pic_url })
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'comment-body' },
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { className: 'comment-author', to: '/user/' + comment.author_id },
+        comment.author_name
+      ),
+      comment.body
+    ),
+    _react2.default.createElement(
+      'button',
+      { className: 'comment-like' },
+      'Like'
+    ),
+    _react2.default.createElement(
+      'button',
+      { className: 'comment-reply' },
+      'Reply'
+    ),
+    _react2.default.createElement(
+      _reactMoment2.default,
+      { interval: 120000, fromNow: true, ago: true },
+      dateToFormat
+    )
+  );
+};
+
+exports.default = CommentItem;
 
 /***/ })
 /******/ ]);

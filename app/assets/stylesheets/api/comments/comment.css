@@ -1,0 +1,42 @@
+.comment-profile-pic {
+  grid-area: photo;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.comment-container {
+  font-size: 12px;
+  display: grid;
+  grid-template-columns: 50px 40px 40px auto;
+  grid-template-rows: auto 20px;
+  grid-template-areas:
+    'photo body body body'
+    ' . like reply time';
+}
+
+.comment-body{
+  display: block;
+  align-self: center;
+  grid-area: body;
+  background-color: white;
+  border-radius: 50px;
+}
+
+
+.comment-author {
+  padding: 10px;
+}
+.comment-like{
+  grid-area: like;
+}
+
+.comment-reply{
+  grid-area: reply;
+}
+
+.comment-container time{
+  grid-area: time;
+}

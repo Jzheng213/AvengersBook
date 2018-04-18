@@ -7,6 +7,7 @@ import { asArray } from '../../reducers/posts/selector';
 const mapStateToProps = (state) => {
   const posts = asArray(state.entities.posts);
   return{
+    comments : state.entities.comments,
     posts,
     currentUser: state.session.currentUser
   };
