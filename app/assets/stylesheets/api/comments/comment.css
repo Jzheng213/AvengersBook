@@ -12,10 +12,11 @@
   border-width: 0px 1px 1px 1px;
   border-style: solid;
   border-color: #e1e2e3;
+  width: 516px;
   margin-bottom: 12px;
 }
 .comment-container {
-  box-sizing: content-box;
+  box-sizing: border-box;
   font-size: 12px;
   padding: 10px 10px 5px 10px;
   display: grid;
@@ -31,6 +32,7 @@
   align-self: stretch;
   justify-self: start;
   grid-area: body;
+  max-width: 90%;
   background-color: white;
   border-radius: 20px;
 }
@@ -38,6 +40,8 @@
 .comment-content {
   padding: 8px 10px 8px 8px;
   display: inline-block;
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .comment-author {
