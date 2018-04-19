@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom';
 //Components
 import Root from './components/root';
 import configureStore from './store/store';
+import { createComment } from './actions/comment_actions';
+
+window.createComment = createComment({comment: {body: 'something new', post_id: '49'}});
 
 document.addEventListener('DOMContentLoaded', () => {
   let store;

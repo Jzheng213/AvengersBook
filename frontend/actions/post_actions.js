@@ -5,6 +5,7 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const RECEIVE_POST = 'RECEIVE_POST';
 
 const receivePosts = (payload) => {
+  debugger;
   return {
     type: RECEIVE_POSTS,
     payload
@@ -12,6 +13,7 @@ const receivePosts = (payload) => {
 };
 
 const receivePost = (payload) => {
+
   return {
     type: RECEIVE_POST,
     payload

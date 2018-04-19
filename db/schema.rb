@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180404193149) do
+ActiveRecord::Schema.define(version: 20180418183447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(version: 20180404193149) do
     t.string "parent_comment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["author_id"], name: "index_comments_on_author_id", unique: true
   end
 
   create_table "friends", force: :cascade do |t|

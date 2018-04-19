@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { asFilteredArray } from '../../reducers/posts/selector';
+import { createComment } from '../../actions/comment_actions';
 import CommentItem from './comment_item';
+import CreateCommentForm from './create_comment_form';
 
 const mapStateToProps = (state, ownProps) => {
   const comments = asFilteredArray({obj: state.entities.comments, param: 'post_id' , filter: ownProps.postId});
@@ -11,9 +13,15 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return{
+    postComment: (comment) => dispatch(createComment(comment))
+  };
+};
+
 const Comment = (props) => {
   return(
-    <div>
+    <div className='comment-list'>
       <ul>
         {
           props.comments.map(comment => {
@@ -21,8 +29,9 @@ const Comment = (props) => {
           })
         }
       </ul>
+      <CreateCommentForm postComment={props.postComment} postId={props.postId}/>
     </div>
   );
 };
 
-export default connect(mapStateToProps, null) (Comment);
+export default connect(mapStateToProps, mapDispatchToProps) (Comment);

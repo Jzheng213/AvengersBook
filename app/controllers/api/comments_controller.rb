@@ -9,10 +9,11 @@ class Api::CommentsController < ApplicationController
   end
 
   def create
-    @comment = Comment.new(comment_params)
+    @comment = Comment.new(body: params[:body], post_id: params[:post_id])
     @comment.author = current_user
+    @post = Post.find(params[:post_id])
     if @comment.save
-      :show
+      render :show
     else
       render json: @comments.errors.full_messages, status: 422
     end

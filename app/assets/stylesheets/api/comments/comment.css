@@ -7,10 +7,19 @@
   object-position: center;
 }
 
+.comment-list {
+  background-color: #f2f3f5;
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: #e1e2e3;
+  margin-bottom: 12px;
+}
 .comment-container {
+  box-sizing: content-box;
   font-size: 12px;
+  padding: 10px 10px 5px 10px;
   display: grid;
-  grid-template-columns: 50px 40px 40px auto;
+  grid-template-columns: 40px 45px 40px auto;
   grid-template-rows: auto 20px;
   grid-template-areas:
     'photo body body body'
@@ -18,25 +27,41 @@
 }
 
 .comment-body{
-  display: block;
-  align-self: center;
+  display: inline-block;
+  align-self: stretch;
+  justify-self: start;
   grid-area: body;
   background-color: white;
-  border-radius: 50px;
+  border-radius: 20px;
 }
 
+.comment-content {
+  padding: 8px 10px 8px 8px;
+  display: inline-block;
+}
 
 .comment-author {
-  padding: 10px;
+  font-weight: bold;
+  color: #365899;
+  box-sizing: border-box;
+  padding: 8px 0px 8px 10px;
 }
 .comment-like{
+  color: #365899;
+  margin-right: 2px;
+  align-self: start;
+  justify-self: end;
   grid-area: like;
 }
 
 .comment-reply{
+  color: #365899;
+  align-self: start;
   grid-area: reply;
 }
 
 .comment-container time{
+  color: #616770;
+  align-self: start;
   grid-area: time;
 }

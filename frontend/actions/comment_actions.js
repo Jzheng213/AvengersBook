@@ -3,30 +3,36 @@ import * as APIUtil from '../util/comment_api_util';
 export const RECEIVE_COMMENT = 'RECEIVE_COMMENT';
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 
-const receiveComment = (comment) => {
+const receiveComment = (payload) => {
   return {
     type: RECEIVE_COMMENT,
-    comment
+    payload
   };
 };
 
-const receiveComments = (comments) => {
+const receiveComments = (payload) => {
   return {
     type: RECEIVE_COMMENTS,
-    comments
+    payload
   };
 };
 
 
 export const fetchComment = (id) => dispatch => {
-  return APIUtil.fetchComment(id).then((comment_from_server) => {
-    return dispatch(receiveComment(comment_from_server));
+  return APIUtil.fetchComment(id).then((commentFromServer) => {
+    return dispatch(receiveComment(commentFromServer));
   });
 };
 
 
 export const fetchComments = (ids) => dispatch => {
-  return APIUtil.fetchComments(ids).then((comments_from_server) => {
-    return dispatch(receiveComments(comments_from_server));
+  return APIUtil.fetchComments(ids).then((payload) => {
+    return dispatch(receiveComments(payload));
+  });
+};
+
+export const createComment = (comment) => dispatch => {
+  return APIUtil.postComment(comment).then((payload) => {
+    return dispatch(receiveComment(payload));
   });
 };

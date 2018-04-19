@@ -13,10 +13,10 @@ const CommentItem = ({comment}) => {
         <Link className='comment-author' to={`/user/${comment.author_id}`}>
           {comment.author_name}
         </Link>
-        {comment.body}
+        <div className='comment-content'>{comment.body}</div>
       </div>
-      <button className='comment-like'>Like</button>
-      <button className='comment-reply'>Reply</button>
+      <span className='comment-like'>Like &middot;</span>
+      <span className='comment-reply'>Reply &middot;</span>
       <Moment interval={120000} fromNow ago>{dateToFormat}</Moment>
     </div>
   );

@@ -10027,6 +10027,7 @@ var RECEIVE_POSTS = exports.RECEIVE_POSTS = 'RECEIVE_POSTS';
 var RECEIVE_POST = exports.RECEIVE_POST = 'RECEIVE_POST';
 
 var receivePosts = function receivePosts(payload) {
+  debugger;
   return {
     type: RECEIVE_POSTS,
     payload: payload
@@ -10034,6 +10035,7 @@ var receivePosts = function receivePosts(payload) {
 };
 
 var receivePost = function receivePost(payload) {
+
   return {
     type: RECEIVE_POST,
     payload: payload
@@ -30347,10 +30349,15 @@ var _store = __webpack_require__(475);
 
 var _store2 = _interopRequireDefault(_store);
 
+var _comment_actions = __webpack_require__(559);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+window.createComment = (0, _comment_actions.createComment)({ comment: { body: 'something new', post_id: '49' } });
 //Components
 //React
+
+
 document.addEventListener('DOMContentLoaded', function () {
   var store = void 0;
   if (window.currentUser) {
@@ -52644,11 +52651,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _merge2 = __webpack_require__(32);
+var _merge3 = __webpack_require__(32);
 
-var _merge3 = _interopRequireDefault(_merge2);
+var _merge4 = _interopRequireDefault(_merge3);
 
 var _post_actions = __webpack_require__(51);
+
+var _comment_actions = __webpack_require__(559);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52664,9 +52673,11 @@ var postReducer = function postReducer() {
     case _post_actions.RECEIVE_POSTS:
       return action.payload.posts;
     case _post_actions.RECEIVE_POST:
-      return (0, _merge3.default)({}, state, _defineProperty({}, action.payload.post.id, action.payload.post));
+      return (0, _merge4.default)({}, state, _defineProperty({}, action.payload.post.id, action.payload.post));
+    case _comment_actions.RECEIVE_COMMENT:
+      return (0, _merge4.default)({}, state, _defineProperty({}, action.payload.post.id, action.payload.post));
     case _post_actions.REMOVE_POST:
-      var newState = (0, _merge3.default)({}, state);
+      var newState = (0, _merge4.default)({}, state);
       delete newState[action.id];
       return newState;
     default:
@@ -53059,9 +53070,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _merge2 = __webpack_require__(32);
+var _merge3 = __webpack_require__(32);
 
-var _merge3 = _interopRequireDefault(_merge2);
+var _merge4 = _interopRequireDefault(_merge3);
 
 var _post_actions = __webpack_require__(51);
 
@@ -53079,11 +53090,13 @@ var commentReducer = function commentReducer() {
   Object.freeze(state);
   switch (action.type) {
     case _post_actions.RECEIVE_POSTS:
-      return action.payload.comments;
+      return (0, _merge4.default)({}, action.payload.comments);
     case _post_actions.RECEIVE_POST:
-      return (0, _merge3.default)({}, state, _defineProperty({}, action.payload.comment.id, action.payload.comment));
+      return (0, _merge4.default)({}, state, _defineProperty({}, action.payload.comment.id, action.payload.comment));
+    case _comment_actions.RECEIVE_COMMENT:
+      return (0, _merge4.default)({}, state, _defineProperty({}, action.payload.comment.id, action.payload.comment));
     case _comment_actions.REMOVE_COMMENT:
-      var newState = (0, _merge3.default)({}, state);
+      var newState = (0, _merge4.default)({}, state);
       delete newState[action.id];
       return newState;
     default:
@@ -53103,7 +53116,7 @@ exports.default = commentReducer;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchComments = exports.fetchComment = exports.RECEIVE_COMMENTS = exports.RECEIVE_COMMENT = undefined;
+exports.createComment = exports.fetchComments = exports.fetchComment = exports.RECEIVE_COMMENTS = exports.RECEIVE_COMMENT = undefined;
 
 var _comment_api_util = __webpack_require__(560);
 
@@ -53114,32 +53127,40 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var RECEIVE_COMMENT = exports.RECEIVE_COMMENT = 'RECEIVE_COMMENT';
 var RECEIVE_COMMENTS = exports.RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 
-var receiveComment = function receiveComment(comment) {
+var receiveComment = function receiveComment(payload) {
   return {
     type: RECEIVE_COMMENT,
-    comment: comment
+    payload: payload
   };
 };
 
-var receiveComments = function receiveComments(comments) {
+var receiveComments = function receiveComments(payload) {
   return {
     type: RECEIVE_COMMENTS,
-    comments: comments
+    payload: payload
   };
 };
 
 var fetchComment = exports.fetchComment = function fetchComment(id) {
   return function (dispatch) {
-    return APIUtil.fetchComment(id).then(function (comment_from_server) {
-      return dispatch(receiveComment(comment_from_server));
+    return APIUtil.fetchComment(id).then(function (commentFromServer) {
+      return dispatch(receiveComment(commentFromServer));
     });
   };
 };
 
 var fetchComments = exports.fetchComments = function fetchComments(ids) {
   return function (dispatch) {
-    return APIUtil.fetchComments(ids).then(function (comments_from_server) {
-      return dispatch(receiveComments(comments_from_server));
+    return APIUtil.fetchComments(ids).then(function (payload) {
+      return dispatch(receiveComments(payload));
+    });
+  };
+};
+
+var createComment = exports.createComment = function createComment(comment) {
+  return function (dispatch) {
+    return APIUtil.postComment(comment).then(function (payload) {
+      return dispatch(receiveComment(payload));
     });
   };
 };
@@ -53169,6 +53190,14 @@ var fetchComments = exports.fetchComments = function fetchComments(ids) {
   });
 };
 
+var postComment = exports.postComment = function postComment(comment) {
+  return $.ajax({
+    method: 'POST',
+    url: '/api/comments/',
+    data: comment
+  });
+};
+
 /***/ }),
 /* 561 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -53188,9 +53217,15 @@ var _reactRedux = __webpack_require__(13);
 
 var _selector = __webpack_require__(456);
 
+var _comment_actions = __webpack_require__(559);
+
 var _comment_item = __webpack_require__(562);
 
 var _comment_item2 = _interopRequireDefault(_comment_item);
+
+var _create_comment_form = __webpack_require__(563);
+
+var _create_comment_form2 = _interopRequireDefault(_create_comment_form);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -53202,21 +53237,30 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
   };
 };
 
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    postComment: function postComment(comment) {
+      return dispatch((0, _comment_actions.createComment)(comment));
+    }
+  };
+};
+
 var Comment = function Comment(props) {
   return _react2.default.createElement(
     'div',
-    null,
+    { className: 'comment-list' },
     _react2.default.createElement(
       'ul',
       null,
       props.comments.map(function (comment) {
         return _react2.default.createElement(_comment_item2.default, { comment: comment, key: comment.id });
       })
-    )
+    ),
+    _react2.default.createElement(_create_comment_form2.default, { postComment: props.postComment, postId: props.postId })
   );
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(Comment);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Comment);
 
 /***/ }),
 /* 562 */
@@ -53261,17 +53305,21 @@ var CommentItem = function CommentItem(_ref) {
         { className: 'comment-author', to: '/user/' + comment.author_id },
         comment.author_name
       ),
-      comment.body
+      _react2.default.createElement(
+        'div',
+        { className: 'comment-content' },
+        comment.body
+      )
     ),
     _react2.default.createElement(
-      'button',
+      'span',
       { className: 'comment-like' },
-      'Like'
+      'Like \xB7'
     ),
     _react2.default.createElement(
-      'button',
+      'span',
       { className: 'comment-reply' },
-      'Reply'
+      'Reply \xB7'
     ),
     _react2.default.createElement(
       _reactMoment2.default,
@@ -53282,6 +53330,96 @@ var CommentItem = function CommentItem(_ref) {
 };
 
 exports.default = CommentItem;
+
+/***/ }),
+/* 563 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CreateCommentForm = function (_React$Component) {
+  _inherits(CreateCommentForm, _React$Component);
+
+  function CreateCommentForm(props) {
+    _classCallCheck(this, CreateCommentForm);
+
+    var _this = _possibleConstructorReturn(this, (CreateCommentForm.__proto__ || Object.getPrototypeOf(CreateCommentForm)).call(this, props));
+
+    _this.state = {
+      body: ''
+    };
+    _this.update = _this.update.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
+  }
+
+  _createClass(CreateCommentForm, [{
+    key: 'update',
+    value: function update(field) {
+      var _this2 = this;
+
+      return function (e) {
+        _this2.setState(_defineProperty({}, field, e.target.value));
+      };
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(e) {
+      e.preventDefault();
+      this.props.postComment({
+        body: this.state.body,
+        post_id: this.props.postId
+      }).then(this.setState({ body: '' }));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'form',
+          null,
+          _react2.default.createElement('textarea', { className: 'create-create-input',
+            type: 'text',
+            value: this.state.body,
+            onChange: this.update('body')
+          }),
+          _react2.default.createElement(
+            'button',
+            { onClick: this.handleSubmit },
+            'Upload'
+          )
+        )
+      );
+    }
+  }]);
+
+  return CreateCommentForm;
+}(_react2.default.Component);
+
+exports.default = CreateCommentForm;
 
 /***/ })
 /******/ ]);
