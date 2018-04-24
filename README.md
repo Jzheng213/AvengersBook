@@ -7,7 +7,9 @@ AvengersBook is a full-stack, single-page application inspired by Facebook a soc
 A demo login feature is available to check out the website without going through the signup process.
 
 ### Login Page
+The login page has a front end verification to ensure the information entered follows proper formatting before making the ajax call. Any issue with the entry is highlighted red. 
 
+![Login Gif](https://github.com/Jzheng213/NeedToNetwork/blob/master/image/gifs/login_giphy.gif)
 ### News Feed
 
 ### Profile Page
