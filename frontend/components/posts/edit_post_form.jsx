@@ -70,7 +70,7 @@ class EditPostForm extends React.Component{
     let formData = new FormData();
     formData.append('post[id]', this.state.id);
     formData.append('post[body]', this.state.body);
-    formData.append('post[wall_owner_id]', this.props.match.params.userId);
+    // formData.append('post[wall_owner_id]', this.props.match.params.userId);
     formData.append('post[content]', this.state.content || '');
 
     this.props.submitPost(formData).then(()=>{

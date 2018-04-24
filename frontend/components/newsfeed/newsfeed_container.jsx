@@ -1,18 +1,18 @@
 import { connect } from 'react-redux';
-import { logout } from '../../actions/session_actions';
 import NewsFeed from './newsfeed';
-
+import { toggleEditPostModal } from '../../actions/modal_actions';
 
 const mapStateToProps = (state) => {
+
   return {
-    state: state
+    editPostModal: state.ui.modal.editPostModal
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    logout
+    toggleEditPostModal: ()=> dispatch(toggleEditPostModal()),
   };
 };
 
-export default connect(mapStateToProps, null)(NewsFeed);
+export default connect(mapStateToProps, mapDispatchToProps)(NewsFeed);

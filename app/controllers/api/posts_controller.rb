@@ -32,6 +32,7 @@ class Api::PostsController < ApplicationController
   end
 
   def update
+    
     @post = current_user.posts.find(params[:post][:id])
     @post.author = current_user
     if @post.update(post_params)
