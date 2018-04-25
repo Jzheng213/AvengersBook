@@ -10,9 +10,14 @@ A demo login feature is available to check out the website without going through
 The login page has a front end verification to ensure the information entered follows proper formatting before making the ajax call. Any issue with the entry is highlighted red. 
 
 ![Login Gif](https://github.com/Jzheng213/NeedToNetwork/blob/master/image/gifs/login_giphy.gif)
-### News Feed
-
 ### Profile Page
+The profile page allows users to customize their profile image and cover image. The profile page is populated with posts created by the user profile 
+
+The profile page shows the user's page which consist of the user profile image, cover image, post user made, and, list of user friends. If the profile is your own you can update the profile and cover image.
+
+![Login Gif](https://github.com/Jzheng213/NeedToNetwork/blob/master/image/gifs/change_photo_demo.gif)
+
+### News Feed
 
 ## Reusable Components
 
