@@ -53194,7 +53194,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 var Comment = function Comment(props) {
-  debugger;
+
   return _react2.default.createElement(
     'div',
     { className: 'comment-list' },

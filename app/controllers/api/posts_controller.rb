@@ -12,6 +12,8 @@ class Api::PostsController < ApplicationController
     newsfeed_post_author_ids << params[:current_user_id]
 
     @posts = Post.where(author_id: newsfeed_post_author_ids)
+    @postIds = @posts.map(&:author_id).uniq
+    @users = User.where(id: @postIds)
     render :index
   end
 

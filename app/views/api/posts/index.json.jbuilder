@@ -1,4 +1,3 @@
-
 json.set! 'posts' do
   @posts.each do |post|
     json.set! post.id do

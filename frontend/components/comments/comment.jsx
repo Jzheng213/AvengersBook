@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const Comment = (props) => {
-  debugger
+  
   return(
     <div className='comment-list'>
       <ul>
