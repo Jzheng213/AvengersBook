@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 const mapStateToProps = (props) => {
   return {
     currentUser: props.session.currentUser,
+    users: props.entities.users,
     pendingFriendRequests: props.entities.friend_requests
   };
 };

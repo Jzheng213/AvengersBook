@@ -17,9 +17,10 @@ export default class NavBar extends React.Component {
 
   componentWillMount(){
     this.props.requestPendingFriendRequests(this.props.currentUser.id);
-
+    this.props.requestUser(this.props.currentUser.id);
   }
   componentDidMount(){
+    this.props.requestUser(this.props.currentUser.id);
     document.addEventListener('mousedown', this.handleClickInside);
     this.props.requestPendingFriendRequests(this.props.currentUser.id);
   }
@@ -30,6 +31,7 @@ export default class NavBar extends React.Component {
 
   render(){
     this.friendRequest = this.props;
+    const currentUserId = this.props.currentUser.id;
     return(
       <nav className='logged-in-nav-bar'>
         <nav className='navbuffer' />
@@ -45,7 +47,7 @@ export default class NavBar extends React.Component {
           </section>
           <section className='right-section'>
             <Link to={`/user/${this.props.currentUser.id}`} className='nav-link nav-profile-link'>
-              <img className='nav-profile-pic' src={this.props.currentUser.profile_pic_url}/>
+              { this.props.users[currentUserId] && <img className='nav-profile-pic' src={this.props.users[currentUserId].profile_pic_url}/>}
               <span>{`${this.props.currentUser.first_name}`}</span>
             </Link>
 

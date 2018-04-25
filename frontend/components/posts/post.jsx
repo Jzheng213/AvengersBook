@@ -27,7 +27,6 @@ class Post extends React.Component{
   }
 
   render(){
-
     return(
       <div>
         <ul>
@@ -36,6 +35,7 @@ class Post extends React.Component{
               return(
                 <div key={post.id}>
                   <PostItem post={post}
+                    users={this.props.users}
                     currentUser={this.props.currentUser}
                     deletePost={this.props.deletePost}
                     toggleEditPostModal={this.props.toggleEditPostModal}

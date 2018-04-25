@@ -11,6 +11,7 @@ const mapStateToProps = (state, ownProps) => {
     postModalFocused: state.ui.modal.postModalFocused,
     errorModal: state.ui.modal.errorModal,
     postErrMsg: state.errors.post,
+    users: state.entities.users,
     ownProps
   };
 };

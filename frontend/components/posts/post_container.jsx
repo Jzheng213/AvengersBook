@@ -8,6 +8,7 @@ const mapStateToProps = (state) => {
   const posts = asArray(state.entities.posts);
   return{
     comments : state.entities.comments,
+    users : state.entities.users,
     posts,
     currentUser: state.session.currentUser
   };

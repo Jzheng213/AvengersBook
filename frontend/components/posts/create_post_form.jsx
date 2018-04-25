@@ -77,11 +77,11 @@ class CreatePostForm extends React.Component {
     });
   }
 
-
   render(){
     let modalPostScreen = this.props.postModalFocused ? 'post-screen-on' : '';
     let errorModalScreen = this.props.errorModal ? 'error-modal-screen' : '';
     let errorBody = '';
+    const currentUserId = this.props.currentUser.id;
 
     if (this.props.postErrMsg[0] === ('Body can\'t be blank'))
       errorBody = 'This post appears to be blank. Please write something or attach a photo to post.';
@@ -96,7 +96,9 @@ class CreatePostForm extends React.Component {
           </div>
           <div className='create-post-input-container'>
             <Link to={`/user/${this.props.currentUser.id}`}>
-              <img className='post-profile-pic' src={this.props.currentUser.profile_pic_url} />
+              { this.props.users[currentUserId] &&
+                <img className='post-profile-pic' src={this.props.users[currentUserId].profile_pic_url} />
+              }
             </Link>
             <textarea className='create-post-input'
               type='text'

@@ -1,6 +1,7 @@
 import merge from 'lodash/merge';
 
 import {RECEIVE_POST, RECEIVE_POSTS, REMOVE_POST} from '../../actions/post_actions';
+import { RECEIVE_USER } from '../../actions/user_actions';
 import { RECEIVE_COMMENT } from '../../actions/comment_actions';
 
 

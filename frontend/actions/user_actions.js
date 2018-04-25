@@ -12,15 +12,16 @@ const receiveUsers = (users) => {
   };
 };
 
-const receiveUser = (user) => {
+const receiveUser = ({user, posts}) => {
   return {
     type: RECEIVE_USER,
-    user
+    user,
+    posts
   };
 };
 
 const receiveUserPair = (payload) => {
-  
+
   return {
     type: RECEIVE_PAIR,
     currentUser: payload.currentUser,

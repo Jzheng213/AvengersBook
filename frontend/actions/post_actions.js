@@ -5,7 +5,7 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const RECEIVE_POST = 'RECEIVE_POST';
 
 const receivePosts = (payload) => {
-  debugger;
+
   return {
     type: RECEIVE_POSTS,
     payload
@@ -28,12 +28,14 @@ const removePost = (id) => {
 };
 
 export const fetchPosts = (wallOwnerId) => dispatch => {
+
   return APIUtil.fetchPosts(wallOwnerId).then((payload) => {
     return dispatch(receivePosts(payload));
   });
 };
 
 export const fetchFriendsPosts = (currentUserId) => dispatch => {
+
   return APIUtil.fetchFriendsPosts(currentUserId).then((payload) => {
     return dispatch(receivePosts(payload));
   });

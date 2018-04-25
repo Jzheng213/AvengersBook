@@ -14,6 +14,7 @@ const mapStateToProps = (state, ownProps) => {
     editPostModal: state.ui.modal.editPostModal,
     postErrMsg: state.errors.post,
     editPost: state.entities.editPost,
+    users: state.entities.users,
     ownProps
   };
 };
@@ -83,13 +84,14 @@ class EditPostForm extends React.Component{
   }
 
   render(){
+    const authorId = this.props.match.params.userId;
     return (
       <div className='edit-post-form'>
         <header>Edit Post</header>
         {this.props.editPost.body &&
           <div>
             <Link to={`/user/${this.props.editPost.author_id}`}>
-              <img className='post-profile-pic' src={this.props.editPost.author_profile_pic_url} />
+              <img className='post-profile-pic' src={this.props.users[authorId].profile_pic_url} />
             </Link>
             <textarea className='create-post-input'
               type='text'

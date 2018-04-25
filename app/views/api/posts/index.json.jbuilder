@@ -7,6 +7,14 @@ json.set! 'posts' do
   end
 end
 
+json.set! 'users' do
+  @users.each do |user|
+    json.set! user.id do
+      json.partial! 'api/users/user', user: user
+    end
+  end
+end
+
 json.set! 'comments' do
   @posts.each do |post|
     post.comments.each do |comment|

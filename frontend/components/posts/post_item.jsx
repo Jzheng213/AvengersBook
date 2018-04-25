@@ -5,9 +5,8 @@ import Moment from 'react-moment';
 
 
 class PostItem extends React.Component{
-
   render(){
-
+    const authorId = this.props.post.author_id;
     const list = {'Public':null, 'Friends':null, 'Friends except...': null};
     const dateToFormat = this.props.post.updated_at;
     return(
@@ -15,13 +14,13 @@ class PostItem extends React.Component{
         <div className='post-item'>
           <div className='post-header'>
             <div className='post-header-section'>
-              <Link to={`/user/${this.props.post.author_id}`}>
-                <img className='post-profile-pic' src={this.props.post.author_profile_pic_url} />
+              <Link to={`/user/${authorId}`}>
+                <img className='post-profile-pic' src={this.props.users[authorId].profile_pic_url} />
               </Link>
               <div className='post-header-detail'>
                 <div className='post-header-link'>
-                  <Link className='author-home-page' to={`/user/${this.props.post.author_id}`} >{this.props.post.author_name}</Link>
-                  { this.props.post.author_id !== this.props.post.wall_owner_id &&
+                  <Link className='author-home-page' to={`/user/${authorId}`} >{this.props.users[authorId].full_name}</Link>
+                  { authorId !== this.props.post.wall_owner_id &&
                     <Link className='author-home-page' to={`/user/${this.props.post.wall_owner_id}`} ><span className='post-left-carot'> &#x25BA; </span>{this.props.post.wall_owner_name}</Link>
                   }
                 </div>
@@ -32,7 +31,7 @@ class PostItem extends React.Component{
                 </div>
               </div>
             </div>
-            { this.props.post.author_id === this.props.currentUser.id &&
+            { authorId === this.props.currentUser.id &&
               <DropDown customClass='post-modification'
                 list={{
                   'Edit Post': ()=> this.props.toggleEditPostModal(this.props.post),
