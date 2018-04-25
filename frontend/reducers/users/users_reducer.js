@@ -2,6 +2,7 @@ import merge from 'lodash/merge';
 
 import { RECEIVE_USER, RECEIVE_USERS, RECEIVE_PAIR } from '../../actions/user_actions';
 import { RECEIVE_POSTS } from '../../actions/post_actions';
+import { RECEIVE_COMMENTS } from '../../actions/comment_actions';
 
 const userReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -9,7 +10,8 @@ const userReducer = (state = {}, action) => {
   case RECEIVE_USERS:
     return merge({}, state, action.users);
   case RECEIVE_POSTS:
-    
+    return merge({}, state, action.payload.users);
+  case RECEIVE_COMMENTS:
     return merge({}, state, action.payload.users);
   case RECEIVE_USER:
     const newState = merge({}, state);

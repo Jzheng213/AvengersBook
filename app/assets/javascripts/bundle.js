@@ -50517,6 +50517,8 @@ var _user_actions = __webpack_require__(24);
 
 var _post_actions = __webpack_require__(51);
 
+var _comment_actions = __webpack_require__(558);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -50530,7 +50532,8 @@ var userReducer = function userReducer() {
     case _user_actions.RECEIVE_USERS:
       return (0, _merge3.default)({}, state, action.users);
     case _post_actions.RECEIVE_POSTS:
-
+      return (0, _merge3.default)({}, state, action.payload.users);
+    case _comment_actions.RECEIVE_COMMENTS:
       return (0, _merge3.default)({}, state, action.payload.users);
     case _user_actions.RECEIVE_USER:
       var newState = (0, _merge3.default)({}, state);
@@ -53177,7 +53180,8 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
   var comments = (0, _selector.asFilteredArray)({ obj: state.entities.comments, param: 'post_id', filter: ownProps.postId });
   return {
     comments: comments,
-    currentUser: state.session.currentUser
+    currentUser: state.session.currentUser,
+    users: state.entities.users
   };
 };
 
@@ -53190,6 +53194,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 var Comment = function Comment(props) {
+  debugger;
   return _react2.default.createElement(
     'div',
     { className: 'comment-list' },
@@ -53197,7 +53202,7 @@ var Comment = function Comment(props) {
       'ul',
       null,
       props.comments.map(function (comment) {
-        return _react2.default.createElement(_comment_item2.default, { comment: comment, key: comment.id });
+        return _react2.default.createElement(_comment_item2.default, { comment: comment, users: props.users, key: comment.id });
       })
     ),
     _react2.default.createElement(_create_comment_form2.default, { postComment: props.postComment, postId: props.postId })
@@ -53263,7 +53268,8 @@ var _reactMoment2 = _interopRequireDefault(_reactMoment);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var CommentItem = function CommentItem(_ref) {
-  var comment = _ref.comment;
+  var comment = _ref.comment,
+      users = _ref.users;
 
   var dateToFormat = comment.updated_at;
   return _react2.default.createElement(
@@ -53272,7 +53278,7 @@ var CommentItem = function CommentItem(_ref) {
     _react2.default.createElement(
       _reactRouterDom.Link,
       { to: '/user/' + comment.author_id },
-      _react2.default.createElement('img', { className: 'comment-profile-pic', src: comment.author_profile_pic_url })
+      _react2.default.createElement('img', { className: 'comment-profile-pic', src: users[comment.author_id].profile_pic_url })
     ),
     _react2.default.createElement(
       'div',

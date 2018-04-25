@@ -1,6 +1,8 @@
 class Api::CommentsController < ApplicationController
   def index
     @comments = Comment.where(id:params[:ids])
+    @commentIds = @comments.map(&:author_id).uniq
+    @users = User.where(id: @commentIds)
     render :index
   end
   def show

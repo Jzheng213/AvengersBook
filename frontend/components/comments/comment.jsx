@@ -9,7 +9,8 @@ const mapStateToProps = (state, ownProps) => {
   const comments = asFilteredArray({obj: state.entities.comments, param: 'post_id' , filter: ownProps.postId});
   return{
     comments,
-    currentUser: state.session.currentUser
+    currentUser: state.session.currentUser,
+    users: state.entities.users
   };
 };
 
@@ -20,12 +21,13 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const Comment = (props) => {
+  debugger
   return(
     <div className='comment-list'>
       <ul>
         {
           props.comments.map(comment => {
-            return <CommentItem comment={comment} key={comment.id}/>;
+            return <CommentItem comment={comment} users={props.users} key={comment.id}/>;
           })
         }
       </ul>
