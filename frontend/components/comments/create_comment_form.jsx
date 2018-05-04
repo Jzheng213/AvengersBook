@@ -4,8 +4,10 @@ class CreateCommentForm extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      body: ''
+      body: '',
+      placeholder: 'Write a comment...'
     };
+
     this.update = this.update.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -19,26 +21,28 @@ class CreateCommentForm extends React.Component {
   }
 
   handleSubmit(e){
-    e.preventDefault();
-    this.props.postComment({
-      body: this.state.body,
-      post_id: this.props.postId
-    }).then(
-      this.setState({body: ''})
-    );
-
+    if(e.keyCode === 13){
+      this.props.postComment({
+        body: this.state.body,
+        post_id: this.props.postId
+      }).then(
+        () => this.setState({body: '', placeholder: 'Write a comment...'})
+      );
+    }
   }
 
   render(){
     return (
       <div>
-        <form>
+        <form onSubmit={(e) => this.handleSubmit(e)}>
+          <img className='post-profile-pic' src={this.props.currentUser.profile_pic_url} />
           <textarea className='create-create-input'
+            placeholder={this.state.placeholder}
             type='text'
             value={this.state.body}
+            onKeyDown={this.handleSubmit}
             onChange={this.update('body')}
           />
-          <button onClick={this.handleSubmit}>Upload</button>
         </form>
       </div>
     );

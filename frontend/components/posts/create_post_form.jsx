@@ -101,6 +101,7 @@ class CreatePostForm extends React.Component {
               }
             </Link>
             <textarea className='create-post-input'
+              placeholder="What's on your mind?"
               type='text'
               value={this.state.body}
               onChange={this.update('body')}

@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const Comment = (props) => {
-  
+
   return(
     <div className='comment-list'>
       <ul>
@@ -31,7 +31,10 @@ const Comment = (props) => {
           })
         }
       </ul>
-      <CreateCommentForm postComment={props.postComment} postId={props.postId}/>
+      <CreateCommentForm
+        postId={props.postId}
+        postComment={props.postComment}
+        currentUser={props.users[props.currentUser.id]}/>
     </div>
   );
 };

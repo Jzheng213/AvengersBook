@@ -49377,6 +49377,7 @@ var CreatePostForm = function (_React$Component) {
               this.props.users[currentUserId] && _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.users[currentUserId].profile_pic_url })
             ),
             _react2.default.createElement('textarea', { className: 'create-post-input',
+              placeholder: 'What\'s on your mind?',
               type: 'text',
               value: this.state.body,
               onChange: this.update('body')
@@ -53205,7 +53206,10 @@ var Comment = function Comment(props) {
         return _react2.default.createElement(_comment_item2.default, { comment: comment, users: props.users, key: comment.id });
       })
     ),
-    _react2.default.createElement(_create_comment_form2.default, { postComment: props.postComment, postId: props.postId })
+    _react2.default.createElement(_create_comment_form2.default, {
+      postId: props.postId,
+      postComment: props.postComment,
+      currentUser: props.users[props.currentUser.id] })
   );
 };
 
@@ -53350,8 +53354,10 @@ var CreateCommentForm = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (CreateCommentForm.__proto__ || Object.getPrototypeOf(CreateCommentForm)).call(this, props));
 
     _this.state = {
-      body: ''
+      body: '',
+      placeholder: 'Write a comment...'
     };
+
     _this.update = _this.update.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     return _this;
@@ -53369,31 +53375,38 @@ var CreateCommentForm = function (_React$Component) {
   }, {
     key: 'handleSubmit',
     value: function handleSubmit(e) {
-      e.preventDefault();
-      this.props.postComment({
-        body: this.state.body,
-        post_id: this.props.postId
-      }).then(this.setState({ body: '' }));
+      var _this3 = this;
+
+      if (e.keyCode === 13) {
+        this.props.postComment({
+          body: this.state.body,
+          post_id: this.props.postId
+        }).then(function () {
+          return _this3.setState({ body: '', placeholder: 'Write a comment...' });
+        });
+      }
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this4 = this;
+
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
           'form',
-          null,
+          { onSubmit: function onSubmit(e) {
+              return _this4.handleSubmit(e);
+            } },
+          _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.currentUser.profile_pic_url }),
           _react2.default.createElement('textarea', { className: 'create-create-input',
+            placeholder: this.state.placeholder,
             type: 'text',
             value: this.state.body,
+            onKeyDown: this.handleSubmit,
             onChange: this.update('body')
-          }),
-          _react2.default.createElement(
-            'button',
-            { onClick: this.handleSubmit },
-            'Upload'
-          )
+          })
         )
       );
     }
