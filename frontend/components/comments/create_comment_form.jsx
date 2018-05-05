@@ -33,18 +33,18 @@ class CreateCommentForm extends React.Component {
 
   render(){
     return (
-      <div>
-        <form onSubmit={(e) => this.handleSubmit(e)}>
-          <img className='post-profile-pic' src={this.props.currentUser.profile_pic_url} />
-          <textarea className='create-create-input'
-            placeholder={this.state.placeholder}
-            type='text'
-            value={this.state.body}
-            onKeyDown={this.handleSubmit}
-            onChange={this.update('body')}
-          />
-        </form>
+      <form className='create-comments' onSubmit={(e) => this.handleSubmit(e)}>
+        <img className='comment-profile-pic' src={this.props.currentUser.profile_pic_url} />
+        <div className='create-comment-body'>
+        <textarea className='create-comment-text'
+          placeholder={this.state.placeholder}
+          type='text'
+          value={this.state.body}
+          onKeyDown={this.handleSubmit}
+          onChange={this.update('body')}
+        />
       </div>
+      </form>
     );
   }
 

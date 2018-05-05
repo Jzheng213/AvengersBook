@@ -34,7 +34,9 @@ const Comment = (props) => {
       <CreateCommentForm
         postId={props.postId}
         postComment={props.postComment}
-        currentUser={props.users[props.currentUser.id]}/>
+        currentUser={props.users[props.currentUser.id]}
+      />
+    <a href='#'>View more comments</a>
     </div>
   );
 };

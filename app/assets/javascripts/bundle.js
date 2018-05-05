@@ -53209,7 +53209,13 @@ var Comment = function Comment(props) {
     _react2.default.createElement(_create_comment_form2.default, {
       postId: props.postId,
       postComment: props.postComment,
-      currentUser: props.users[props.currentUser.id] })
+      currentUser: props.users[props.currentUser.id]
+    }),
+    _react2.default.createElement(
+      'a',
+      { href: '#' },
+      'View more comments'
+    )
   );
 };
 
@@ -53392,15 +53398,15 @@ var CreateCommentForm = function (_React$Component) {
       var _this4 = this;
 
       return _react2.default.createElement(
-        'div',
-        null,
+        'form',
+        { className: 'create-comments', onSubmit: function onSubmit(e) {
+            return _this4.handleSubmit(e);
+          } },
+        _react2.default.createElement('img', { className: 'comment-profile-pic', src: this.props.currentUser.profile_pic_url }),
         _react2.default.createElement(
-          'form',
-          { onSubmit: function onSubmit(e) {
-              return _this4.handleSubmit(e);
-            } },
-          _react2.default.createElement('img', { className: 'post-profile-pic', src: this.props.currentUser.profile_pic_url }),
-          _react2.default.createElement('textarea', { className: 'create-create-input',
+          'div',
+          { className: 'create-comment-body' },
+          _react2.default.createElement('textarea', { className: 'create-comment-text',
             placeholder: this.state.placeholder,
             type: 'text',
             value: this.state.body,

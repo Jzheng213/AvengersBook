@@ -1,6 +1,6 @@
 class Api::CommentsController < ApplicationController
   def index
-    @comments = Comment.where(id:params[:ids])
+    @comments = Comment.where(id:params[:ids]).limit(2);
     @commentIds = @comments.map(&:author_id).uniq
     @users = User.where(id: @commentIds)
     render :index

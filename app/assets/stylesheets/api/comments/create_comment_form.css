@@ -1,0 +1,27 @@
+.create-comments {
+  box-sizing: border-box;
+  padding: 10px 10px 5px 10px;
+  display: grid;
+  grid-template-columns: 40px auto;
+  grid-template-rows: auto;
+  grid-template-areas: 'photo body';
+}
+
+.create-comment-body {
+  box-sizing: content-box;
+  padding: 5px 10px;
+  grid-area: body;
+  font-size: 12px;
+  background-color: white;
+  border: 1px solid #ced0d4;
+  border-radius: 20px;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.create-comment-text {
+  min-height: 1em;
+  rows: 1;
+  width: 100%;
+
+}
